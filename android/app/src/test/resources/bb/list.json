@@ -1,0 +1,136 @@
+[
+ {
+  "id": "d2253eca8eb54465949e193ccb02b7eb",
+  "status": "needs_answers",
+  "progress": 100,
+  "created_at": 1794202272000,
+  "updated_at": 1794202272000,
+  "filename": "20261109_143012_F.mp4",
+  "recorded_at_ms": 1794202212000,
+  "collision_t": 18.2,
+  "other_cls": {
+   "value": "car",
+   "label": "승용차",
+   "source": "guess"
+  },
+  "chapter": "car_car",
+  "rule_id": null,
+  "title": null,
+  "fault_by_party": null,
+  "fault_display": null,
+  "provisional": true,
+  "remaining_count": 9,
+  "reason": null,
+  "vehicle_record": false,
+  "sync_grade": "none",
+  "fault_display_with_vehicle": null,
+  "vehicle_changes": false,
+  "collision_review_needed": false,
+  "collision_pick_until": null
+ },
+ {
+  "id": "42a047fca1954faead9c65f9839103a0",
+  "status": "needs_answers",
+  "progress": 100,
+  "created_at": 1794202272000,
+  "updated_at": 1794202272001,
+  "filename": "20261109_143012_F.mp4",
+  "recorded_at_ms": 1794202212000,
+  "collision_t": 18.2,
+  "other_cls": {
+   "value": "pedestrian",
+   "label": "보행자",
+   "source": "user"
+  },
+  "chapter": "car_pedestrian",
+  "rule_id": null,
+  "title": null,
+  "fault_by_party": null,
+  "fault_display": null,
+  "provisional": true,
+  "remaining_count": 8,
+  "reason": null,
+  "vehicle_record": false,
+  "sync_grade": "none",
+  "fault_display_with_vehicle": null,
+  "vehicle_changes": false,
+  "collision_review_needed": false,
+  "collision_pick_until": null
+ },
+ {
+  "id": "258bf51d24b341708712a03559accd5e",
+  "status": "needs_answers",
+  "progress": 100,
+  "created_at": 1794202272000,
+  "updated_at": 1794202272000,
+  "filename": "20261109_143012_F.mp4",
+  "recorded_at_ms": 1794202212000,
+  "collision_t": 18.2,
+  "other_cls": {
+   "value": "bicycle",
+   "label": "자전거",
+   "source": "video"
+  },
+  "chapter": "car_bicycle",
+  "rule_id": "거42-1",
+  "title": "자전거횡단도로 횡단 자전거 대 자전거횡단도로 전후 직진 자동차",
+  "fault_by_party": {
+   "other": 0,
+   "ego": 100
+  },
+  "fault_display": {
+   "kind": "ratio",
+   "party": null,
+   "value": null,
+   "text": "내 차 100 : 상대 0",
+   "note": null
+  },
+  "provisional": true,
+  "remaining_count": 1,
+  "reason": null,
+  "vehicle_record": false,
+  "sync_grade": "none",
+  "fault_display_with_vehicle": null,
+  "vehicle_changes": false,
+  "collision_review_needed": false,
+  "collision_pick_until": null
+ },
+ {
+  "id": "14a9b8ec31054bbab81d3fcd0c17d6d3",
+  "status": "needs_answers",
+  "progress": 100,
+  "created_at": 1794202272000,
+  "updated_at": 1794202272000,
+  "filename": "20261109_143012_F.mp4",
+  "recorded_at_ms": 1794202212000,
+  "collision_t": 18.2,
+  "other_cls": {
+   "value": "pedestrian",
+   "label": "보행자",
+   "source": "video"
+  },
+  "chapter": "car_pedestrian",
+  "rule_id": "보13",
+  "title": "신호등 없는 횡단보도 횡단 사고",
+  "fault_by_party": {
+   "ego": 100,
+   "other": 0
+  },
+  "fault_display": {
+   "kind": "pedestrian_only",
+   "party": "other",
+   "value": 0,
+   "text": "보행자 과실 0%",
+   "note": "차대보행자 기준은 보행자 과실만 정해요. 내 차 몫은 나머지 100%예요"
+  },
+  "provisional": true,
+  "remaining_count": 3,
+  "reason": null,
+  "vehicle_record": false,
+  "sync_grade": "none",
+  "fault_display_with_vehicle": null,
+  "vehicle_changes": false,
+  "collision_review_needed": false,
+  "collision_pick_until": null
+ }
+]

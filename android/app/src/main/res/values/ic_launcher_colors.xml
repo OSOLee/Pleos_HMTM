@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 앱 아이콘 색 (docs/app-ui.md 1절 "앱 아이콘"). 다크는 values-night -->
+<resources>
+    <color name="ic_bg">#0064FF</color>
+    <color name="ic_body">#FFFFFF</color>
+    <color name="ic_lens">#0064FF</color>
+    <color name="ic_ego">#FFFFFF</color>
+    <color name="ic_other">#99C1FF</color>
+    <color name="ic_rec">#FF4D4F</color>
+</resources>

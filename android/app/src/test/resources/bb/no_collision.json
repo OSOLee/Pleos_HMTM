@@ -1,0 +1,73 @@
+{
+ "id": "e8e06175a8b94743b20ccbae39edacdd",
+ "status": "no_collision",
+ "progress": 100,
+ "created_at": 1794202272000,
+ "updated_at": 1794202272000,
+ "analysis": {
+  "status": "no_collision",
+  "reason": "no_impact",
+  "message": "부딪힌 순간을 찾지 못했어요",
+  "analyzer": {
+   "name": "fake",
+   "version": "0.1.0"
+  },
+  "video": {
+   "duration_s": 30.0,
+   "fps": 5.0,
+   "frames": 150,
+   "width": 64,
+   "height": 48
+  },
+  "scenario": {
+   "scenario": "no_collision",
+   "chosen_by": "request",
+   "video_read": true,
+   "description": "충돌 순간을 찾지 못함 (사용자가 고르게 됨)"
+  }
+ },
+ "sync": {
+  "start_ms": 1794202212000,
+  "start_source": "filename",
+  "offset_ms": 0,
+  "method": "coarse_start_v0",
+  "score": null,
+  "grade": "none",
+  "reason": "no_vehicle_record",
+  "t_collision_ms": null,
+  "candidates": [
+   {
+    "source": "filename",
+    "start_ms": 1794202212000
+   }
+  ],
+  "params": {
+   "margin_ms": 15000,
+   "max_window_ms": 300000,
+   "min_before_ms": 3000,
+   "default_tz_min": 540,
+   "method": "coarse_start_v0",
+   "fine_corr": 0.7,
+   "impact_tol_ms": 500,
+   "search_ms": 15000,
+   "mtime_search_ms": 60000,
+   "grid_ms": 100,
+   "impact_decel_kmh_s": 10.0
+  },
+  "fine": null,
+  "vehicle_gap": null,
+  "reason_text": "차량 기록이 없어요",
+  "clock_warnings": []
+ },
+ "collision_review": {
+  "needed": true,
+  "reason": "no_collision",
+  "message": "영상에서 사고 순간을 찾지 못했어요. 영상에서 부딪힌 순간을 골라 주세요",
+  "t": null,
+  "t_confidence": null,
+  "candidates": [],
+  "threshold": 0.5,
+  "can_pick": true,
+  "pick_until": 1794807072000
+ }
+}

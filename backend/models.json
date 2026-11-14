@@ -1,0 +1,66 @@
+{
+  "schema": "hmtm-models-1",
+  "models": {
+    "detector": {
+      "role": "탐지·추적",
+      "file": "bb_v3.pt",
+      "version": "v8l_bb_v3",
+      "sha256": "78f1a2d85e0a31b887e1b5f732824b8321e9d4685dcc2f0caaef578597dc3c7b",
+      "size_bytes": 87713978,
+      "source": "B 전달 v8l_bb_v3/weights/best.pt (Colab, data_bb3.yaml, 15 에폭, 체크포인트 2026-11-10, v8l_bb_v2에서 이어 학습). 이 PC에서는 best01.pt로 받아 bb_v3.pt로 둠",
+      "classes": [
+        "vehicle",
+        "two_wheeler",
+        "bicycle",
+        "person"
+      ],
+      "imgsz": 960,
+      "conf": 0.15
+    },
+    "kind": {
+      "role": "상대 종류 신호",
+      "file": "bb_v3.pt",
+      "version": "v8l_bb_v3",
+      "sha256": "78f1a2d85e0a31b887e1b5f732824b8321e9d4685dcc2f0caaef578597dc3c7b",
+      "size_bytes": 87713978,
+      "source": "B 전달 v8l_bb_v3/weights/best.pt (Colab, data_bb3.yaml, 15 에폭, 체크포인트 2026-11-10, v8l_bb_v2에서 이어 학습). 이 PC에서는 best01.pt로 받아 bb_v3.pt로 둠",
+      "classes": [
+        "vehicle",
+        "two_wheeler",
+        "bicycle",
+        "person"
+      ],
+      "imgsz": 960,
+      "conf": 0.15
+    },
+    "scene": {
+      "file": "scene_cls.pt",
+      "role": "교차로 형태(M6)",
+      "version": "scene_v1",
+      "sha256": "5e91b77cc8ab9f3715354bdae6c10d5540f9226816c2353849791e8b89b137fc",
+      "size_bytes": 10263560,
+      "source": "B 전달 (2026-11-14 sha256·크기 확인 완료)",
+      "classes": [
+        "cross_signal",
+        "cross_nosignal",
+        "t_junction",
+        "straight"
+      ],
+      "imgsz": 384,
+      "conf": null
+    },
+    "crosswalk": {
+      "file": "crosswalk.pt",
+      "role": "횡단보도(M5)",
+      "version": "crosswalk_v1",
+      "sha256": "509d56e93deb95ad5fd815a1481fe95758037c4b12f7c61ec5424964f8c752d2",
+      "size_bytes": 52064274,
+      "source": "B 전달 (2026-11-14 sha256·크기 확인 완료)",
+      "classes": [
+        "crosswalk"
+      ],
+      "imgsz": 960,
+      "conf": 0.15
+    }
+  }
+}

@@ -1,0 +1,2383 @@
+{
+ "id": "e16fff79d23540f0852d6ae1b41e05d5",
+ "status": "needs_answers",
+ "progress": 100,
+ "created_at": 1794202272000,
+ "updated_at": 1794202272000,
+ "event": {
+  "t_event": 1794202228900,
+  "t_event_source": "video",
+  "collision_t": 18.2,
+  "collision_frame": 91,
+  "range": {
+   "from": 1794202197000,
+   "to": 1794202255700
+  }
+ },
+ "data_quality": {
+  "vehicle_record": true,
+  "sync_grade": "fine",
+  "sync_reason": null,
+  "samples": 588,
+  "gaps": [],
+  "fields_missing": [],
+  "sync_suspect": false,
+  "sync_reason_text": null,
+  "clock_warnings": []
+ },
+ "parties": {
+  "ego": {
+   "label": "내 차",
+   "cls": "car"
+  },
+  "other": {
+   "label": "상대",
+   "cls": "car"
+  }
+ },
+ "other_cls": {
+  "field": "parties.other.cls",
+  "value": "car",
+  "label": "승용차",
+  "source": "video",
+  "confidence": 0.9,
+  "low_confidence": false,
+  "chapter": "car_car",
+  "options": [
+   "car",
+   "truck",
+   "bus",
+   "two_wheeler",
+   "bicycle",
+   "farm_machine",
+   "pedestrian"
+  ],
+  "choices": [
+   "승용차",
+   "화물차",
+   "버스",
+   "이륜차",
+   "자전거",
+   "농기계",
+   "보행자"
+  ]
+ },
+ "auto_answers": [
+  {
+   "field": "parties.ego.turn_signal_used",
+   "value": true,
+   "source": "vehicle",
+   "rule": "turn_signal_v0",
+   "evidence": {
+    "text": "사고 6초 전 왼쪽 지시등 켜짐 (사고 때까지 켜져 있음)",
+    "window": {
+     "from": 1794202218900,
+     "to": 1794202228900
+    },
+    "points": [
+     {
+      "t": 1794202222900,
+      "key": "turnSignal",
+      "value": "LEFT"
+     }
+    ]
+   }
+  }
+ ],
+ "answers": {
+  "parties.ego.cls": {
+   "value": "car",
+   "source": "vehicle",
+   "evidence": "내 차는 승용차였어요 (차량 정보)"
+  },
+  "parties.ego.movement": {
+   "value": "left_turn",
+   "source": "video",
+   "evidence": "내 차가 좌회전했어요 (17.5초)"
+  },
+  "parties.other.cls": {
+   "value": "car",
+   "source": "video",
+   "evidence": "상대는 승용차였어요"
+  },
+  "parties.other.entry_from": {
+   "value": "left",
+   "source": "video",
+   "evidence": "상대가 내 차 기준 왼쪽 길에서 왔어요"
+  },
+  "parties.other.movement": {
+   "value": "straight",
+   "source": "video",
+   "evidence": "상대가 직진했어요"
+  },
+  "scene.junction_type": {
+   "value": "cross",
+   "source": "video",
+   "evidence": "교차로 모양은 사거리였어요"
+  },
+  "scene.place": {
+   "value": "intersection",
+   "source": "video",
+   "evidence": "사고 장소는 교차로였어요"
+  },
+  "road.signal_present": {
+   "value": false,
+   "source": "default",
+   "basis": "guess",
+   "evidence": "교차로에 신호등이 없었어요 (영상 추정)"
+  },
+  "road.wider_road": {
+   "value": "equal",
+   "source": "default",
+   "basis": "default",
+   "evidence": "두 도로의 폭이 비슷했어요 (기본값)"
+  },
+  "parties.ego.driver_factors": {
+   "value": [],
+   "source": "default",
+   "basis": "default",
+   "evidence": "내 차 운전자에게 해당하는 것이 있으면 골라 주세요 (모르면 넘어가도 돼요) → 없음 (기본값)"
+  }
+ },
+ "answer_conflicts": [],
+ "source_conflicts": [],
+ "questions": [
+  {
+   "field": "road.signal_present",
+   "question": "이 교차로에 신호등이 있었나요?",
+   "answer_type": "choice",
+   "options": [
+    true,
+    false
+   ],
+   "choices": [
+    "있음",
+    "없음"
+   ],
+   "model_guess": false,
+   "guess_source": "video",
+   "guess_evidence": "영상으로는 교차로에 신호등이 없었던 것 같아요 (추정)",
+   "default": false,
+   "optional": false,
+   "group": null,
+   "depends_on": null,
+   "vehicle_hint": null
+  },
+  {
+   "field": "road.wider_road",
+   "question": "교차하는 두 도로 중 어느 쪽이 더 넓은가요?",
+   "answer_type": "choice",
+   "options": [
+    "equal",
+    "mine",
+    "theirs"
+   ],
+   "choices": [
+    "폭이 비슷함",
+    "내 차가 달린 도로",
+    "상대가 달린 도로"
+   ],
+   "model_guess": "equal",
+   "guess_source": "default",
+   "default": true,
+   "depends_on": {
+    "parties.other.entry_from": [
+     "left",
+     "right"
+    ]
+   },
+   "guess_evidence": null,
+   "optional": false,
+   "group": null,
+   "vehicle_hint": null
+  },
+  {
+   "field": "road.center_line",
+   "question": "사고 난 길에 중앙선(가운데 노란 선)이 있나요?",
+   "answer_type": "choice",
+   "options": [
+    true,
+    false
+   ],
+   "choices": [
+    "있음",
+    "없음 (골목길)"
+   ],
+   "model_guess": null,
+   "guess_source": null,
+   "guess_evidence": null,
+   "default": false,
+   "optional": false,
+   "group": null,
+   "depends_on": null,
+   "vehicle_hint": null
+  },
+  {
+   "field": "intersection_entry_order",
+   "question": "두 차 중 어느 쪽이 먼저 교차로에 들어갔나요?",
+   "answer_type": "choice",
+   "options": [
+    "ego",
+    "other",
+    "same_time"
+   ],
+   "choices": [
+    "내 차",
+    "상대",
+    "거의 동시에"
+   ],
+   "model_guess": null,
+   "guess_source": null,
+   "guess_evidence": null,
+   "default": false,
+   "optional": false,
+   "group": null,
+   "depends_on": null,
+   "vehicle_hint": null
+  },
+  {
+   "field": "parties.ego.turn_signal_used",
+   "question": "내 차는 방향지시등을 켰나요?",
+   "answer_type": "choice",
+   "options": [
+    true,
+    false
+   ],
+   "choices": [
+    "켰음",
+    "안 켰거나 늦게 켰음"
+   ],
+   "model_guess": null,
+   "guess_source": null,
+   "guess_evidence": null,
+   "default": false,
+   "optional": false,
+   "group": null,
+   "depends_on": null,
+   "vehicle_hint": {
+    "value": true,
+    "value_label": "켬",
+    "text": "사고 6초 전 왼쪽 지시등 켜짐 (사고 때까지 켜져 있음)",
+    "determined": true,
+    "applied": true,
+    "reason": null,
+    "reason_text": null,
+    "rule": "turn_signal_v0"
+   }
+  },
+  {
+   "field": "situation.special",
+   "question": "이 중에 해당하는 게 있으면 골라 주세요 (없으면 넘어가도 돼요)",
+   "answer_type": "multi",
+   "options": [
+    "emergency:ego",
+    "emergency:other",
+    "one_way:ego",
+    "one_way:other",
+    "door:ego",
+    "door:other",
+    "cargo:ego",
+    "cargo:other",
+    "bus_stop:ego",
+    "bus_stop:other",
+    "off_road:ego",
+    "off_road:other",
+    "reverse:ego",
+    "reverse:other",
+    "lane_change:ego",
+    "lane_change:other",
+    "cut_in:ego",
+    "cut_in:other",
+    "congested:ego",
+    "congested:other",
+    "merging:ego",
+    "merging:other",
+    "lc_first:ego",
+    "lc_first:other",
+    "overtake:ego",
+    "overtake:other",
+    "to_shoulder:ego",
+    "to_shoulder:other",
+    "safety_zone:ego",
+    "safety_zone:other",
+    "center:ego",
+    "center:other",
+    "wrong_way:ego",
+    "wrong_way:other",
+    "lc_in_int:ego",
+    "lc_in_int:other",
+    "to_off_road:ego",
+    "to_off_road:other",
+    "large:ego",
+    "large:other",
+    "blocking:ego",
+    "blocking:other",
+    "turn_done:ego",
+    "turn_done:other",
+    "wide_turn:ego",
+    "wide_turn:other",
+    "narrow_turn:ego",
+    "narrow_turn:other",
+    "no_lights:ego",
+    "no_lights:other",
+    "sidewalk_cross:ego",
+    "sidewalk_cross:other",
+    "sudden_turn:ego",
+    "sudden_turn:other",
+    "left_banned:ego",
+    "left_method:ego",
+    "signaled_first:ego",
+    "signaled_first:other",
+    "bus_lane:ego",
+    "bus_lane:other",
+    "sudden_stop:ego",
+    "sudden_stop:other",
+    "tailgating:ego",
+    "tailgating:other",
+    "brake_light:ego",
+    "brake_light:other",
+    "view_blocked:ego",
+    "view_blocked:other",
+    "evasive:ego",
+    "evasive:other",
+    "school_bus:ego",
+    "school_bus:other",
+    "highway",
+    "night",
+    "low_vis",
+    "side_street",
+    "none"
+   ],
+   "choices": [
+    "내 차가 긴급 출동 중인 긴급자동차 (경광등·사이렌)",
+    "상대가 긴급 출동 중인 긴급자동차 (경광등·사이렌)",
+    "내 차가 일방통행 길을 거꾸로 들어감",
+    "상대가 일방통행 길을 거꾸로 들어감",
+    "내 차가 서 있다가 문을 열었음",
+    "상대가 서 있다가 문을 열었음",
+    "내 차에서 짐이 떨어짐",
+    "상대 차에서 짐이 떨어짐",
+    "내 차가 버스정류장에서 출발한 버스",
+    "상대가 버스정류장에서 출발한 버스",
+    "내 차가 도로가 아닌 곳(주차장·건물 입구 등)에서 도로로 나옴",
+    "상대가 도로가 아닌 곳(주차장·건물 입구 등)에서 도로로 나옴",
+    "내 차가 후진하던 중",
+    "상대가 후진하던 중",
+    "내 차가 차로를 바꾸던 중",
+    "상대가 차로를 바꾸던 중",
+    "내 차가 뒤에서 오른쪽 좁은 틈으로 끼어듦",
+    "상대가 뒤에서 오른쪽 좁은 틈으로 끼어듦",
+    "내 차가 막힌 차로에서 기다리다 갑자기 차로를 바꿈",
+    "상대가 막힌 차로에서 기다리다 갑자기 차로를 바꿈",
+    "내 차로가 줄어드는 곳(합류)이었음",
+    "상대 차로가 줄어드는 곳(합류)이었음",
+    "내 차가 같은 차로 뒤에 있다가 먼저 차로를 바꿈",
+    "상대가 같은 차로 뒤에 있다가 먼저 차로를 바꿈",
+    "내 차가 앞지르기를 하던 중",
+    "상대가 앞지르기를 하던 중",
+    "내 차가 갓길로 차로를 바꿈",
+    "상대가 갓길로 차로를 바꿈",
+    "내 차가 안전지대(바닥에 빗금 친 곳)를 지나 달림",
+    "상대가 안전지대(바닥에 빗금 친 곳)를 지나 달림",
+    "내 차가 중앙선을 넘음",
+    "상대가 중앙선을 넘음",
+    "내 차가 중앙선을 넘어 거꾸로 달림 (역주행)",
+    "상대가 중앙선을 넘어 거꾸로 달림 (역주행)",
+    "내 차가 교차로 안에서 차로를 바꿈",
+    "상대가 교차로 안에서 차로를 바꿈",
+    "내 차가 도로가 아닌 곳(주차장·건물 입구 등)으로 우회전해 들어감",
+    "상대가 도로가 아닌 곳(주차장·건물 입구 등)으로 우회전해 들어감",
+    "내 차가 버스·덤프트럭·5톤 이상 화물차 같은 대형차",
+    "상대가 버스·덤프트럭·5톤 이상 화물차 같은 대형차",
+    "내 차가 막혀 있는 교차로에 들어감 (꼬리물기)",
+    "상대가 막혀 있는 교차로에 들어감 (꼬리물기)",
+    "내 차가 좌회전을 거의 끝낸 뒤 부딪힘",
+    "상대가 좌회전을 거의 끝낸 뒤 부딪힘",
+    "내 차가 크게 돌아서 회전함 (바깥쪽으로 넓게)",
+    "상대가 크게 돌아서 회전함 (바깥쪽으로 넓게)",
+    "내 차가 안쪽으로 바짝 붙어 회전함 (좁게)",
+    "상대가 안쪽으로 바짝 붙어 회전함 (좁게)",
+    "내 차가 밤·비·안개인데 전조등을 안 켰거나 속도를 안 줄임",
+    "상대가 밤·비·안개인데 전조등을 안 켰거나 속도를 안 줄임",
+    "내 차가 갓길 경계선이나 인도를 넘어 달림",
+    "상대가 갓길 경계선이나 인도를 넘어 달림",
+    "내 차가 상대가 가까이 왔을 때 갑자기 회전함",
+    "상대가 내 차가 가까이 왔을 때 갑자기 회전함",
+    "내 차가 좌회전 금지 장소에서 좌회전함",
+    "내 차가 교차로 중심 안쪽으로 돌지 않고 좌회전함",
+    "내 차가 상대보다 먼저 방향지시등으로 차로 변경을 알림",
+    "상대가 내 차보다 먼저 방향지시등으로 차로 변경을 알림",
+    "내 차가 버스전용차로로 달림",
+    "상대가 버스전용차로로 달림",
+    "내 차가 이유 없이 갑자기 섰음",
+    "상대가 이유 없이 갑자기 섰음",
+    "내 차가 앞차와 너무 가까이 붙어 달림",
+    "상대가 앞차와 너무 가까이 붙어 달림",
+    "내 차 브레이크등이 고장 나 있었음",
+    "상대 브레이크등이 고장 나 있었음",
+    "내 차 쪽에서 건물·큰 차 때문에 상대가 안 보였음",
+    "상대 쪽에서 건물·큰 차 때문에 상대가 안 보였음",
+    "내 차가 부딪히기 전에 피하려고 속도를 줄이거나 방향을 틀었음",
+    "상대가 부딪히기 전에 피하려고 속도를 줄이거나 방향을 틀었음",
+    "내 차가 어린이통학버스",
+    "상대가 어린이통학버스",
+    "고속도로·자동차전용도로였음",
+    "밤이었음",
+    "비·눈·안개 등으로 앞이 잘 안 보였음",
+    "골목길(중앙선 없는 좁은 길)이었음",
+    "해당 없음 (모두 아니요)"
+   ],
+   "option_groups": [
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "마주 오다가",
+    "마주 오다가",
+    "마주 오다가",
+    "마주 오다가",
+    "교차로",
+    "교차로",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "교차로",
+    "교차로",
+    "회전",
+    "회전",
+    "회전",
+    "회전",
+    "회전",
+    "회전",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "회전",
+    "회전",
+    "회전",
+    "회전",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "같은 방향으로 가다가",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "일반",
+    "장소·날씨",
+    "장소·날씨",
+    "장소·날씨",
+    "장소·날씨",
+    "일반"
+   ],
+   "more_options": [
+    "door:ego",
+    "door:other",
+    "bus_stop:ego",
+    "bus_stop:other",
+    "off_road:ego",
+    "off_road:other",
+    "to_off_road:ego",
+    "to_off_road:other",
+    "large:ego",
+    "large:other",
+    "school_bus:ego",
+    "school_bus:other",
+    "highway"
+   ],
+   "group": "특수 상황",
+   "all_options": [
+    "emergency:ego",
+    "emergency:other",
+    "one_way:ego",
+    "one_way:other",
+    "door:ego",
+    "door:other",
+    "cargo:ego",
+    "cargo:other",
+    "bus_stop:ego",
+    "bus_stop:other",
+    "off_road:ego",
+    "off_road:other",
+    "reverse:ego",
+    "reverse:other",
+    "lane_change:ego",
+    "lane_change:other",
+    "cut_in:ego",
+    "cut_in:other",
+    "congested:ego",
+    "congested:other",
+    "merging:ego",
+    "merging:other",
+    "lc_first:ego",
+    "lc_first:other",
+    "overtake:ego",
+    "overtake:other",
+    "to_shoulder:ego",
+    "to_shoulder:other",
+    "safety_zone:ego",
+    "safety_zone:other",
+    "center:ego",
+    "center:other",
+    "wrong_way:ego",
+    "wrong_way:other",
+    "lc_in_int:ego",
+    "lc_in_int:other",
+    "to_off_road:ego",
+    "to_off_road:other",
+    "large:ego",
+    "large:other",
+    "blocking:ego",
+    "blocking:other",
+    "turn_done:ego",
+    "turn_done:other",
+    "wide_turn:ego",
+    "wide_turn:other",
+    "narrow_turn:ego",
+    "narrow_turn:other",
+    "no_lights:ego",
+    "no_lights:other",
+    "queue:ego",
+    "queue:other",
+    "sidewalk:ego",
+    "sidewalk:other",
+    "pass_right:ego",
+    "pass_right:other",
+    "parking_arrow:ego",
+    "parking_arrow:other",
+    "sidewalk_cross:ego",
+    "sidewalk_cross:other",
+    "sudden_turn:ego",
+    "sudden_turn:other",
+    "left_banned:ego",
+    "left_banned:other",
+    "left_method:ego",
+    "left_method:other",
+    "right_method:ego",
+    "right_method:other",
+    "u_outside:ego",
+    "u_outside:other",
+    "sudden_lc:ego",
+    "sudden_lc:other",
+    "banned_lc:ego",
+    "banned_lc:other",
+    "forced_cut:ego",
+    "forced_cut:other",
+    "signaled_first:ego",
+    "signaled_first:other",
+    "bus_lane:ego",
+    "bus_lane:other",
+    "sudden_stop:ego",
+    "sudden_stop:other",
+    "tailgating:ego",
+    "tailgating:other",
+    "brake_light:ego",
+    "brake_light:other",
+    "no_fault_stop:ego",
+    "no_fault_stop:other",
+    "hazard:ego",
+    "hazard:other",
+    "warning_sign:ego",
+    "warning_sign:other",
+    "no_evacuate:ego",
+    "no_evacuate:other",
+    "bad_parking:ego",
+    "bad_parking:other",
+    "banned_parking:ego",
+    "banned_parking:other",
+    "door_traffic:ego",
+    "door_traffic:other",
+    "door_sudden:ego",
+    "door_sudden:other",
+    "door_stop:ego",
+    "door_stop:other",
+    "door_foresee:ego",
+    "door_foresee:other",
+    "view_blocked:ego",
+    "view_blocked:other",
+    "evasive:ego",
+    "evasive:other",
+    "school_bus:ego",
+    "school_bus:other",
+    "late_red:ego",
+    "late_red:other",
+    "highway",
+    "night",
+    "low_vis",
+    "side_street",
+    "none"
+   ],
+   "model_guess": [],
+   "default": true,
+   "optional": true,
+   "guess_source": null,
+   "guess_evidence": null,
+   "depends_on": null,
+   "vehicle_hint": null
+  },
+  {
+   "field": "parties.ego.driver_factors",
+   "question": "내 차 운전자에게 해당하는 것이 있으면 골라 주세요 (모르면 넘어가도 돼요)",
+   "answer_type": "multi",
+   "options": [
+    "drunk_0.03_plus",
+    "drunk_under_0.03",
+    "drugs",
+    "no_license",
+    "speed_20plus",
+    "speed_under20",
+    "phone",
+    "inattention",
+    "dark_tint",
+    "reckless",
+    "group_danger",
+    "none"
+   ],
+   "choices": [
+    "음주 (혈중알코올 0.03% 이상)",
+    "음주 (0.03% 미만)",
+    "약물 복용",
+    "무면허",
+    "제한속도보다 시속 20km 이상 빨랐음",
+    "제한속도보다 조금(시속 20km 미만) 빨랐음",
+    "운전 중 휴대전화 사용·영상 시청",
+    "졸음·한눈팔기 등으로 앞을 제대로 안 봄",
+    "밤·비 오는 날 짙은 썬팅 차량",
+    "난폭운전 (위반을 연달아·반복)",
+    "여러 대가 줄지어 위험하게 운전 (공동위험)",
+    "해당 없음 (모두 아니요)"
+   ],
+   "model_guess": [],
+   "default": true,
+   "optional": true,
+   "group": "운전자 요인",
+   "guess_source": null,
+   "guess_evidence": null,
+   "depends_on": null,
+   "vehicle_hint": null
+  },
+  {
+   "field": "parties.other.driver_factors",
+   "question": "상대 운전자에게 해당하는 것이 있으면 골라 주세요 (모르면 넘어가도 돼요)",
+   "answer_type": "multi",
+   "options": [
+    "drunk_0.03_plus",
+    "drunk_under_0.03",
+    "drugs",
+    "no_license",
+    "speed_20plus",
+    "speed_under20",
+    "phone",
+    "inattention",
+    "dark_tint",
+    "reckless",
+    "group_danger",
+    "none"
+   ],
+   "choices": [
+    "음주 (혈중알코올 0.03% 이상)",
+    "음주 (0.03% 미만)",
+    "약물 복용",
+    "무면허",
+    "제한속도보다 시속 20km 이상 빨랐음",
+    "제한속도보다 조금(시속 20km 미만) 빨랐음",
+    "운전 중 휴대전화 사용·영상 시청",
+    "졸음·한눈팔기 등으로 앞을 제대로 안 봄",
+    "밤·비 오는 날 짙은 썬팅 차량",
+    "난폭운전 (위반을 연달아·반복)",
+    "여러 대가 줄지어 위험하게 운전 (공동위험)",
+    "해당 없음 (모두 아니요)"
+   ],
+   "model_guess": [],
+   "default": true,
+   "optional": true,
+   "group": "운전자 요인",
+   "guess_source": null,
+   "guess_evidence": null,
+   "depends_on": null,
+   "vehicle_hint": null
+  }
+ ],
+ "remaining": [
+  {
+   "field": "road.signal_present",
+   "question": "이 교차로에 신호등이 있었나요?",
+   "answer_type": "choice",
+   "options": [
+    true,
+    false
+   ],
+   "choices": [
+    "있음",
+    "없음"
+   ],
+   "model_guess": false,
+   "guess_source": "video",
+   "guess_evidence": "영상으로는 교차로에 신호등이 없었던 것 같아요 (추정)",
+   "default": false,
+   "group": null,
+   "depends_on": null,
+   "guess_choice": "없음",
+   "vehicle_hint": null
+  },
+  {
+   "field": "road.wider_road",
+   "question": "교차하는 두 도로 중 어느 쪽이 더 넓은가요?",
+   "answer_type": "choice",
+   "options": [
+    "equal",
+    "mine",
+    "theirs"
+   ],
+   "choices": [
+    "폭이 비슷함",
+    "내 차가 달린 도로",
+    "상대가 달린 도로"
+   ],
+   "model_guess": "equal",
+   "guess_source": "default",
+   "guess_evidence": null,
+   "default": true,
+   "group": null,
+   "depends_on": {
+    "parties.other.entry_from": [
+     "left",
+     "right"
+    ]
+   },
+   "guess_choice": "폭이 비슷함",
+   "vehicle_hint": null
+  },
+  {
+   "field": "road.center_line",
+   "question": "사고 난 길에 중앙선(가운데 노란 선)이 있나요?",
+   "answer_type": "choice",
+   "options": [
+    true,
+    false
+   ],
+   "choices": [
+    "있음",
+    "없음 (골목길)"
+   ],
+   "model_guess": null,
+   "guess_source": null,
+   "guess_evidence": null,
+   "default": false,
+   "group": null,
+   "depends_on": null,
+   "guess_choice": null,
+   "vehicle_hint": null
+  },
+  {
+   "field": "intersection_entry_order",
+   "question": "두 차 중 어느 쪽이 먼저 교차로에 들어갔나요?",
+   "answer_type": "choice",
+   "options": [
+    "ego",
+    "other",
+    "same_time"
+   ],
+   "choices": [
+    "내 차",
+    "상대",
+    "거의 동시에"
+   ],
+   "model_guess": null,
+   "guess_source": null,
+   "guess_evidence": null,
+   "default": false,
+   "group": null,
+   "depends_on": null,
+   "guess_choice": null,
+   "vehicle_hint": null
+  },
+  {
+   "field": "parties.ego.turn_signal_used",
+   "question": "내 차는 방향지시등을 켰나요?",
+   "answer_type": "choice",
+   "options": [
+    true,
+    false
+   ],
+   "choices": [
+    "켰음",
+    "안 켰거나 늦게 켰음"
+   ],
+   "model_guess": null,
+   "guess_source": null,
+   "guess_evidence": null,
+   "default": false,
+   "group": null,
+   "depends_on": null,
+   "guess_choice": null,
+   "vehicle_hint": {
+    "value": true,
+    "value_label": "켬",
+    "text": "사고 6초 전 왼쪽 지시등 켜짐 (사고 때까지 켜져 있음)",
+    "determined": true,
+    "applied": true,
+    "reason": null,
+    "reason_text": null,
+    "rule": "turn_signal_v0"
+   }
+  }
+ ],
+ "remaining_count": 5,
+ "answered": [],
+ "result": {
+  "status": "ok",
+  "provisional": true,
+  "rule_id": "차16-1",
+  "title": "왼쪽 직진 대 오른쪽 좌회전 (동일폭)",
+  "fault_by_party": {
+   "other": 40,
+   "ego": 60
+  },
+  "base_fault_by_party": {
+   "other": 40,
+   "ego": 60
+  },
+  "modifiers": [],
+  "unverifiable_factors": [
+   {
+    "id": "A:slow_violation",
+    "label": "A 서행·감속 불이행, 일시정지 위반",
+    "party": "other",
+    "category": "situational",
+    "delta": 10,
+    "observed": {
+     "entry_speed": null
+    },
+    "missing": [
+     "entry_speed_to_limit"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "A:inattention",
+    "label": "A 전방주시 위반·조작 지연",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "졸음, 한눈팔기 등으로 앞을 제대로 보지 않았거나 핸들·브레이크 조작이 늦었나요?"
+   },
+   {
+    "id": "A:drunk_under_003",
+    "label": "A 음주운전 (혈중알코올 0.03% 미만)",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전자가 음주 상태였나요? (0.03% 미만)"
+   },
+   {
+    "id": "A:speeding_under20",
+    "label": "A 제한속도 위반 (시속 20km 미만)",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "speed_over_limit_kmh": null
+    },
+    "missing": [
+     "speed_over_limit_kmh",
+     "speed_over_limit_kmh"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "A:dark_tint",
+    "label": "A 시야 불량 시 짙은 썬팅 차량 운전",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "야간·우천 등에 썬팅이 짙은 차량(앞면 70%, 옆면 40% 미만)이었나요?"
+   },
+   {
+    "id": "A:phone_use",
+    "label": "A 운전 중 휴대전화 사용·영상 시청",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전 중 휴대전화를 쓰거나 영상을 보고 있었나요?"
+   },
+   {
+    "id": "A:speeding_20plus",
+    "label": "A 제한속도 위반 (시속 20km 이상)",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "speed_over_limit_kmh": null
+    },
+    "missing": [
+     "speed_over_limit_kmh"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "A:drunk_003_plus",
+    "label": "A 음주운전 (혈중알코올 0.03% 이상)",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전자가 음주 상태였나요? (0.03% 이상)"
+   },
+   {
+    "id": "A:drugs",
+    "label": "A 약물운전",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "약물의 영향이 있었나요?"
+   },
+   {
+    "id": "A:no_license",
+    "label": "A 무면허 운전",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "무면허 운전이었나요?"
+   },
+   {
+    "id": "A:group_danger",
+    "label": "A 공동위험행위",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "2대 이상이 줄지어 위험하게 주행하던 중이었나요?"
+   },
+   {
+    "id": "A:reckless",
+    "label": "A 난폭운전",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "위반 행위를 연달아 하거나 반복하는 난폭운전 중이었나요?"
+   },
+   {
+    "id": "A:clear_first_entry",
+    "label": "A 명확한 선진입",
+    "party": "other",
+    "category": "situational",
+    "delta": -10,
+    "observed": {
+     "entry_lead_sec": null,
+     "entry_speed_ratio": null
+    },
+    "missing": [
+     "entry_lead_sec",
+     "entry_speed_ratio"
+    ],
+    "detect": "auto",
+    "question": null
+   },
+   {
+    "id": "B:narrow_turn",
+    "label": "B 좁게(小) 좌·우회전",
+    "party": "ego",
+    "category": "situational",
+    "delta": 10,
+    "observed": {
+     "narrow_turn": null
+    },
+    "missing": [
+     "narrow_turn"
+    ],
+    "detect": "auto",
+    "question": null
+   },
+   {
+    "id": "B:wide_turn",
+    "label": "B 넓게(大) 좌·우회전",
+    "party": "ego",
+    "category": "situational",
+    "delta": 10,
+    "observed": {
+     "wide_turn": null
+    },
+    "missing": [
+     "wide_turn"
+    ],
+    "detect": "auto",
+    "question": null
+   },
+   {
+    "id": "B:no_turn_signal",
+    "label": "B 진로변경 시 신호 불이행·지연",
+    "party": "ego",
+    "category": "situational",
+    "delta": 10,
+    "observed": {
+     "turn_signal_used": null
+    },
+    "missing": [
+     "turn_signal_used"
+    ],
+    "detect": "manual",
+    "question": "회전하거나 차로를 바꿀 때 방향지시등을 켰나요?"
+   },
+   {
+    "id": "B:slow_violation",
+    "label": "B 서행·감속 불이행, 일시정지 위반",
+    "party": "ego",
+    "category": "situational",
+    "delta": 10,
+    "observed": {
+     "entry_speed": null
+    },
+    "missing": [
+     "entry_speed_to_limit"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "B:left_turn_prohibited",
+    "label": "B 좌회전 금지 위반",
+    "party": "ego",
+    "category": "situational",
+    "delta": 20,
+    "observed": {
+     "left_turn_prohibited_violation": null
+    },
+    "missing": [
+     "left_turn_prohibited_violation"
+    ],
+    "detect": "partial",
+    "question": null
+   },
+   {
+    "id": "B:inattention",
+    "label": "B 전방주시 위반·조작 지연",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "졸음, 한눈팔기 등으로 앞을 제대로 보지 않았거나 핸들·브레이크 조작이 늦었나요?"
+   },
+   {
+    "id": "B:drunk_under_003",
+    "label": "B 음주운전 (혈중알코올 0.03% 미만)",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전자가 음주 상태였나요? (0.03% 미만)"
+   },
+   {
+    "id": "B:speeding_under20",
+    "label": "B 제한속도 위반 (시속 20km 미만)",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "speed_over_limit_kmh": null
+    },
+    "missing": [
+     "speed_over_limit_kmh",
+     "speed_over_limit_kmh"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "B:dark_tint",
+    "label": "B 시야 불량 시 짙은 썬팅 차량 운전",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "야간·우천 등에 썬팅이 짙은 차량(앞면 70%, 옆면 40% 미만)이었나요?"
+   },
+   {
+    "id": "B:phone_use",
+    "label": "B 운전 중 휴대전화 사용·영상 시청",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전 중 휴대전화를 쓰거나 영상을 보고 있었나요?"
+   },
+   {
+    "id": "B:speeding_20plus",
+    "label": "B 제한속도 위반 (시속 20km 이상)",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "speed_over_limit_kmh": null
+    },
+    "missing": [
+     "speed_over_limit_kmh"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "B:drunk_003_plus",
+    "label": "B 음주운전 (혈중알코올 0.03% 이상)",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전자가 음주 상태였나요? (0.03% 이상)"
+   },
+   {
+    "id": "B:drugs",
+    "label": "B 약물운전",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "약물의 영향이 있었나요?"
+   },
+   {
+    "id": "B:no_license",
+    "label": "B 무면허 운전",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "무면허 운전이었나요?"
+   },
+   {
+    "id": "B:group_danger",
+    "label": "B 공동위험행위",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "2대 이상이 줄지어 위험하게 주행하던 중이었나요?"
+   },
+   {
+    "id": "B:reckless",
+    "label": "B 난폭운전",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "위반 행위를 연달아 하거나 반복하는 난폭운전 중이었나요?"
+   },
+   {
+    "id": "B:clear_first_entry",
+    "label": "B 명확한 선진입",
+    "party": "ego",
+    "category": "situational",
+    "delta": -10,
+    "observed": {
+     "entry_lead_sec": null,
+     "entry_speed_ratio": null
+    },
+    "missing": [
+     "entry_lead_sec",
+     "entry_speed_ratio"
+    ],
+    "detect": "auto",
+    "question": null
+   },
+   {
+    "id": "B:turn_completed",
+    "label": "B 좌회전 완료 직후(기 좌회전)",
+    "party": "ego",
+    "category": "situational",
+    "delta": -30,
+    "observed": {
+     "turn_almost_completed": null
+    },
+    "missing": [
+     "turn_almost_completed"
+    ],
+    "detect": "auto",
+    "question": null
+   }
+  ],
+  "auto_filled": [
+   "road.signal_present",
+   "road.wider_road",
+   "parties.ego.driver_factors"
+  ],
+  "notice": null,
+  "chapter": "car_car",
+  "fault_display": {
+   "kind": "ratio",
+   "party": null,
+   "value": null,
+   "text": "내 차 60 : 상대 40",
+   "note": null
+  }
+ },
+ "judge_version": "hmtm-0.1.1",
+ "result_with_vehicle": {
+  "status": "ok",
+  "provisional": true,
+  "rule_id": "차16-1",
+  "title": "왼쪽 직진 대 오른쪽 좌회전 (동일폭)",
+  "fault_by_party": {
+   "other": 40,
+   "ego": 60
+  },
+  "base_fault_by_party": {
+   "other": 40,
+   "ego": 60
+  },
+  "modifiers": [],
+  "unverifiable_factors": [
+   {
+    "id": "A:slow_violation",
+    "label": "A 서행·감속 불이행, 일시정지 위반",
+    "party": "other",
+    "category": "situational",
+    "delta": 10,
+    "observed": {
+     "entry_speed": null
+    },
+    "missing": [
+     "entry_speed_to_limit"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "A:inattention",
+    "label": "A 전방주시 위반·조작 지연",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "졸음, 한눈팔기 등으로 앞을 제대로 보지 않았거나 핸들·브레이크 조작이 늦었나요?"
+   },
+   {
+    "id": "A:drunk_under_003",
+    "label": "A 음주운전 (혈중알코올 0.03% 미만)",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전자가 음주 상태였나요? (0.03% 미만)"
+   },
+   {
+    "id": "A:speeding_under20",
+    "label": "A 제한속도 위반 (시속 20km 미만)",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "speed_over_limit_kmh": null
+    },
+    "missing": [
+     "speed_over_limit_kmh",
+     "speed_over_limit_kmh"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "A:dark_tint",
+    "label": "A 시야 불량 시 짙은 썬팅 차량 운전",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "야간·우천 등에 썬팅이 짙은 차량(앞면 70%, 옆면 40% 미만)이었나요?"
+   },
+   {
+    "id": "A:phone_use",
+    "label": "A 운전 중 휴대전화 사용·영상 시청",
+    "party": "other",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전 중 휴대전화를 쓰거나 영상을 보고 있었나요?"
+   },
+   {
+    "id": "A:speeding_20plus",
+    "label": "A 제한속도 위반 (시속 20km 이상)",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "speed_over_limit_kmh": null
+    },
+    "missing": [
+     "speed_over_limit_kmh"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "A:drunk_003_plus",
+    "label": "A 음주운전 (혈중알코올 0.03% 이상)",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전자가 음주 상태였나요? (0.03% 이상)"
+   },
+   {
+    "id": "A:drugs",
+    "label": "A 약물운전",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "약물의 영향이 있었나요?"
+   },
+   {
+    "id": "A:no_license",
+    "label": "A 무면허 운전",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "무면허 운전이었나요?"
+   },
+   {
+    "id": "A:group_danger",
+    "label": "A 공동위험행위",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "2대 이상이 줄지어 위험하게 주행하던 중이었나요?"
+   },
+   {
+    "id": "A:reckless",
+    "label": "A 난폭운전",
+    "party": "other",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "위반 행위를 연달아 하거나 반복하는 난폭운전 중이었나요?"
+   },
+   {
+    "id": "A:clear_first_entry",
+    "label": "A 명확한 선진입",
+    "party": "other",
+    "category": "situational",
+    "delta": -10,
+    "observed": {
+     "entry_lead_sec": null,
+     "entry_speed_ratio": null
+    },
+    "missing": [
+     "entry_lead_sec",
+     "entry_speed_ratio"
+    ],
+    "detect": "auto",
+    "question": null
+   },
+   {
+    "id": "B:narrow_turn",
+    "label": "B 좁게(小) 좌·우회전",
+    "party": "ego",
+    "category": "situational",
+    "delta": 10,
+    "observed": {
+     "narrow_turn": null
+    },
+    "missing": [
+     "narrow_turn"
+    ],
+    "detect": "auto",
+    "question": null
+   },
+   {
+    "id": "B:wide_turn",
+    "label": "B 넓게(大) 좌·우회전",
+    "party": "ego",
+    "category": "situational",
+    "delta": 10,
+    "observed": {
+     "wide_turn": null
+    },
+    "missing": [
+     "wide_turn"
+    ],
+    "detect": "auto",
+    "question": null
+   },
+   {
+    "id": "B:slow_violation",
+    "label": "B 서행·감속 불이행, 일시정지 위반",
+    "party": "ego",
+    "category": "situational",
+    "delta": 10,
+    "observed": {
+     "entry_speed": null
+    },
+    "missing": [
+     "entry_speed_to_limit"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "B:left_turn_prohibited",
+    "label": "B 좌회전 금지 위반",
+    "party": "ego",
+    "category": "situational",
+    "delta": 20,
+    "observed": {
+     "left_turn_prohibited_violation": null
+    },
+    "missing": [
+     "left_turn_prohibited_violation"
+    ],
+    "detect": "partial",
+    "question": null
+   },
+   {
+    "id": "B:inattention",
+    "label": "B 전방주시 위반·조작 지연",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "졸음, 한눈팔기 등으로 앞을 제대로 보지 않았거나 핸들·브레이크 조작이 늦었나요?"
+   },
+   {
+    "id": "B:drunk_under_003",
+    "label": "B 음주운전 (혈중알코올 0.03% 미만)",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전자가 음주 상태였나요? (0.03% 미만)"
+   },
+   {
+    "id": "B:speeding_under20",
+    "label": "B 제한속도 위반 (시속 20km 미만)",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "speed_over_limit_kmh": null
+    },
+    "missing": [
+     "speed_over_limit_kmh",
+     "speed_over_limit_kmh"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "B:dark_tint",
+    "label": "B 시야 불량 시 짙은 썬팅 차량 운전",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "야간·우천 등에 썬팅이 짙은 차량(앞면 70%, 옆면 40% 미만)이었나요?"
+   },
+   {
+    "id": "B:phone_use",
+    "label": "B 운전 중 휴대전화 사용·영상 시청",
+    "party": "ego",
+    "category": "notable",
+    "delta": 10,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전 중 휴대전화를 쓰거나 영상을 보고 있었나요?"
+   },
+   {
+    "id": "B:speeding_20plus",
+    "label": "B 제한속도 위반 (시속 20km 이상)",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "speed_over_limit_kmh": null
+    },
+    "missing": [
+     "speed_over_limit_kmh"
+    ],
+    "detect": "calibration",
+    "question": null
+   },
+   {
+    "id": "B:drunk_003_plus",
+    "label": "B 음주운전 (혈중알코올 0.03% 이상)",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "운전자가 음주 상태였나요? (0.03% 이상)"
+   },
+   {
+    "id": "B:drugs",
+    "label": "B 약물운전",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "약물의 영향이 있었나요?"
+   },
+   {
+    "id": "B:no_license",
+    "label": "B 무면허 운전",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "무면허 운전이었나요?"
+   },
+   {
+    "id": "B:group_danger",
+    "label": "B 공동위험행위",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "2대 이상이 줄지어 위험하게 주행하던 중이었나요?"
+   },
+   {
+    "id": "B:reckless",
+    "label": "B 난폭운전",
+    "party": "ego",
+    "category": "grave",
+    "delta": 20,
+    "observed": {
+     "user_factors": null
+    },
+    "missing": [
+     "user_factors"
+    ],
+    "detect": "manual",
+    "question": "위반 행위를 연달아 하거나 반복하는 난폭운전 중이었나요?"
+   },
+   {
+    "id": "B:clear_first_entry",
+    "label": "B 명확한 선진입",
+    "party": "ego",
+    "category": "situational",
+    "delta": -10,
+    "observed": {
+     "entry_lead_sec": null,
+     "entry_speed_ratio": null
+    },
+    "missing": [
+     "entry_lead_sec",
+     "entry_speed_ratio"
+    ],
+    "detect": "auto",
+    "question": null
+   },
+   {
+    "id": "B:turn_completed",
+    "label": "B 좌회전 완료 직후(기 좌회전)",
+    "party": "ego",
+    "category": "situational",
+    "delta": -30,
+    "observed": {
+     "turn_almost_completed": null
+    },
+    "missing": [
+     "turn_almost_completed"
+    ],
+    "detect": "auto",
+    "question": null
+   }
+  ],
+  "auto_filled": [
+   "road.signal_present",
+   "road.wider_road",
+   "parties.ego.driver_factors"
+  ],
+  "notice": null,
+  "chapter": "car_car",
+  "fault_display": {
+   "kind": "ratio",
+   "party": null,
+   "value": null,
+   "text": "내 차 60 : 상대 40",
+   "note": null
+  }
+ },
+ "vehicle_effects": [],
+ "vehicle_timeline": {
+  "t0_ms": 1794202228900,
+  "from_s": -15.0,
+  "to_s": 5.0,
+  "step_s": 0.2,
+  "collision_s": 0.0,
+  "video_collision_t": 18.2,
+  "sync_grade": "fine",
+  "aligned": true,
+  "speed": [
+   [
+    -15.0,
+    0.3
+   ],
+   [
+    -14.8,
+    1.1
+   ],
+   [
+    -14.6,
+    2.4
+   ],
+   [
+    -14.4,
+    4.2
+   ],
+   [
+    -14.2,
+    6.2
+   ],
+   [
+    -14.0,
+    8.6
+   ],
+   [
+    -13.8,
+    11.3
+   ],
+   [
+    -13.6,
+    14.1
+   ],
+   [
+    -13.4,
+    17.0
+   ],
+   [
+    -13.2,
+    20.0
+   ],
+   [
+    -13.0,
+    23.0
+   ],
+   [
+    -12.8,
+    25.9
+   ],
+   [
+    -12.6,
+    28.7
+   ],
+   [
+    -12.4,
+    31.4
+   ],
+   [
+    -12.2,
+    33.8
+   ],
+   [
+    -12.0,
+    35.8
+   ],
+   [
+    -11.8,
+    37.6
+   ],
+   [
+    -11.6,
+    38.9
+   ],
+   [
+    -11.4,
+    39.7
+   ],
+   [
+    -11.2,
+    41.0
+   ],
+   [
+    -11.0,
+    40.2
+   ],
+   [
+    -10.8,
+    39.4
+   ],
+   [
+    -10.6,
+    38.6
+   ],
+   [
+    -10.4,
+    37.9
+   ],
+   [
+    -10.2,
+    37.4
+   ],
+   [
+    -10.0,
+    37.0
+   ],
+   [
+    -9.8,
+    36.8
+   ],
+   [
+    -9.6,
+    36.8
+   ],
+   [
+    -9.4,
+    37.1
+   ],
+   [
+    -9.2,
+    37.6
+   ],
+   [
+    -9.0,
+    38.2
+   ],
+   [
+    -8.8,
+    38.9
+   ],
+   [
+    -8.6,
+    39.7
+   ],
+   [
+    -8.4,
+    40.6
+   ],
+   [
+    -8.2,
+    41.4
+   ],
+   [
+    -8.0,
+    42.0
+   ],
+   [
+    -7.8,
+    42.6
+   ],
+   [
+    -7.6,
+    43.0
+   ],
+   [
+    -7.4,
+    43.2
+   ],
+   [
+    -7.2,
+    43.2
+   ],
+   [
+    -7.0,
+    42.9
+   ],
+   [
+    -6.8,
+    42.5
+   ],
+   [
+    -6.6,
+    41.9
+   ],
+   [
+    -6.4,
+    41.2
+   ],
+   [
+    -6.2,
+    40.4
+   ],
+   [
+    -6.0,
+    39.8
+   ],
+   [
+    -5.8,
+    38.4
+   ],
+   [
+    -5.6,
+    36.4
+   ],
+   [
+    -5.4,
+    33.9
+   ],
+   [
+    -5.2,
+    31.2
+   ],
+   [
+    -5.0,
+    28.4
+   ],
+   [
+    -4.8,
+    26.0
+   ],
+   [
+    -4.6,
+    23.9
+   ],
+   [
+    -4.4,
+    22.5
+   ],
+   [
+    -4.2,
+    22.0
+   ],
+   [
+    -4.0,
+    22.2
+   ],
+   [
+    -3.8,
+    22.6
+   ],
+   [
+    -3.6,
+    23.3
+   ],
+   [
+    -3.4,
+    24.1
+   ],
+   [
+    -3.2,
+    25.0
+   ],
+   [
+    -3.0,
+    25.9
+   ],
+   [
+    -2.8,
+    26.7
+   ],
+   [
+    -2.6,
+    27.4
+   ],
+   [
+    -2.4,
+    27.8
+   ],
+   [
+    -2.2,
+    28.0
+   ],
+   [
+    -2.0,
+    27.8
+   ],
+   [
+    -1.8,
+    27.1
+   ],
+   [
+    -1.6,
+    26.2
+   ],
+   [
+    -1.4,
+    25.0
+   ],
+   [
+    -1.2,
+    23.7
+   ],
+   [
+    -1.0,
+    22.3
+   ],
+   [
+    -0.8,
+    21.0
+   ],
+   [
+    -0.6,
+    19.8
+   ],
+   [
+    -0.4,
+    18.9
+   ],
+   [
+    -0.2,
+    18.2
+   ],
+   [
+    0.0,
+    18.0
+   ],
+   [
+    0.2,
+    9.0
+   ],
+   [
+    0.4,
+    0.0
+   ],
+   [
+    0.6,
+    0.0
+   ],
+   [
+    0.8,
+    0.0
+   ],
+   [
+    1.0,
+    0.0
+   ],
+   [
+    1.2,
+    0.0
+   ],
+   [
+    1.4,
+    0.0
+   ],
+   [
+    1.6,
+    0.0
+   ],
+   [
+    1.8,
+    0.0
+   ],
+   [
+    2.0,
+    0.0
+   ],
+   [
+    2.2,
+    0.0
+   ],
+   [
+    2.4,
+    0.0
+   ],
+   [
+    2.6,
+    0.0
+   ],
+   [
+    2.8,
+    0.0
+   ],
+   [
+    3.0,
+    0.0
+   ],
+   [
+    3.2,
+    0.0
+   ],
+   [
+    3.4,
+    0.0
+   ],
+   [
+    3.6,
+    0.0
+   ],
+   [
+    3.8,
+    0.0
+   ],
+   [
+    4.0,
+    0.0
+   ],
+   [
+    4.2,
+    0.0
+   ],
+   [
+    4.4,
+    0.0
+   ],
+   [
+    4.6,
+    0.0
+   ],
+   [
+    4.8,
+    0.0
+   ],
+   [
+    5.0,
+    0.0
+   ]
+  ],
+  "speed_max": 43.2,
+  "turn_signal": [
+   {
+    "dir": "LEFT",
+    "from": -6.0,
+    "to": 5.0
+   }
+  ],
+  "brake": [
+   {
+    "from": 0.0,
+    "to": 5.0
+   }
+  ],
+  "gear": [
+   {
+    "value": "D",
+    "from": -15.0,
+    "to": 5.0
+   }
+  ],
+  "gaps": []
+ },
+ "analysis": {
+  "status": "ok",
+  "reason": null,
+  "message": null,
+  "analyzer": {
+   "name": "fake",
+   "version": "0.1.0"
+  },
+  "video": {
+   "duration_s": 30.0,
+   "fps": 5.0,
+   "frames": 150,
+   "width": 64,
+   "height": 48
+  },
+  "scenario": {
+   "scenario": "left_turn_motion",
+   "chosen_by": "request",
+   "video_read": true,
+   "description": "내 차 좌회전, 상대가 왼쪽 길에서 직진, 비신호 사거리 (차16-1). 내 차 움직임(ego_motion) 있음: 3초 출발, 12~14초 감속, 16초부터 좌회전, 18.2초 충돌. 데모: 충돌 6초 전부터 LEFT 지시등을 켠 차량 기록 (sd_data.py). 지시등은 이 도표의 가감 요소(진로변경 시 신호 불이행 +10)라 기록이 결과를 바꿀 수 있음"
+  }
+ },
+ "sync": {
+  "start_ms": 1794202212000,
+  "start_source": "filename",
+  "offset_ms": -1300,
+  "method": "speed_xcorr+impact",
+  "score": 1.0,
+  "grade": "fine",
+  "reason": null,
+  "t_collision_ms": 1794202228900,
+  "candidates": [
+   {
+    "source": "filename",
+    "start_ms": 1794202212000
+   }
+  ],
+  "params": {
+   "margin_ms": 15000,
+   "max_window_ms": 300000,
+   "min_before_ms": 3000,
+   "default_tz_min": 540,
+   "method": "coarse_start_v0",
+   "fine_corr": 0.7,
+   "impact_tol_ms": 500,
+   "search_ms": 15000,
+   "mtime_search_ms": 60000,
+   "grid_ms": 100,
+   "impact_decel_kmh_s": 10.0
+  },
+  "fine": {
+   "reason": null,
+   "offset_ms": -1300,
+   "score": 1.0,
+   "offset_candidates": [
+    {
+     "offset_ms": -1300,
+     "score": 1.0
+    },
+    {
+     "offset_ms": -200,
+     "score": 0.926
+    },
+    {
+     "offset_ms": -2400,
+     "score": 0.926
+    }
+   ],
+   "impact": {
+    "t_ms": 1794202229100,
+    "decel_kmh_s": 50.7,
+    "offset_ms": -1100,
+    "matched": true
+   }
+  },
+  "vehicle_gap": null,
+  "reason_text": null,
+  "clock_warnings": []
+ },
+ "collision_review": {
+  "needed": false,
+  "reason": null,
+  "message": null,
+  "t": 18.2,
+  "t_confidence": null,
+  "candidates": [],
+  "threshold": 0.5,
+  "can_pick": false,
+  "pick_until": null
+ }
+}

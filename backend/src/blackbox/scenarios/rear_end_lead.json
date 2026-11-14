@@ -1,0 +1,96 @@
+{
+  "schema_version": "bb-0.2",
+  "fake": {
+    "description": "교차로 아닌 길에서 서 있던 앞차를 뒤에서 들이받음 (상대 = 앞차)",
+    "delay_sec": 0,
+    "expect": {
+      "answers": {
+        "parties.other.stop_state": "driving"
+      },
+      "status": "needs_answers",
+      "judge_status": "ok",
+      "rule_id": "차41-1",
+      "fault_by_party": {
+        "ego": 100,
+        "other": 0
+      }
+    }
+  },
+  "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "reason": null,
+  "message": null,
+  "video": {
+    "duration_s": 30.0,
+    "fps": 30.0,
+    "frames": 900,
+    "width": 1920,
+    "height": 1080
+  },
+  "clock": {
+    "osd_start_ms": null
+  },
+  "facts": {
+    "schema_version": "0.3",
+    "collision": {
+      "a": "ego",
+      "b": "other",
+      "t": 18.2,
+      "frame": 546,
+      "zone": "road",
+      "contact": "front"
+    },
+    "parties": {
+      "ego": {
+        "movement": {
+          "value": "straight",
+          "source": "model"
+        }
+      },
+      "other": {
+        "cls": {
+          "value": "car",
+          "source": "model",
+          "confidence": 0.9
+        },
+        "movement": {
+          "value": "straight",
+          "source": "model"
+        },
+        "entry_from": {
+          "value": "south",
+          "source": "model"
+        },
+        "lead_order": {
+          "value": "leading",
+          "source": "model"
+        },
+        "stationary_at_collision": {
+          "value": true,
+          "source": "model"
+        }
+      }
+    },
+    "road": {
+      "location": {
+        "value": "straight",
+        "source": "model"
+      }
+    }
+  },
+  "ego_motion": {
+    "fps": 30.0,
+    "step": 3,
+    "t": [],
+    "speed_proxy": [],
+    "moving": [],
+    "yaw_proxy": [],
+    "jolt_t": [
+      18.2
+    ]
+  },
+  "hints": {}
+}

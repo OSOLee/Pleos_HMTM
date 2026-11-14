@@ -1,0 +1,8 @@
+runs/
+*.pt
+*.onnx
+data/
+datasets/
+*.mp4
+*.avi
+__pycache__/

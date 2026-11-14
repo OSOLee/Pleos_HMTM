@@ -1,0 +1,8335 @@
+{
+ "schema_version": "3.0",
+ "category": "car_pedestrian",
+ "standard": {
+  "name": "자동차사고 과실비율 인정기준",
+  "edition": "2023.06.30 개정판",
+  "chapter": "제3편 제1장 자동차와 보행자의 사고 (p.30~123)"
+ },
+ "conventions": {
+  "roles": "A = 자동차(이륜차·원동기장치자전거 포함), B = 보행자",
+  "base": "원문은 보행자 과실만 표기한다. base는 A = 100 - 보행자 과실, B = 보행자 과실",
+  "modifiers": "보행자 쪽 가감은 party B에 원문 부호 그대로, 자동차 운전자의 현저·중대한 과실은 party A에 +10/+20 (원문의 보행자 -10/-20과 같음)",
+  "not_applicable": "도표에 '비적용'으로 적힌 항목은 modifiers에 넣지 않고 not_applicable에 기록",
+  "scope": "이륜자동차·자전거를 타고 가는 사람은 보행자가 아님. 자전거·이륜차·손수레를 끌고 횡단보도를 건너면 보행자"
+ },
+ "facts_used": {
+  "scene": {
+   "crosswalk_signal": "true/false. 횡단보도(부근)에 보행자 신호등이 있는지",
+   "location": "intersection / straight / off_road / parking_lot (기존 값)",
+   "signal.state": "none 등 (기존 값). 보22는 신호 없는 교차로",
+   "road_class": "expressway 값 추가 (고속도로·자동차전용도로, 보35·보36)",
+   "night, view_obstructed, bad_weather, bright_place": "true/false",
+   "arterial_road": "true/false. 간선도로",
+   "ped_busy_area": "true/false. 주택·상점가·학교",
+   "protection_zone": "child / elderly / disabled / none",
+   "sidewalk_separated, center_line": "true/false",
+   "crossing_prohibition": "none / sign / barrier",
+   "vehicle_access_zone, easy_walk_area, ped_warning_sign": "true/false"
+  },
+  "A(자동차)": {
+   "movement": "straight / left_turn / right_turn / reverse",
+   "signal_at_entry": "green / green_arrow / yellow / red (교차로 또는 횡단보도 정지선 진입 시점)",
+   "right_turn_signal": "green / red / none (우회전 신호기)",
+   "impact_after_intersection": "true/false. 보1~보7(교차로 통과 후) vs 보8~보12(통과 전)",
+   "passed_crosswalk": "true/false. 보14~보18(횡단보도 통과 후) vs 보19(통과 전)",
+   "passed_stopped_vehicles, started_after_stop, reverse_warning, riding_on_crosswalk, on_motorway": "true/false",
+   "speed_over_limit_kmh, avoidable_at_limit, user_factors": "기존 값"
+  },
+  "B(보행자)": {
+   "cls": "person",
+   "ped_place": "crosswalk / near_crosswalk / near_overpass / intersection / road / sidewalk / roadway / ped_only_road / ped_priority_road",
+   "ped_activity": "crossing / walking / lying_or_playing",
+   "ped_posture": "sitting / lying / standing (보30)",
+   "ped_signal_at_start, ped_signal_at_impact": "green / flashing_green / red",
+   "dist_from_crosswalk_m": "횡단보도(육교·지하도)에서의 거리 m",
+   "crossing_road_width": "narrower / equal / wider (보22)",
+   "roadway_walk_position": "edge_1m / beyond_1m (보26), edge / center (보27-2, 보28)",
+   "sidewalk_closed, diagonal_crossing, inside_stop_line, opposite_side_start, behind_before_reverse, on_shoulder": "true/false",
+   "expressway_walk_reason": "none / justified",
+   "vulnerable_type": "child(만 13세 미만) / elderly(만 65세 이상) / disabled(등록 장애인) / none",
+   "in_own_protection_zone": "true/false. 보호구역 종류와 보행자가 일치 (어린이보호구역의 어린이 등)",
+   "walk_manner": "normal / stop / back / zigzag",
+   "ped_factors": "group, sudden_entry, intentional_block, inline_skate 중 해당 값 배열. 없으면 [], 모르면 null"
+  }
+ },
+ "thresholds": {},
+ "global_modifiers": [],
+ "rules": [
+  {
+   "id": "보1",
+   "title": "보행자 적색 횡단 개시·적색 충격 / 자동차 녹색 교차로 통과 후",
+   "source": {
+    "ref": "제3편 제1장 p.38 [보1]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn",
+         "right_turn"
+        ]
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "green"
+       }
+      ]
+     },
+     "B": {
+      "label": "적색에 횡단 개시, 적색에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "red"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 30,
+    "B": 70
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입",
+    "보·차도 구분 없음 (보행자 적색 횡단이라 감산하지 않음)"
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄",
+    "녹색에 진입해 충격 시점에 황색으로 바뀐 경우도 보1 준용",
+    "차량은 직진, 좌회전, 우회전 규제를 받는 우회전"
+   ]
+  },
+  {
+   "id": "보2",
+   "title": "보행자 적색 횡단 개시·적색 충격 / 자동차 황색 교차로 통과 후",
+   "source": {
+    "ref": "제3편 제1장 p.42 [보2]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn",
+         "right_turn"
+        ]
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "yellow"
+       }
+      ]
+     },
+     "B": {
+      "label": "적색에 횡단 시작, 적색에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "red"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 50,
+    "B": 50
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "정지·후퇴·ㄹ자 보행",
+    "보행자 급진입",
+    "보·차도 구분 없음"
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보3",
+   "title": "보행자 적색 횡단 개시·녹색(점멸) 충격 / 자동차 황색 교차로 통과 후",
+   "source": {
+    "ref": "제3편 제1장 p.46 [보3]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn"
+        ]
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "yellow"
+       }
+      ]
+     },
+     "B": {
+      "label": "적색에 횡단 개시, 녹색(녹색점멸)에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "red"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "in",
+        "value": [
+         "green",
+         "flashing_green"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 70,
+    "B": 30
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "정지·후퇴·ㄹ자 보행",
+    "보행자 급진입",
+    "보·차도 구분 없음"
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보4",
+   "title": "보행자 녹색 횡단 개시·녹색(점멸) 충격 / 자동차 황색 교차로 통과 후",
+   "source": {
+    "ref": "제3편 제1장 p.46 [보4]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn"
+        ]
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "yellow"
+       }
+      ]
+     },
+     "B": {
+      "label": "녹색에 횡단 개시, 녹색(녹색점멸)에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "green"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "in",
+        "value": [
+         "green",
+         "flashing_green"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "정지·후퇴·ㄹ자 보행",
+    "보·차도 구분 없음"
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄",
+    "녹색점멸은 녹색과 같게 봄"
+   ]
+  },
+  {
+   "id": "보5",
+   "title": "보행자 녹색 횡단 개시·녹색(점멸) 충격 / 자동차 적색 교차로 통과 후",
+   "source": {
+    "ref": "제3편 제1장 p.49 [보5]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn",
+         "right_turn"
+        ]
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "녹색에 횡단 개시, 녹색(녹색점멸)에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "green"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "in",
+        "value": [
+         "green",
+         "flashing_green"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    }
+   ],
+   "not_applicable": [
+    "야간·기타 시야장애",
+    "간선도로",
+    "정지·후퇴·ㄹ자 보행",
+    "주택·상점가·학교",
+    "집단횡단",
+    "어린이·노인·장애인",
+    "어린이·노인·장애인보호구역",
+    "차의 현저한 과실",
+    "차의 중대한 과실",
+    "보·차도 구분 없음"
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보6",
+   "title": "보행자 적색 횡단 개시·적색 충격 / 자동차 적색 교차로 통과 후",
+   "source": {
+    "ref": "제3편 제1장 p.49 [보6]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn",
+         "right_turn"
+        ]
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "적색에 횡단 개시, 적색에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "red"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 60,
+    "B": 40
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "정지·후퇴·ㄹ자 보행",
+    "보행자 급진입"
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보7",
+   "title": "보행자 녹색점멸 횡단 개시·적색 충격 / 자동차 적색 교차로 통과 후",
+   "source": {
+    "ref": "제3편 제1장 p.53 [보7]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn",
+         "right_turn"
+        ]
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "녹색점멸에 횡단 개시, 적색에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "flashing_green"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 80,
+    "B": 20
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보8",
+   "title": "보행자 적색 횡단 개시·적색 충격 / 자동차 녹색 직진 (교차로 통과 전)",
+   "source": {
+    "ref": "제3편 제1장 p.56 [보8]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "straight"
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": false
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "green"
+       }
+      ]
+     },
+     "B": {
+      "label": "적색에 횡단 개시, 적색에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "red"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 30,
+    "B": 70
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보·차도 구분 없음"
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보9",
+   "title": "보행자 적색 횡단 개시·녹색(점멸) 충돌 / 자동차 적색 직진 (교차로 통과 전)",
+   "source": {
+    "ref": "제3편 제1장 p.56 [보9]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "straight"
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": false
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "적색에 횡단 개시, 녹색(녹색점멸)에 충돌",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "red"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "in",
+        "value": [
+         "green",
+         "flashing_green"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 80,
+    "B": 20
+   },
+   "modifiers": [
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "야간·기타 시야장애",
+    "간선도로",
+    "정지·후퇴·ㄹ자 보행",
+    "보행자 급진입",
+    "보·차도 구분 없음"
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄",
+    "적색에 횡단 개시해 녹색점멸에 충돌한 경우도 같음",
+    "차량의 신호위반 과실이 중해 정지·후퇴는 가산하지 않음"
+   ]
+  },
+  {
+   "id": "보10",
+   "title": "보행자 녹색 횡단 개시·녹색(점멸) 충격 / 자동차 적색 직진 (교차로 통과 전)",
+   "source": {
+    "ref": "제3편 제1장 p.60 [보10]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "straight"
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": false
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "녹색에 횡단 개시, 녹색(녹색점멸)에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "green"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "in",
+        "value": [
+         "green",
+         "flashing_green"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    }
+   ],
+   "not_applicable": [
+    "야간·기타 시야장애",
+    "간선도로",
+    "정지·후퇴·ㄹ자 보행",
+    "주택·상점가·학교",
+    "집단횡단",
+    "보·차도 구분 없음",
+    "어린이·노인·장애인",
+    "어린이·노인·장애인보호구역",
+    "차의 현저한 과실",
+    "차의 중대한 과실"
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보11(가)",
+   "title": "보행자 녹색 횡단 개시·적색 충격 / 자동차 녹색 직진 (교차로 통과 전)",
+   "source": {
+    "ref": "제3편 제1장 p.60 [보11]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "straight"
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": false
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "green"
+       }
+      ]
+     },
+     "B": {
+      "label": "녹색에 횡단 개시, 적색에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "green"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 90,
+    "B": 10
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보11(나)",
+   "title": "보행자 녹색점멸 횡단 개시·적색 충격 / 자동차 녹색 직진 (교차로 통과 전)",
+   "source": {
+    "ref": "제3편 제1장 p.60 [보11]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "straight"
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": false
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "green"
+       }
+      ]
+     },
+     "B": {
+      "label": "녹색점멸에 횡단 개시, 적색에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "flashing_green"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 80,
+    "B": 20
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보12",
+   "title": "보행자 녹색점멸 횡단 개시·녹색점멸 충격 / 자동차 적색 직진 (교차로 통과 전)",
+   "source": {
+    "ref": "제3편 제1장 p.63 [보12]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "straight"
+       },
+       {
+        "fact": "impact_after_intersection",
+        "op": "==",
+        "value": false
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "녹색점멸에 횡단 개시, 녹색점멸에 충격",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "flashing_green"
+       },
+       {
+        "fact": "ped_signal_at_impact",
+        "op": "==",
+        "value": "flashing_green"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 95,
+    "B": 5
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "횡단보도와 붙은 차량정지선 안쪽은 횡단보도로 봄. 횡단보도 표시가 없어도 보행자 신호기가 있으면 신호 있는 횡단보도 사고로 봄"
+   ]
+  },
+  {
+   "id": "보13",
+   "title": "신호등 없는 횡단보도 횡단 사고",
+   "source": {
+    "ref": "제3편 제1장 p.66 [보13]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn",
+         "right_turn"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 15
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 15
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 15
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_center",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_no_center",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_elderly_disabled_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_child_zone_unsignalized",
+     "party": "B",
+     "delta": -30
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "단일로(직선·곡선)와 교차로 부근의 신호 없는 횡단보도 모두 포함",
+    "보·차도 구분이나 중앙선 여부와 관계없이 적용",
+    "원문 ①은 야간·시야장애와 간선도로를 함께 묶어 '15%까지'로 설명함. 둘 다 해당할 때 합산할지 원문 대조 필요"
+   ]
+  },
+  {
+   "id": "보14(가)",
+   "title": "보행자 녹색 횡단 중 / 자동차 적색 교차로 진입 후 횡단보도 통과",
+   "source": {
+    "ref": "제3편 제1장 p.69 [보14]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn"
+        ]
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 녹색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "in",
+        "value": [
+         "green",
+         "flashing_green"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 90,
+    "B": 10
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄",
+    "횡단보도 통과 전 충격은 보19, 우회전 신호기에 따른 우회전은 보17·보18"
+   ]
+  },
+  {
+   "id": "보14(나)",
+   "title": "보행자 적색 횡단 중 / 자동차 적색 교차로 진입 후 횡단보도 통과",
+   "source": {
+    "ref": "제3편 제1장 p.69 [보14]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn"
+        ]
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 적색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "in",
+        "value": [
+         "red"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 60,
+    "B": 40
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄",
+    "횡단보도 통과 전 충격은 보19, 우회전 신호기에 따른 우회전은 보17·보18"
+   ]
+  },
+  {
+   "id": "보15(가)",
+   "title": "보행자 녹색 횡단 중 / 자동차 황색 교차로 진입 후 횡단보도 통과",
+   "source": {
+    "ref": "제3편 제1장 p.73 [보15]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn"
+        ]
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "yellow"
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 녹색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "in",
+        "value": [
+         "green",
+         "flashing_green"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 90,
+    "B": 10
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄"
+   ]
+  },
+  {
+   "id": "보15(나)",
+   "title": "보행자 적색 횡단 중 / 자동차 황색 교차로 진입 후 횡단보도 통과",
+   "source": {
+    "ref": "제3편 제1장 p.73 [보15]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn"
+        ]
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "==",
+        "value": "yellow"
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 적색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "in",
+        "value": [
+         "red"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 50,
+    "B": 50
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄"
+   ]
+  },
+  {
+   "id": "보16",
+   "title": "보행자 적색 횡단 중 / 자동차 녹색 교차로 진입 후 횡단보도 통과",
+   "source": {
+    "ref": "제3편 제1장 p.73 [보16]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn"
+        ]
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "signal_at_entry",
+        "op": "in",
+        "value": [
+         "green",
+         "green_arrow"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 적색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 50,
+    "B": 50
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 30
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄",
+    "차량이 정상 신호라 횡단금지 가산이 보15보다 큼 (표지 20, 시설 30)"
+   ]
+  },
+  {
+   "id": "보17(가)",
+   "title": "보행자 녹색 횡단 중 / 우회전 신호 적색에 우회전",
+   "source": {
+    "ref": "제3편 제1장 p.77 [보17]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "right_turn"
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "right_turn_signal",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 녹색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "in",
+        "value": [
+         "green",
+         "flashing_green"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 90,
+    "B": 10
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄"
+   ],
+   "priority": 1
+  },
+  {
+   "id": "보17(나)",
+   "title": "보행자 적색 횡단 중 / 우회전 신호 적색에 우회전",
+   "source": {
+    "ref": "제3편 제1장 p.77 [보17]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "right_turn"
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "right_turn_signal",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 적색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "in",
+        "value": [
+         "red"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 60,
+    "B": 40
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄"
+   ],
+   "priority": 1
+  },
+  {
+   "id": "보18",
+   "title": "보행자 적색 횡단 중 / 우회전 신호 녹색에 우회전",
+   "source": {
+    "ref": "제3편 제1장 p.77 [보18]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "right_turn"
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": true
+       },
+       {
+        "fact": "right_turn_signal",
+        "op": "==",
+        "value": "green"
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 적색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "==",
+        "value": "red"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 40,
+    "B": 60
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 30
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄"
+   ],
+   "priority": 1
+  },
+  {
+   "id": "보19(가)",
+   "title": "보행자 녹색 횡단 중 / 자동차 횡단보도 통과 전",
+   "source": {
+    "ref": "제3편 제1장 p.81 [보19]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "any": [
+         {
+          "fact": "movement",
+          "op": "==",
+          "value": "straight"
+         },
+         {
+          "all": [
+           {
+            "fact": "movement",
+            "op": "==",
+            "value": "right_turn"
+           },
+           {
+            "fact": "right_turn_signal",
+            "op": "==",
+            "value": "none"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": false
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 녹색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "in",
+        "value": [
+         "green",
+         "flashing_green"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 80,
+    "B": 20
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄",
+    "교차로 통과 전 사고라 차량 신호는 보지 않음",
+    "우회전 신호기가 없는 곳의 우회전 차량도 이 기준"
+   ]
+  },
+  {
+   "id": "보19(나)",
+   "title": "보행자 적색 횡단 중 / 자동차 횡단보도 통과 전",
+   "source": {
+    "ref": "제3편 제1장 p.81 [보19]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "any": [
+         {
+          "fact": "movement",
+          "op": "==",
+          "value": "straight"
+         },
+         {
+          "all": [
+           {
+            "fact": "movement",
+            "op": "==",
+            "value": "right_turn"
+           },
+           {
+            "fact": "right_turn_signal",
+            "op": "==",
+            "value": "none"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "fact": "passed_crosswalk",
+        "op": "==",
+        "value": false
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 적색 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       },
+       {
+        "fact": "ped_signal_at_start",
+        "op": "in",
+        "value": [
+         "red"
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 50,
+    "B": 50
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "차량 신호는 횡단보도 정지선 진입 시점, 보행자 신호는 횡단 개시 시점 기준",
+    "녹색점멸은 녹색과 같게 봄",
+    "교차로 통과 전 사고라 차량 신호는 보지 않음",
+    "우회전 신호기가 없는 곳의 우회전 차량도 이 기준"
+   ]
+  },
+  {
+   "id": "보20",
+   "title": "직선도로 신호 없는 횡단보도 부근 횡단",
+   "source": {
+    "ref": "제3편 제1장 p.84 [보20]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "straight"
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 10m 이내 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_crosswalk"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 80,
+    "B": 20
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_center",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_no_center",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_inside_stop_line",
+     "party": "B",
+     "delta": -10
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_elderly_disabled_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_child_zone_unsignalized",
+     "party": "B",
+     "delta": -30
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "횡단보도 부근은 10m 내외. 10~30m 지점은 보행자 과실 +10, 30m를 넘으면 무단횡단(보22·보23) 기준",
+    "보·차도 구분이나 중앙선 여부와 관계없이 적용"
+   ]
+  },
+  {
+   "id": "보21",
+   "title": "육교·지하도 부근 횡단",
+   "source": {
+    "ref": "제3편 제1장 p.84 [보21]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "straight"
+       }
+      ]
+     },
+     "B": {
+      "label": "육교·지하도 10m 이내 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "near_overpass"
+       },
+       {
+        "fact": "dist_from_crosswalk_m",
+        "op": "<=",
+        "value": 30
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 60,
+    "B": 40
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_near_10_30m",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "육교·지하도 부근은 10m 내외. 10~30m는 +10, 30m를 넘으면 무단횡단 기준",
+    "dist_from_crosswalk_m에 육교·지하도까지 거리를 넣음"
+   ]
+  },
+  {
+   "id": "보22(가)",
+   "title": "신호등 없는 교차로 횡단 중 (소로 횡단)",
+   "source": {
+    "ref": "제3편 제1장 p.89 [보22]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.location",
+      "op": "==",
+      "value": "intersection",
+      "of": "facts"
+     },
+     {
+      "fact": "signal.state",
+      "op": "==",
+      "value": "none",
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn",
+         "right_turn"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "교차로 소로 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "any": [
+         {
+          "fact": "ped_place",
+          "op": "==",
+          "value": "intersection"
+         },
+         {
+          "all": [
+           {
+            "fact": "ped_place",
+            "op": "in",
+            "value": [
+             "near_crosswalk",
+             "near_overpass"
+            ]
+           },
+           {
+            "fact": "dist_from_crosswalk_m",
+            "op": ">",
+            "value": 30
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "fact": "crossing_road_width",
+        "op": "==",
+        "value": "narrower"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 90,
+    "B": 10
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_diagonal",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_center",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_no_center",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "crossing_road_width: 보행자가 건넌 도로가 차량이 지나던 도로보다 좁으면 narrower",
+    "도로 폭은 계측이 아니라 운전자가 한눈에 분별할 수 있는지로 판단 (p.32 대법원 97다4187)",
+    "보·차도 구분이나 중앙선 여부와 관계없이 적용"
+   ]
+  },
+  {
+   "id": "보22(나)",
+   "title": "신호등 없는 교차로 횡단 중 (동일폭 횡단)",
+   "source": {
+    "ref": "제3편 제1장 p.89 [보22]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.location",
+      "op": "==",
+      "value": "intersection",
+      "of": "facts"
+     },
+     {
+      "fact": "signal.state",
+      "op": "==",
+      "value": "none",
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn",
+         "right_turn"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "교차로 동일폭 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "any": [
+         {
+          "fact": "ped_place",
+          "op": "==",
+          "value": "intersection"
+         },
+         {
+          "all": [
+           {
+            "fact": "ped_place",
+            "op": "in",
+            "value": [
+             "near_crosswalk",
+             "near_overpass"
+            ]
+           },
+           {
+            "fact": "dist_from_crosswalk_m",
+            "op": ">",
+            "value": 30
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "fact": "crossing_road_width",
+        "op": "==",
+        "value": "equal"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 80,
+    "B": 20
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_diagonal",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_center",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_no_center",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "crossing_road_width: 보행자가 건넌 도로가 차량이 지나던 도로보다 좁으면 narrower",
+    "도로 폭은 계측이 아니라 운전자가 한눈에 분별할 수 있는지로 판단 (p.32 대법원 97다4187)",
+    "보·차도 구분이나 중앙선 여부와 관계없이 적용"
+   ]
+  },
+  {
+   "id": "보22(다)",
+   "title": "신호등 없는 교차로 횡단 중 (대로 횡단)",
+   "source": {
+    "ref": "제3편 제1장 p.89 [보22]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.location",
+      "op": "==",
+      "value": "intersection",
+      "of": "facts"
+     },
+     {
+      "fact": "signal.state",
+      "op": "==",
+      "value": "none",
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "in",
+        "value": [
+         "straight",
+         "left_turn",
+         "right_turn"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "교차로 대로 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "any": [
+         {
+          "fact": "ped_place",
+          "op": "==",
+          "value": "intersection"
+         },
+         {
+          "all": [
+           {
+            "fact": "ped_place",
+            "op": "in",
+            "value": [
+             "near_crosswalk",
+             "near_overpass"
+            ]
+           },
+           {
+            "fact": "dist_from_crosswalk_m",
+            "op": ">",
+            "value": 30
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "fact": "crossing_road_width",
+        "op": "==",
+        "value": "wider"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 70,
+    "B": 30
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_diagonal",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_center",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_no_center",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "crossing_road_width: 보행자가 건넌 도로가 차량이 지나던 도로보다 좁으면 narrower",
+    "도로 폭은 계측이 아니라 운전자가 한눈에 분별할 수 있는지로 판단 (p.32 대법원 97다4187)",
+    "보·차도 구분이나 중앙선 여부와 관계없이 적용"
+   ]
+  },
+  {
+   "id": "보23",
+   "title": "단일로 횡단 중 사고",
+   "source": {
+    "ref": "제3편 제1장 p.93 [보23]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.location",
+      "op": "==",
+      "value": "straight",
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "straight"
+       }
+      ]
+     },
+     "B": {
+      "label": "도로 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "any": [
+         {
+          "fact": "ped_place",
+          "op": "==",
+          "value": "road"
+         },
+         {
+          "all": [
+           {
+            "fact": "ped_place",
+            "op": "in",
+            "value": [
+             "near_crosswalk",
+             "near_overpass"
+            ]
+           },
+           {
+            "fact": "dist_from_crosswalk_m",
+            "op": ">",
+            "value": 30
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "fact": "ped_activity",
+        "op": "==",
+        "value": "crossing"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 80,
+    "B": 20
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk_no_center",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "원문 도표 제목은 '단일로(중앙선 없음)'이나 해설은 통상의 단일로 전체로 설명함. 중앙선 조건은 넣지 않음 (원문 대조 필요)",
+    "횡단보도·육교에서 30m를 넘는 곳의 횡단도 이 기준"
+   ],
+   "exclude_if": [
+    {
+     "role": "A",
+     "fact": "on_motorway",
+     "op": "==",
+     "value": true,
+     "reason": "자동차전용도로에서는 이 기준을 적용하지 않음"
+    }
+   ]
+  },
+  {
+   "id": "보24",
+   "title": "자동차 보도 침범 사고",
+   "source": {
+    "ref": "제3편 제1장 p.96 [보24]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [],
+    "roles": {
+     "A": {
+      "label": "보도 침범 주행",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "보도 보행",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "sidewalk"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_vehicle_access_zone",
+     "party": "B",
+     "delta": 5
+    }
+   ],
+   "not_applicable": [
+    "야간·기타 시야장애",
+    "간선도로",
+    "정지·후퇴·ㄹ자 보행",
+    "보행자 급진입",
+    "주택·상점가·학교",
+    "어린이·노인·장애인",
+    "어린이·노인·장애인 보호구역",
+    "차의 현저한 과실",
+    "차의 중대한 과실",
+    "보·차도 구분 없음"
+   ],
+   "notes": [
+    "차도가 아닌 장소로 진출하거나 그곳에서 차도로 진입하다 보도 위 보행자를 충격",
+    "보도 위 후진 사고도 이 기준"
+   ],
+   "priority": 1
+  },
+  {
+   "id": "보25",
+   "title": "보도 공사 중 차도 보행 사고",
+   "source": {
+    "ref": "제3편 제1장 p.96 [보25]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "차도 보행 (보도 공사·퇴적토 등)",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "roadway"
+       },
+       {
+        "fact": "sidewalk_closed",
+        "op": "==",
+        "value": true
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 90,
+    "B": 10
+   },
+   "modifiers": [
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "운전자도 공사 상황을 보고 차도 보행을 예견할 수 있어 간선도로 가산은 5%까지"
+   ]
+  },
+  {
+   "id": "보26(가)",
+   "title": "차도 보행 중 사고 (보·차도 경계 1m 이내)",
+   "source": {
+    "ref": "제3편 제1장 p.97 [보26]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "차도 보행 (경계 1m 이내)",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "roadway"
+       },
+       {
+        "fact": "sidewalk_closed",
+        "op": "==",
+        "value": false
+       },
+       {
+        "fact": "roadway_walk_position",
+        "op": "==",
+        "value": "edge_1m"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 80,
+    "B": 20
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "차도측단: 보·차도 경계선에서 1m 이내",
+    "간선도로는 차도측단을 빼고 1개 차선씩 중앙 쪽으로 들어갈 때마다 5%씩 더해 최고 20%까지 (원문 해설). 차선 수 가산은 아직 반영하지 않음"
+   ]
+  },
+  {
+   "id": "보26(나)",
+   "title": "차도 보행 중 사고 (1m 이상)",
+   "source": {
+    "ref": "제3편 제1장 p.97 [보26]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "차도 보행 (경계 1m 이상)",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "roadway"
+       },
+       {
+        "fact": "sidewalk_closed",
+        "op": "==",
+        "value": false
+       },
+       {
+        "fact": "roadway_walk_position",
+        "op": "==",
+        "value": "beyond_1m"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 70,
+    "B": 30
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "차도측단: 보·차도 경계선에서 1m 이내",
+    "간선도로는 차도측단을 빼고 1개 차선씩 중앙 쪽으로 들어갈 때마다 5%씩 더해 최고 20%까지 (원문 해설). 차선 수 가산은 아직 반영하지 않음"
+   ]
+  },
+  {
+   "id": "보27-1",
+   "title": "중앙선이 없는 도로 차도 보행 중 사고",
+   "source": {
+    "ref": "제3편 제1장 p.100 [보27-1]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     },
+     {
+      "fact": "scene.center_line",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "차도 보행",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "roadway"
+       },
+       {
+        "fact": "ped_activity",
+        "op": "==",
+        "value": "walking"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_intentional_block",
+     "party": "B",
+     "delta": 15
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "보도와 차도의 구별이 없고 중앙선이 없는 도로 (일방통행은 차선으로 구분되지 않은 도로)"
+   ]
+  },
+  {
+   "id": "보27-2",
+   "title": "차도 가장자리 보행 중 사고 (중앙선 있는 도로)",
+   "source": {
+    "ref": "제3편 제1장 p.103 [보27-2]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     },
+     {
+      "fact": "scene.center_line",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "차도 가장자리 보행",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "roadway"
+       },
+       {
+        "fact": "ped_activity",
+        "op": "==",
+        "value": "walking"
+       },
+       {
+        "fact": "roadway_walk_position",
+        "op": "==",
+        "value": "edge"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "일방통행인 경우 차선으로 구분된 도로도 포함 (center_line을 true로)"
+   ]
+  },
+  {
+   "id": "보28",
+   "title": "차도 중앙부분 보행 중 사고 (중앙선 있는 도로)",
+   "source": {
+    "ref": "제3편 제1장 p.103 [보28]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     },
+     {
+      "fact": "scene.center_line",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "차도 중앙부분 보행",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "roadway"
+       },
+       {
+        "fact": "ped_activity",
+        "op": "==",
+        "value": "walking"
+       },
+       {
+        "fact": "roadway_walk_position",
+        "op": "==",
+        "value": "center"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 80,
+    "B": 20
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "간선도로는 1개 차선씩 중앙 쪽으로 들어갈 때마다 5%씩 더해 최고 20%까지 (원문 해설). 차선 수 가산은 아직 반영하지 않음"
+   ]
+  },
+  {
+   "id": "보29-1",
+   "title": "보행자 전용도로 사고",
+   "source": {
+    "ref": "제3편 제1장 p.106 [보29-1]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [],
+    "roles": {
+     "A": {
+      "label": "전용도로 침범 주행",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "보행자 전용도로 보행",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "ped_only_road"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [],
+   "not_applicable": [
+    "야간·기타 시야장애",
+    "간선도로",
+    "정지·후퇴·ㄹ자 보행",
+    "보행자 급진입",
+    "주택·상점가·학교",
+    "어린이·노인·장애인",
+    "어린이·노인·장애인 보호구역",
+    "차의 현저한 과실",
+    "차의 중대한 과실",
+    "보·차도 구분 없음"
+   ],
+   "priority": 1
+  },
+  {
+   "id": "보29-2",
+   "title": "보행자 우선도로 사고",
+   "source": {
+    "ref": "제3편 제1장 p.108 [보29-2]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [],
+    "roles": {
+     "A": {
+      "label": "우선도로 침범 주행",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "보행자 우선도로 보행",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "ped_priority_road"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_intentional_block",
+     "party": "B",
+     "delta": 15
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "priority": 1
+  },
+  {
+   "id": "보30",
+   "title": "보행자 위험행위 사고 (차도에서 놀기, 누워 있음)",
+   "source": {
+    "ref": "제3편 제1장 p.110 [보30]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "차도에서 놀기·누워 있음",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_activity",
+        "op": "==",
+        "value": "lying_or_playing"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 60,
+    "B": 40
+   },
+   "modifiers": [
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -10
+    },
+    {
+     "ref": "ped_car_started_after_stop",
+     "party": "B",
+     "delta": -10
+    },
+    {
+     "ref": "ped_bright_place",
+     "party": "B",
+     "delta": -10
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "car_ped_sitting_visible",
+     "party": "A",
+     "delta": 10
+    }
+   ],
+   "notes": [
+    "음주자·노상유희자 포함. 주간·야간 구분 없이 기본 40%",
+    "앉아 있는 등 발견이 쉬우면 차의 현저한 과실로 봄"
+   ],
+   "priority": 1
+  },
+  {
+   "id": "보32",
+   "title": "후진 자동차 후미 횡단 사고",
+   "source": {
+    "ref": "제3편 제1장 p.113 [보32]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [],
+    "roles": {
+     "A": {
+      "label": "후진",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "movement",
+        "op": "==",
+        "value": "reverse"
+       }
+      ]
+     },
+     "B": {
+      "label": "후진 차량 후미 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sidewalk_roadway",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_warned_by_horn",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_behind_before_reverse",
+     "party": "B",
+     "delta": -10
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "보행자 급진입"
+   ],
+   "notes": [
+    "보31(후진 차량 3m 이내 횡단)은 도로교통법 개정으로 보32와 통합됨",
+    "같은 유형이라도 보도에서 나면 보24, 주차장 등 도로 외 장소면 보34"
+   ]
+  },
+  {
+   "id": "보33",
+   "title": "이륜차 횡단보도 횡단 주행 중 사고",
+   "source": {
+    "ref": "제3편 제1장 p.116 [보33]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [],
+    "roles": {
+     "A": {
+      "label": "이륜차로 횡단보도 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       },
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "two_wheeler"
+       },
+       {
+        "fact": "riding_on_crosswalk",
+        "op": "==",
+        "value": true
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단보도 횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "ped_place",
+        "op": "==",
+        "value": "crosswalk"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_opposite_side",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_busy_area",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "이륜차의 현저·중대한 과실이 겹치면 중대한 과실만",
+    "자전거·이륜차에서 내려 끌고 가던 사람은 보행자로 봄"
+   ],
+   "priority": 2
+  },
+  {
+   "id": "보34",
+   "title": "차도가 아닌 장소에서의 보행자 횡단 사고",
+   "source": {
+    "ref": "제3편 제1장 p.118 [보34]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.location",
+      "op": "in",
+      "value": [
+       "off_road",
+       "parking_lot"
+      ],
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "횡단",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 100,
+    "B": 0
+   },
+   "modifiers": [
+    {
+     "ref": "ped_sudden_entry",
+     "party": "B",
+     "delta": 5
+    },
+    {
+     "ref": "ped_night_view",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_view_obstructed",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_arterial",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_stop_back_zigzag",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_sign",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_crossing_barrier",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_serious_rideable",
+     "party": "B",
+     "delta": 10
+    },
+    {
+     "ref": "ped_group",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_no_sidewalk",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_vulnerable",
+     "party": "B",
+     "delta": -5
+    },
+    {
+     "ref": "ped_protection_zone",
+     "party": "B",
+     "delta": -15
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "아파트 단지, 공장 등 산업단지, 군부대 안 등 도로가 아닌 곳",
+    "주차장 등에서의 후진 사고도 이 기준",
+    "횡단금지 규제는 도표에 +10만 있고 표지·시설 구분 해설이 없어 둘 다 10으로 둠",
+    "인라인스케이트·퀵보드는 사고 경위에 따라 10~20%"
+   ],
+   "priority": 1
+  },
+  {
+   "id": "보35",
+   "title": "고속도로에서의 보행자 사고 (이유 없는 보행)",
+   "source": {
+    "ref": "제3편 제1장 p.120 [보35]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.road_class",
+      "op": "==",
+      "value": "expressway",
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "이유 없는 보행자",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "expressway_walk_reason",
+        "op": "==",
+        "value": "none"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 20,
+    "B": 80
+   },
+   "modifiers": [
+    {
+     "ref": "ped_expressway_night",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_expressway_weather",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_expressway_jaywalk",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_expressway_easy_area",
+     "party": "B",
+     "delta": -20
+    },
+    {
+     "ref": "ped_expressway_shoulder",
+     "party": "B",
+     "delta": -20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "not_applicable": [
+    "안전표지 설치"
+   ],
+   "notes": [
+    "원문 도표는 A = 보행자, B = 자동차로 표기 (A80 : B20). 이 파일의 약속에 맞춰 A = 자동차로 바꿔 넣음",
+    "차량 고장 등으로 보행할 수밖에 없었던 사정이 있으면 이유 있는 보행 (보36)",
+    "舊 509 기준"
+   ],
+   "priority": 2
+  },
+  {
+   "id": "보36",
+   "title": "고속도로에서의 보행자 사고 (이유 있는 보행)",
+   "source": {
+    "ref": "제3편 제1장 p.120 [보36]",
+    "verified": false
+   },
+   "applies_when": {
+    "scene": [
+     {
+      "fact": "scene.road_class",
+      "op": "==",
+      "value": "expressway",
+      "of": "facts"
+     }
+    ],
+    "roles": {
+     "A": {
+      "label": "자동차",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "in",
+        "value": [
+         "car",
+         "truck",
+         "bus",
+         "two_wheeler"
+        ]
+       }
+      ]
+     },
+     "B": {
+      "label": "이유 있는 보행자",
+      "where": [
+       {
+        "fact": "cls",
+        "op": "==",
+        "value": "person"
+       },
+       {
+        "fact": "expressway_walk_reason",
+        "op": "==",
+        "value": "justified"
+       }
+      ]
+     }
+    }
+   },
+   "base": {
+    "A": 40,
+    "B": 60
+   },
+   "modifiers": [
+    {
+     "ref": "ped_expressway_night",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_expressway_weather",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_expressway_jaywalk",
+     "party": "B",
+     "delta": 20
+    },
+    {
+     "ref": "ped_expressway_easy_area",
+     "party": "B",
+     "delta": -20
+    },
+    {
+     "ref": "ped_expressway_shoulder",
+     "party": "B",
+     "delta": -20
+    },
+    {
+     "ref": "ped_expressway_sign",
+     "party": "B",
+     "delta": -20
+    },
+    {
+     "ref": "inattention",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "drunk_under_003",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "ped_speeding_10_20",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "dark_tint",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "phone_use",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "car_pass_stopped_vehicles",
+     "party": "A",
+     "delta": 10
+    },
+    {
+     "ref": "speeding_20plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drunk_003_plus",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "drugs",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "no_license",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "group_danger",
+     "party": "A",
+     "delta": 20
+    },
+    {
+     "ref": "reckless",
+     "party": "A",
+     "delta": 20
+    }
+   ],
+   "notes": [
+    "원문 도표는 A = 보행자, B = 자동차로 표기 (A80 : B20). 이 파일의 약속에 맞춰 A = 자동차로 바꿔 넣음",
+    "차량 고장 등으로 보행할 수밖에 없었던 사정이 있으면 이유 있는 보행 (보36)",
+    "舊 510 기준"
+   ],
+   "priority": 2
+  }
+ ]
+}

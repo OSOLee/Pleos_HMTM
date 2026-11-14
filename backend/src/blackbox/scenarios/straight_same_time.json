@@ -1,0 +1,101 @@
+{
+  "schema_version": "bb-0.2",
+  "fake": {
+    "description": "둘 다 직진, 상대는 오른쪽 길. 진입 시각 둘 다 있음 (차이 0.3초), 신호 없음",
+    "delay_sec": 0,
+    "expect": {
+      "answers": {},
+      "status": "needs_answers",
+      "judge_status": "ok",
+      "rule_id": "차12-1(가)",
+      "fault_by_party": {
+        "other": 40,
+        "ego": 60
+      }
+    }
+  },
+  "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "reason": null,
+  "message": null,
+  "video": {
+    "duration_s": 30.0,
+    "fps": 30.0,
+    "frames": 900,
+    "width": 1920,
+    "height": 1080
+  },
+  "clock": {
+    "osd_start_ms": null
+  },
+  "facts": {
+    "schema_version": "0.3",
+    "collision": {
+      "a": "ego",
+      "b": "other",
+      "t": 18.2,
+      "frame": 546,
+      "zone": "intersection"
+    },
+    "parties": {
+      "ego": {
+        "movement": {
+          "value": "straight",
+          "source": "model"
+        },
+        "intersection_entry": {
+          "frame": 510,
+          "t": 17.0
+        }
+      },
+      "other": {
+        "cls": {
+          "value": "car",
+          "source": "model",
+          "confidence": 0.9
+        },
+        "movement": {
+          "value": "straight",
+          "source": "model"
+        },
+        "entry_from": {
+          "value": "east",
+          "source": "model"
+        },
+        "intersection_entry": {
+          "frame": 519,
+          "t": 17.3
+        }
+      }
+    },
+    "road": {
+      "location": {
+        "value": "intersection",
+        "source": "model"
+      },
+      "junction_type": {
+        "value": "cross",
+        "source": "model"
+      },
+      "signal_present": {
+        "value": false,
+        "source": "model"
+      }
+    }
+  },
+  "ego_motion": {
+    "fps": 30.0,
+    "step": 3,
+    "t": [],
+    "speed_proxy": [],
+    "moving": [],
+    "yaw_proxy": [],
+    "jolt_t": [
+      18.2
+    ]
+  },
+  "hints": {}
+}

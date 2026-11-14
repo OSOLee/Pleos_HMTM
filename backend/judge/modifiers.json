@@ -1,0 +1,2090 @@
+{
+  "schema_version": "1.0",
+  "source": "자동차사고 과실비율 인정기준(2023.06.30) 제2편 총설 4.(p.20~21), 제3편 제2장 3.(p.128~146)",
+  "categories": {
+    "notable": {
+      "label": "현저한 과실",
+      "range": [
+        5,
+        10
+      ],
+      "cap_per_party": 20
+    },
+    "grave": {
+      "label": "중대한 과실",
+      "range": [
+        10,
+        20
+      ]
+    },
+    "situational": {
+      "label": "사고상황별 주요 수정요소",
+      "note": "도표에 기재된 것만 적용"
+    },
+    "other": {
+      "label": "기타 주요 수정요소",
+      "note": "모든 차대차 도표에 공통 적용"
+    }
+  },
+  "exclusive_groups": [
+    {
+      "id": "speed",
+      "members": [
+        "slow_violation",
+        "speeding_under20",
+        "speeding_20plus",
+        "stop_violation"
+      ],
+      "note": "서행·감속 불이행과 속도위반은 중복 적용 불가 (p.135, p.145)"
+    },
+    {
+      "id": "stop_start_lane_change",
+      "members": [
+        "congested_lane_change",
+        "started_after_stop"
+      ],
+      "note": "정차 후 출발하며 차로를 변경하면 20%만 가산하고 정체차로변경 10%는 중복하지 않음 (차43-3)"
+    }
+  ],
+  "modifiers": [
+    {
+      "id": "inattention",
+      "category": "notable",
+      "label": "전방주시 위반·조작 지연",
+      "when": {
+        "all": [
+          {
+            "fact": "user_factors",
+            "op": "contains",
+            "value": "inattention"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "졸음, 한눈팔기 등으로 앞을 제대로 보지 않았거나 핸들·브레이크 조작이 늦었나요?",
+      "note": "상대 출현 후 감속 시작까지 시간으로 모델 추정 가능(2차)"
+    },
+    {
+      "id": "drunk_under_003",
+      "category": "notable",
+      "label": "음주운전 (혈중알코올 0.03% 미만)",
+      "when": {
+        "all": [
+          {
+            "fact": "user_factors",
+            "op": "contains",
+            "value": "drunk_under_0.03"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "운전자가 음주 상태였나요? (0.03% 미만)"
+    },
+    {
+      "id": "speeding_under20",
+      "category": "notable",
+      "label": "제한속도 위반 (시속 20km 미만)",
+      "when": {
+        "all": [
+          {
+            "fact": "speed_over_limit_kmh",
+            "op": ">",
+            "value": 0
+          },
+          {
+            "fact": "speed_over_limit_kmh",
+            "op": "<",
+            "value": 20
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "calibration",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "causal": {
+        "all": [
+          {
+            "fact": "avoidable_at_limit",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "note": "제한속도였다면 피할 수 있었을 때만 과실 (총설 p.16 신뢰의 원칙)"
+    },
+    {
+      "id": "dark_tint",
+      "category": "notable",
+      "label": "시야 불량 시 짙은 썬팅 차량 운전",
+      "when": {
+        "all": [
+          {
+            "fact": "user_factors",
+            "op": "contains",
+            "value": "dark_tint"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "야간·우천 등에 썬팅이 짙은 차량(앞면 70%, 옆면 40% 미만)이었나요?"
+    },
+    {
+      "id": "phone_use",
+      "category": "notable",
+      "label": "운전 중 휴대전화 사용·영상 시청",
+      "when": {
+        "all": [
+          {
+            "fact": "user_factors",
+            "op": "contains",
+            "value": "phone"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "운전 중 휴대전화를 쓰거나 영상을 보고 있었나요?"
+    },
+    {
+      "id": "speeding_20plus",
+      "category": "grave",
+      "label": "제한속도 위반 (시속 20km 이상)",
+      "when": {
+        "all": [
+          {
+            "fact": "speed_over_limit_kmh",
+            "op": ">=",
+            "value": 20
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "calibration",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "causal": {
+        "all": [
+          {
+            "fact": "avoidable_at_limit",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "note": "위반 정도에 따라 20% 이상 가능"
+    },
+    {
+      "id": "drunk_003_plus",
+      "category": "grave",
+      "label": "음주운전 (혈중알코올 0.03% 이상)",
+      "when": {
+        "all": [
+          {
+            "fact": "user_factors",
+            "op": "contains",
+            "value": "drunk_0.03_plus"
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "운전자가 음주 상태였나요? (0.03% 이상)"
+    },
+    {
+      "id": "drugs",
+      "category": "grave",
+      "label": "약물운전",
+      "when": {
+        "all": [
+          {
+            "fact": "user_factors",
+            "op": "contains",
+            "value": "drugs"
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "약물의 영향이 있었나요?"
+    },
+    {
+      "id": "no_license",
+      "category": "grave",
+      "label": "무면허 운전",
+      "when": {
+        "all": [
+          {
+            "fact": "user_factors",
+            "op": "contains",
+            "value": "no_license"
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "무면허 운전이었나요?"
+    },
+    {
+      "id": "group_danger",
+      "category": "grave",
+      "label": "공동위험행위",
+      "when": {
+        "all": [
+          {
+            "fact": "user_factors",
+            "op": "contains",
+            "value": "group_danger"
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "2대 이상이 줄지어 위험하게 주행하던 중이었나요?"
+    },
+    {
+      "id": "reckless",
+      "category": "grave",
+      "label": "난폭운전",
+      "when": {
+        "all": [
+          {
+            "fact": "user_factors",
+            "op": "contains",
+            "value": "reckless"
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "위반 행위를 연달아 하거나 반복하는 난폭운전 중이었나요?"
+    },
+    {
+      "id": "night_no_lights",
+      "category": "situational",
+      "label": "야간·악천후·시야장애 시 등화 미점등, 감속 불이행",
+      "when": {
+        "all": [
+          {
+            "fact": "low_visibility_no_care",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "clear_first_entry",
+      "category": "situational",
+      "label": "명확한 선진입",
+      "when": {
+        "all": [
+          {
+            "fact": "entry_lead_sec",
+            "op": ">=",
+            "value": "$clear_lead_sec"
+          },
+          {
+            "fact": "entry_speed_ratio",
+            "op": "<=",
+            "value": "$similar_speed_ratio"
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "note": "선진입 정도에 따라 -10~30. 비슷한 속도 전제, 빨라서 순간적으로 앞선 것은 동시진입 (p.134~135)"
+    },
+    {
+      "id": "slow_violation",
+      "category": "situational",
+      "label": "서행·감속 불이행, 일시정지 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "entry_speed_to_limit",
+            "op": ">=",
+            "value": "$decel_ratio"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "calibration",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "when_fallback": {
+        "all": [
+          {
+            "fact": "entry_speed",
+            "op": ">=",
+            "value": "$entry_speed_slow"
+          }
+        ]
+      },
+      "note": "교차로 진입 당시 속도 기준. 감속은 제한속도의 절반 전후, 충돌 직전 급제동은 제외 (p.135)"
+    },
+    {
+      "id": "sudden_turn",
+      "category": "situational",
+      "label": "급(急) 좌·우회전, 좌회전 금지 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "sudden_turn",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "wide_turn",
+      "category": "situational",
+      "label": "넓게(大) 좌·우회전",
+      "when": {
+        "all": [
+          {
+            "fact": "wide_turn",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "narrow_turn",
+      "category": "situational",
+      "label": "좁게(小) 좌·우회전",
+      "when": {
+        "all": [
+          {
+            "fact": "narrow_turn",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "forbidden_lane_change",
+      "category": "situational",
+      "label": "진로변경·앞지르기·끼어들기 금지 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "forbidden_lane_change",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "bus_lane",
+      "category": "situational",
+      "label": "전용차로 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "bus_lane_violation",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "no_turn_signal",
+      "category": "situational",
+      "label": "진로변경 시 신호 불이행·지연",
+      "when": {
+        "all": [
+          {
+            "fact": "turn_signal_used",
+            "op": "==",
+            "value": false
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "question": "회전하거나 차로를 바꿀 때 방향지시등을 켰나요?"
+    },
+    {
+      "id": "body_out_waiting",
+      "category": "situational",
+      "label": "차체를 내밀고 대기",
+      "when": {
+        "all": [
+          {
+            "fact": "body_partly_out_waiting",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "note": "도로가 아닌 장소에서 나올 때 차체 일부만 차도에 내민 경우만"
+    },
+    {
+      "id": "blocking_intersection",
+      "category": "situational",
+      "label": "교차로 정체 중 진입(꼬리물기)",
+      "when": {
+        "all": [
+          {
+            "fact": "entered_congested_intersection",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "turn_risk_place",
+      "category": "situational",
+      "label": "회전위험장소, 회전금지장소",
+      "when": {
+        "all": [
+          {
+            "fact": "turn_in_forbidden_place",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "safe_distance",
+      "category": "situational",
+      "label": "안전거리 확보 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "unsafe_distance",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "reversing",
+      "category": "situational",
+      "label": "후진 사고",
+      "when": {
+        "all": [
+          {
+            "fact": "movement",
+            "op": "==",
+            "value": "reverse"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "note": "동시 후진, 비상등 켜고 천천히 후진하면 비적용"
+    },
+    {
+      "id": "t_junction_turning",
+      "category": "situational",
+      "label": "신호 없는 삼거리(T자) 교차로의 회전 차량",
+      "when": {
+        "all": [
+          {
+            "fact": "movement",
+            "op": "in",
+            "value": [
+              "left_turn",
+              "right_turn"
+            ]
+          },
+          {
+            "of": "other",
+            "fact": "movement",
+            "op": "==",
+            "value": "straight"
+          },
+          {
+            "of": "facts",
+            "fact": "scene.junction_type",
+            "op": "==",
+            "value": "t"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)"
+    },
+    {
+      "id": "keep_right_violation",
+      "category": "situational",
+      "label": "오른쪽 통행 불이행",
+      "when": {
+        "all": [
+          {
+            "fact": "off_right_side",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "차14-1 등 개별 도표"
+    },
+    {
+      "id": "two_wheeler_reduction",
+      "category": "other",
+      "label": "이륜차 감산 (우자 위험부담)",
+      "when": {
+        "all": [
+          {
+            "fact": "cls",
+            "op": "==",
+            "value": "two_wheeler"
+          },
+          {
+            "fact": "damage_severity",
+            "op": "in",
+            "value": [
+              "moderate",
+              "severe"
+            ]
+          }
+        ]
+      },
+      "default_delta": null,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "delta_by": {
+        "fact": "damage_severity",
+        "map": {
+          "moderate": -5,
+          "severe": -10
+        }
+      },
+      "unless_party_has": [
+        "grave"
+      ],
+      "question": "이륜차 쪽 피해(부상·파손)는 어느 정도였나요? (경미 / 중간 / 큼)",
+      "note": "경미한 사고, 이륜차가 12대 중과실이면 비적용. 피해 정도별 -5/-10은 팀 기준"
+    },
+    {
+      "id": "large_vehicle",
+      "category": "other",
+      "label": "대형차 가산",
+      "when": {
+        "all": [
+          {
+            "fact": "cls",
+            "op": "in",
+            "value": [
+              "truck",
+              "bus",
+              "large"
+            ]
+          },
+          {
+            "fact": "damage_enlarged",
+            "op": "==",
+            "value": true
+          },
+          {
+            "of": "other",
+            "fact": "cls",
+            "op": "!=",
+            "value": "two_wheeler"
+          }
+        ]
+      },
+      "default_delta": 5,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "p.128~146 (제3편 제2장 3. 수정요소의 해설)",
+      "note": "대형차 때문에 손해가 커졌을 때만. 이륜차와 대형차 사이는 이륜차 감산만"
+    },
+    {
+      "id": "late_entry_before_red",
+      "category": "situational",
+      "label": "적신호 직전 진입",
+      "when": {
+        "all": [
+          {
+            "fact": "entered_just_before_red",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차1~차4 (p.147~212)",
+      "note": "교차로 진입 전 상당한 거리에서 황색을 보고도 무리하게 진입 (차1-3)"
+    },
+    {
+      "id": "lane_marking_violation",
+      "category": "situational",
+      "label": "노면표시 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "lane_marking_violation",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차1~차4 (p.147~212)",
+      "note": "좌·우회전 지정차로에서 직진하는 등 노면표시 위반 (차1-5, 차3-7, 3-8)"
+    },
+    {
+      "id": "turn_completed",
+      "category": "situational",
+      "label": "좌회전 완료 직후(기 좌회전)",
+      "when": {
+        "all": [
+          {
+            "fact": "turn_almost_completed",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "제3편 제2장 차1~차4 (p.147~212)",
+      "note": "직진차가 교차로에 들어올 때 이미 좌회전을 마쳤거나 거의 빠져나간 상태 (p.135)"
+    },
+    {
+      "id": "no_unprotected_sign",
+      "category": "situational",
+      "label": "자기 방향에 비보호좌회전 표지 없음",
+      "when": {
+        "all": [
+          {
+            "fact": "unprotected_left_sign",
+            "op": "==",
+            "value": false
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "manual",
+      "effect": "accident",
+      "source": "제3편 제2장 차1~차4 (p.147~212)",
+      "note": "직진차 쪽에 비보호좌회전 표지가 없어 좌회전을 예상하기 어려움 (차2-6)",
+      "question": "직진 차량 쪽 신호등에 비보호좌회전 표지가 있었나요?"
+    },
+    {
+      "id": "view_obstructed",
+      "category": "situational",
+      "label": "시야 제한",
+      "when": {
+        "all": [
+          {
+            "fact": "view_obstructed",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차1~차4 (p.147~212)",
+      "note": "직진차의 시야가 가려진 경우 (차2-6)"
+    },
+    {
+      "id": "lane_change_after_turn",
+      "category": "situational",
+      "label": "좌·우회전 직후 차로 변경",
+      "when": {
+        "all": [
+          {
+            "fact": "lane_change_after_turn",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차1~차4 (p.147~212)",
+      "note": "회전 직후 차로를 바꾼 수만큼 중복 가산 가능 (차4-1, 4-2)"
+    },
+    {
+      "id": "stop_violation",
+      "category": "situational",
+      "label": "일시정지 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "stopped_before_entry",
+            "op": "==",
+            "value": false
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "제3편 제2장 차1~차4 (p.147~212)",
+      "note": "적색 신호 우회전 등 일시정지 의무 위반 (차4-1)"
+    },
+    {
+      "id": "lane_change_in_intersection",
+      "category": "situational",
+      "label": "교차로 내 진로변경",
+      "when": {
+        "all": [
+          {
+            "fact": "lane_change_in_intersection",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차5-1 (p.213~217)",
+      "note": "신호에 따라 직진하다 교차로 안에서 진로를 바꾼 경우. 신호불이행·지연이면 추가 가산"
+    },
+    {
+      "id": "stopped_then_started",
+      "category": "situational",
+      "label": "일시정지 후 출발",
+      "when": {
+        "all": [
+          {
+            "fact": "stopped_before_entry",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "제3편 제2장 차7~차10 (p.226~248)",
+      "note": "일시정지는 했지만 좌우 확인이 불충분했던 경우. 정지했으면 상대가 인식하고 피할 여지가 커서 감산"
+    },
+    {
+      "id": "left_turn_prohibited",
+      "category": "situational",
+      "label": "좌회전 금지 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "left_turn_prohibited_violation",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차7~차10 (p.226~248)",
+      "note": "좌회전 금지 장소에서 좌회전 (차8)"
+    },
+    {
+      "id": "left_turn_method",
+      "category": "situational",
+      "label": "좌회전 방법 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "left_turn_method_violation",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차7~차10 (p.226~248)",
+      "note": "미리 도로 중앙선을 따라 서행하며 교차로 중심 안쪽으로 좌회전하지 않은 경우 (도로교통법 제25조, 차10)"
+    },
+    {
+      "id": "no_lane_across",
+      "category": "situational",
+      "label": "건너편에 차로가 없음",
+      "when": {
+        "all": [
+          {
+            "fact": "no_lane_across",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차11 (p.249~266)",
+      "note": "회전 노면표시 차로에서 직진했는데 건너편에 이어지는 차로가 없어 진로를 바꿔야 했던 경우 (차11-3, 11-6)"
+    },
+    {
+      "id": "foresaw_other_turn",
+      "category": "situational",
+      "label": "상대의 회전을 명확히 인식 가능",
+      "when": {
+        "all": [
+          {
+            "fact": "could_foresee_other_turn",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차11 (p.249~266)",
+      "note": "상대가 충분히 앞서서 서서히 회전해 미리 알 수 있었던 경우 (차11-3, 11-6)"
+    },
+    {
+      "id": "yield_violation",
+      "category": "situational",
+      "label": "진로양보의무 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "yield_violation",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차11 (p.249~266)",
+      "note": "도로 오른쪽으로 피하여 진로를 양보할 의무 위반 (차11-4)"
+    },
+    {
+      "id": "slowed_down",
+      "category": "situational",
+      "label": "서행(일시정지 포함)",
+      "when": {
+        "all": [
+          {
+            "fact": "slowed_before_entry",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "제3편 제2장 차12~차18 (p.267~314)",
+      "note": "교차로 진입 전 서행하거나 일시정지한 경우 감산 (차12)"
+    },
+    {
+      "id": "right_turn_method",
+      "category": "situational",
+      "label": "우회전 방법 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "right_turn_method_violation",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차12~차18 (p.267~314)",
+      "note": "미리 도로 우측 가장자리를 서행하며 우회전하지 않은 경우 (차18-1)"
+    },
+    {
+      "id": "forced_cut_in",
+      "category": "situational",
+      "label": "무리한 끼어들기·진로방해",
+      "when": {
+        "all": [
+          {
+            "fact": "forced_cut_in",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차19~차21 (p.315~326)",
+      "note": "동시 회전 중 상대 진로로 무리하게 끼어들거나 진로를 방해 (차20-1, 21-1)"
+    },
+    {
+      "id": "shoulder_intrusion",
+      "category": "situational",
+      "label": "갓길경계선·인도 침범",
+      "when": {
+        "all": [
+          {
+            "fact": "crossed_shoulder_or_sidewalk",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차19~차21 (p.315~326)",
+      "note": "우측 좁은 공간으로 끼어들며 갓길경계선이나 인도를 침범 (차20-2)"
+    },
+    {
+      "id": "right_space_wide",
+      "category": "situational",
+      "label": "우측 공간이 넓음",
+      "when": {
+        "all": [
+          {
+            "fact": "right_space_wide",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차19~차21 (p.315~326)",
+      "note": "선행 우회전 차량이 오른쪽에 넓은 공간을 남겨 끼어들기를 유발 (차20-2)"
+    },
+    {
+      "id": "no_passing_zone_overtake",
+      "category": "situational",
+      "label": "추월금지 장소에서 추월",
+      "when": {
+        "all": [
+          {
+            "fact": "overtook_in_no_passing_zone",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차31~차33 (p.327~350)",
+      "note": "추월이 금지된 곳에서 중앙선을 넘어 추월 (차31-1)"
+    },
+    {
+      "id": "rear_inattention",
+      "category": "situational",
+      "label": "현저한 후방주시 태만",
+      "when": {
+        "all": [
+          {
+            "fact": "rear_inattention",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차31~차33 (p.327~350)",
+      "note": "후진하면서 뒤를 제대로 살피지 않음 (차31-4)"
+    },
+    {
+      "id": "double_solid_center",
+      "category": "situational",
+      "label": "이중 실선 중앙선 침범",
+      "when": {
+        "all": [
+          {
+            "fact": "crossed_double_solid_center",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차31~차33 (p.327~350)",
+      "note": "넘을 수 없는 이중 실선 중앙선을 넘음 (차31-4)"
+    },
+    {
+      "id": "uphill_vehicle",
+      "category": "situational",
+      "label": "올라가는 차량",
+      "when": {
+        "all": [
+          {
+            "fact": "going_uphill",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차31~차33 (p.327~350)",
+      "note": "비탈진 좁은 도로에서는 올라가는 차가 오른쪽으로 피해 양보해야 함 (도로교통법 제20조, 차32-1)"
+    },
+    {
+      "id": "virtual_center_crossing",
+      "category": "situational",
+      "label": "가상의 중앙선 침범",
+      "when": {
+        "all": [
+          {
+            "fact": "crossed_virtual_center",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차31~차33 (p.327~350)",
+      "note": "중앙선이 없는 도로에서 도로 가운데를 넘어 상대 쪽으로 진행 (차32-1)"
+    },
+    {
+      "id": "one_way_head_on",
+      "category": "situational",
+      "label": "일방통행 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "one_way_violation",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 30,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차31~차33 (p.327~350)",
+      "note": "일방통행 도로를 거꾸로 진행 (차32-1)"
+    },
+    {
+      "id": "stationary",
+      "category": "situational",
+      "label": "정지",
+      "when": {
+        "all": [
+          {
+            "fact": "stationary_at_collision",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "제3편 제2장 차31~차33 (p.327~350)",
+      "note": "충돌 당시 정지해 있었음 (차32-1)"
+    },
+    {
+      "id": "evasive_action",
+      "category": "situational",
+      "label": "회피",
+      "when": {
+        "all": [
+          {
+            "fact": "evasive_action",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "제3편 제2장 차31~차33 (p.327~350)",
+      "note": "충돌을 피하려고 감속·피양 등 회피 조치를 함 (차32-1)"
+    },
+    {
+      "id": "ran_signal",
+      "category": "situational",
+      "label": "신호위반",
+      "when": {
+        "all": [
+          {
+            "fact": "ran_signal",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 80,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차31~차33 (p.327~350)",
+      "note": "상시유턴구역 사고에서 직진차가 신호를 위반한 경우 (차33-1)"
+    },
+    {
+      "id": "residential_area",
+      "category": "situational",
+      "label": "주택가·상점가 등",
+      "when": {
+        "all": [
+          {
+            "fact": "scene.residential_area",
+            "op": "==",
+            "value": true,
+            "of": "facts"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "보행자·차량 출입이 잦은 곳에서 추돌 (차41-1)"
+    },
+    {
+      "id": "slow_or_stop_no_reason",
+      "category": "situational",
+      "label": "저속주행 또는 편도 3차로 이상 도로에서 이유 없는 정지",
+      "when": {
+        "all": [
+          {
+            "fact": "slow_or_stop_without_reason",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차41-1"
+    },
+    {
+      "id": "brake_light_failure",
+      "category": "situational",
+      "label": "제동등화 고장",
+      "when": {
+        "all": [
+          {
+            "fact": "brake_light_failure",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차41-1"
+    },
+    {
+      "id": "sudden_stop_no_reason",
+      "category": "situational",
+      "label": "이유 없는 급정지",
+      "when": {
+        "all": [
+          {
+            "fact": "sudden_stop_without_reason",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 30,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차41-1"
+    },
+    {
+      "id": "on_highway",
+      "category": "situational",
+      "label": "고속도로(자동차전용도로 포함)",
+      "when": {
+        "all": [
+          {
+            "fact": "scene.road_type",
+            "op": "==",
+            "value": "highway",
+            "of": "facts"
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차로에 주정차한 차량이 고속도로에 있음 (차42-1)"
+    },
+    {
+      "id": "no_fault_in_stopping",
+      "category": "situational",
+      "label": "주정차에 과실 없음",
+      "when": {
+        "all": [
+          {
+            "fact": "no_fault_in_stopping",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "앞선 사고로 부득이하게 멈춘 데 과실이 없음 (차42-1)"
+    },
+    {
+      "id": "in_passing_lane",
+      "category": "situational",
+      "label": "추월차로",
+      "when": {
+        "all": [
+          {
+            "fact": "in_passing_lane",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "추월차로에 주정차하거나 추월차로 주행 중 (차42-1, 48-1)"
+    },
+    {
+      "id": "low_visibility_env",
+      "category": "situational",
+      "label": "야간·악천후 등 시야확보 곤란",
+      "when": {
+        "all": [
+          {
+            "fact": "scene.low_visibility",
+            "op": "==",
+            "value": true,
+            "of": "facts"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차42, 48-1"
+    },
+    {
+      "id": "warning_sign_installed",
+      "category": "situational",
+      "label": "안전표지판 등 설치",
+      "when": {
+        "all": [
+          {
+            "fact": "warning_sign_installed",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "고장자동차 표지 등을 설치함 (차42-1)"
+    },
+    {
+      "id": "hazard_lights_on",
+      "category": "situational",
+      "label": "비상점멸표시등 점등",
+      "when": {
+        "all": [
+          {
+            "fact": "hazard_lights_on",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "auto",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차42-1"
+    },
+    {
+      "id": "could_not_evacuate",
+      "category": "situational",
+      "label": "대피불가능 상황",
+      "when": {
+        "all": [
+          {
+            "fact": "could_not_evacuate",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차42-1"
+    },
+    {
+      "id": "parking_prohibited_place",
+      "category": "situational",
+      "label": "주정차 금지장소",
+      "when": {
+        "all": [
+          {
+            "fact": "parking_prohibited_place",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "도로교통법 제32·33조 (차42-2)"
+    },
+    {
+      "id": "improper_parking",
+      "category": "situational",
+      "label": "주정차 방법 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "improper_parking",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "도로 오른쪽 가장자리에 정차하지 않는 등 (차42-2)"
+    },
+    {
+      "id": "no_safety_measures",
+      "category": "situational",
+      "label": "비상등화 등 안전조치 불이행",
+      "when": {
+        "all": [
+          {
+            "fact": "no_safety_measures",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차42-2"
+    },
+    {
+      "id": "unavoidable",
+      "category": "situational",
+      "label": "회피불능",
+      "when": {
+        "all": [
+          {
+            "fact": "unavoidable",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "주정차 차량이 피할 수 없었음 (차42-2)"
+    },
+    {
+      "id": "partially_in_lane",
+      "category": "situational",
+      "label": "차로 일부 점용",
+      "when": {
+        "all": [
+          {
+            "fact": "partially_in_lane",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "갓길 주정차 차량이 차로 일부를 점용 (차42-3)"
+    },
+    {
+      "id": "stopped_without_necessity",
+      "category": "situational",
+      "label": "부득이한 사정이 없는 주정차",
+      "when": {
+        "all": [
+          {
+            "fact": "stopped_without_necessity",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "고속도로 갓길은 고장 등 부득이한 경우만 정차 가능 (차42-3)"
+    },
+    {
+      "id": "no_warning_sign",
+      "category": "situational",
+      "label": "안전표지 미설치",
+      "when": {
+        "all": [
+          {
+            "fact": "no_warning_sign",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차42-3"
+    },
+    {
+      "id": "lane_change_into_passing_lane",
+      "category": "situational",
+      "label": "고속도로 추월차로로 차로 변경",
+      "when": {
+        "all": [
+          {
+            "fact": "lane_change_into_passing_lane",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차43-2"
+    },
+    {
+      "id": "congested_lane_change",
+      "category": "situational",
+      "label": "정체차로 변경",
+      "when": {
+        "all": [
+          {
+            "fact": "congested_lane_change",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "정체 중인 차로에서 진로변경 (차43-3)"
+    },
+    {
+      "id": "started_after_stop",
+      "category": "situational",
+      "label": "정차 후 출발",
+      "when": {
+        "all": [
+          {
+            "fact": "started_after_stop",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "정차했다 출발하며 진로변경. 정체차로변경과 중복 불가 (차43-3, 43-5, 45-2)"
+    },
+    {
+      "id": "speeding_generic",
+      "category": "situational",
+      "label": "과속",
+      "when": {
+        "all": [
+          {
+            "fact": "speeding",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차43-5"
+    },
+    {
+      "id": "consecutive_lane_change",
+      "category": "situational",
+      "label": "연속 진로변경",
+      "when": {
+        "all": [
+          {
+            "fact": "consecutive_lane_change",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차43-5"
+    },
+    {
+      "id": "long_distance_lane_change",
+      "category": "situational",
+      "label": "원거리 진로변경",
+      "when": {
+        "all": [
+          {
+            "fact": "long_distance_lane_change",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "충분한 거리를 두고 진로변경 (차43-5)"
+    },
+    {
+      "id": "signaled_first",
+      "category": "situational",
+      "label": "진로변경 의사 선표시",
+      "when": {
+        "all": [
+          {
+            "fact": "signaled_lane_change_first",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "먼저 방향지시등으로 진로변경 의사를 표시 (차43-5)"
+    },
+    {
+      "id": "overtaking_situation",
+      "category": "situational",
+      "label": "추월상황",
+      "when": {
+        "all": [
+          {
+            "fact": "overtaking_situation",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "갓길로 진로변경하며 추월 (차43-6)"
+    },
+    {
+      "id": "did_not_approach_center",
+      "category": "situational",
+      "label": "미리 중앙선에 다가서지 않음",
+      "when": {
+        "all": [
+          {
+            "fact": "did_not_approach_center",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "좌회전 전 미리 도로 중앙으로 붙지 않음 (차45-1)"
+    },
+    {
+      "id": "crossed_road_boundary",
+      "category": "situational",
+      "label": "도로경계 침범",
+      "when": {
+        "all": [
+          {
+            "fact": "crossed_road_boundary",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차45-2"
+    },
+    {
+      "id": "overtake_right_after_lane_change",
+      "category": "situational",
+      "label": "진로변경 진입 직후 추월",
+      "when": {
+        "all": [
+          {
+            "fact": "overtake_right_after_lane_change",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차45-2"
+    },
+    {
+      "id": "signal_given",
+      "category": "situational",
+      "label": "신호 이행",
+      "when": {
+        "all": [
+          {
+            "fact": "turn_signal_used",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -5,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "방향지시등을 켜고 추월 (차45-4)"
+    },
+    {
+      "id": "obstructed_overtaking",
+      "category": "situational",
+      "label": "앞지르기 방해금지 위반",
+      "when": {
+        "all": [
+          {
+            "fact": "obstructed_overtaking",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "도로교통법 제21조 (차45-5, 45-6)"
+    },
+    {
+      "id": "overtake_risky_place",
+      "category": "situational",
+      "label": "앞지르기 위험 장소",
+      "when": {
+        "all": [
+          {
+            "fact": "overtake_risky_place",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차45-5"
+    },
+    {
+      "id": "u_turn_outside_zone",
+      "category": "situational",
+      "label": "유턴구역을 벗어난 유턴",
+      "when": {
+        "all": [
+          {
+            "fact": "u_turn_outside_zone",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "차46-1"
+    },
+    {
+      "id": "school_bus",
+      "category": "situational",
+      "label": "어린이통학버스",
+      "when": {
+        "all": [
+          {
+            "fact": "is_school_bus",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -40,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차41~차48 (p.351~424)",
+      "note": "어린이통학버스 특별보호 (도로교통법 제51조, 차47-2)"
+    },
+    {
+      "id": "parking_wrong_way",
+      "category": "situational",
+      "label": "주차장 역주행 (화살표 반대 주행)",
+      "when": {
+        "all": [
+          {
+            "fact": "against_parking_arrow",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차51~차55 (p.425~480)",
+      "note": "차51-1"
+    },
+    {
+      "id": "door_open_foreseeable",
+      "category": "situational",
+      "label": "문 열림의 예측가능성 존재",
+      "when": {
+        "all": [
+          {
+            "fact": "door_open_foreseeable",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차51~차55 (p.425~480)",
+      "note": "정차 직후·승하차 중 등 문 열림을 예상할 수 있었음 (차52-1)"
+    },
+    {
+      "id": "night_env",
+      "category": "situational",
+      "label": "야간",
+      "when": {
+        "all": [
+          {
+            "fact": "scene.night",
+            "op": "==",
+            "value": true,
+            "of": "facts"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차51~차55 (p.425~480)",
+      "note": "차52-1"
+    },
+    {
+      "id": "door_toward_traffic",
+      "category": "situational",
+      "label": "주행차로 쪽 문 열림",
+      "when": {
+        "all": [
+          {
+            "fact": "door_toward_traffic",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차51~차55 (p.425~480)",
+      "note": "차52-1"
+    },
+    {
+      "id": "sudden_door_open",
+      "category": "situational",
+      "label": "급박한 문 열림",
+      "when": {
+        "all": [
+          {
+            "fact": "sudden_door_open",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차51~차55 (p.425~480)",
+      "note": "차52-1"
+    },
+    {
+      "id": "door_at_transit_stop",
+      "category": "situational",
+      "label": "버스·택시 대중교통 승강장에서 문 열림",
+      "when": {
+        "all": [
+          {
+            "fact": "door_at_transit_stop",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": -20,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차51~차55 (p.425~480)",
+      "note": "차52-1"
+    },
+    {
+      "id": "late_entry_no_yield",
+      "category": "situational",
+      "label": "후진입 미양보",
+      "when": {
+        "all": [
+          {
+            "fact": "late_entry_no_yield",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차51~차55 (p.425~480)",
+      "note": "회전교차로에 늦게 들어오며 양보하지 않음 (차54-5)"
+    },
+    {
+      "id": "left_turn_on_main_road",
+      "category": "situational",
+      "label": "좌회전",
+      "when": {
+        "all": [
+          {
+            "fact": "movement",
+            "op": "==",
+            "value": "left_turn"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차51~차55 (p.425~480)",
+      "note": "대로에서 좌회전하다 긴급자동차와 충돌 (차55-4)"
+    },
+    {
+      "id": "sudden_lane_change",
+      "category": "situational",
+      "label": "급차로변경",
+      "when": {
+        "all": [
+          {
+            "fact": "sudden_lane_change",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 차51~차55 (p.425~480)",
+      "note": "차55-5, 55-6"
+    },
+    {
+      "id": "narrow_passing_space",
+      "category": "situational",
+      "label": "이륜차 통과 공간이 충분치 않음",
+      "when": {
+        "all": [
+          {
+            "fact": "narrow_passing_space",
+            "op": "==",
+            "value": true
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 마. 자동차 대 이륜차 특수유형 (p.481~487)",
+      "note": "정체 차량 오른쪽과 차도 가장자리 사이가 대략 1.5m 미만 (차61-1)"
+    },
+    {
+      "id": "not_at_intersection",
+      "category": "situational",
+      "label": "교차로가 아닌 곳",
+      "when": {
+        "all": [
+          {
+            "of": "facts",
+            "fact": "scene.location",
+            "op": "!=",
+            "value": "intersection"
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 마. 자동차 대 이륜차 특수유형 (p.481~487)",
+      "note": "교차로가 아닌 곳에서 정체 차량 사이로 좌회전·횡단한 경우 (차61-1)"
+    },
+    {
+      "id": "sidewalk_stop_violation",
+      "category": "situational",
+      "label": "보도 횡단 전 일시정지 불이행",
+      "when": {
+        "all": [
+          {
+            "fact": "stopped_before_sidewalk",
+            "op": "==",
+            "value": false
+          }
+        ]
+      },
+      "default_delta": 10,
+      "detect": "partial",
+      "effect": "accident",
+      "source": "제3편 제2장 마. 자동차 대 이륜차 특수유형 (p.481~487)",
+      "note": "도로 밖으로 나가려 보도를 횡단할 때는 직전에 일시정지 (도로교통법 제13조, 차61-2)"
+    }
+  ]
+}

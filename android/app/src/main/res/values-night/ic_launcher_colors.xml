@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 다크: 어두운 바탕 + 파란 몸체 (라이트를 뒤집음) -->
+<resources>
+    <color name="ic_bg">#1D1E21</color>
+    <color name="ic_body">#0082FF</color>
+    <color name="ic_lens">#1D1E21</color>
+    <color name="ic_ego">#FFFFFF</color>
+    <color name="ic_other">#5A5C63</color>
+    <color name="ic_rec">#FF6B6D</color>
+</resources>

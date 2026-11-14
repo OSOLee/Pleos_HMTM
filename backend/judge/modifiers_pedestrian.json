@@ -1,0 +1,860 @@
+{
+ "schema_version": "1.0",
+ "category": "car_pedestrian",
+ "source": "자동차사고 과실비율 인정기준 (2023.06.30 개정판) 제3편 제1장 자동차와 보행자의 사고",
+ "note": "공통 사전 modifiers.json에 합쳐 쓴다. 운전자의 현저·중대한 과실 중 휴대전화, 음주, 무면허 등은 공통 사전 항목을 그대로 쓰고, 제한속도 위반(현저)만 이 장의 정의(10~20km/h)로 따로 둔다.",
+ "categories": {},
+ "exclusive_groups": [
+  {
+   "id": "ped_vulnerable",
+   "members": [
+    "ped_vulnerable",
+    "ped_protection_zone",
+    "ped_elderly_disabled_zone",
+    "ped_child_zone_unsignalized"
+   ],
+   "note": "어린이·노인·장애인과 보호구역은 1개만, 수치가 큰 감산 적용 (p.36 (11), 각 도표 해설)"
+  },
+  {
+   "id": "ped_crossing_prohibition",
+   "members": [
+    "ped_crossing_sign",
+    "ped_crossing_barrier"
+   ],
+   "note": "횡단금지 표지와 시설은 하나만 (시설이 있으면 시설 기준)"
+  },
+  {
+   "id": "ped_no_sidewalk",
+   "members": [
+    "ped_no_sidewalk",
+    "ped_no_sidewalk_center",
+    "ped_no_sidewalk_no_center"
+   ],
+   "note": "보·차도 구분 없음은 하나만"
+  },
+  {
+   "id": "ped_view",
+   "members": [
+    "ped_night_view",
+    "ped_view_obstructed"
+   ],
+   "note": "야간·기타 시야장애는 도표의 한 항목이라 하나만"
+  },
+  {
+   "id": "ped_expressway_view",
+   "members": [
+    "ped_expressway_night",
+    "ped_expressway_weather"
+   ],
+   "note": "야간·악천후 등 시야확보 곤란은 한 항목이라 하나만"
+  },
+  {
+   "id": "ped_walk_manner",
+   "members": [
+    "ped_stop_back_zigzag",
+    "ped_zigzag"
+   ],
+   "note": "정지·후퇴·ㄹ자 보행은 하나만"
+  },
+  {
+   "id": "ped_speed",
+   "members": [
+    "ped_speeding_10_20",
+    "speeding_20plus"
+   ],
+   "note": "속도위반은 하나만"
+  }
+ ],
+ "modifiers": [
+  {
+   "id": "ped_view_obstructed",
+   "category": "situational",
+   "label": "기타 시야장애",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.view_obstructed",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": 5,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "주·정차 차량 사이에서 걸어 나오거나 커브·오르막·골목처럼 운전자가 보행자를 미리 보기 어려웠나요? 어두운 옷도 포함",
+   "note": "야간과 겹치면 하나만 적용. 도표에 적힌 '야간·기타 시야장애' 값을 그대로 씀"
+  },
+  {
+   "id": "ped_night_view",
+   "category": "situational",
+   "label": "야간",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.night",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": 5,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "일몰 후부터 일출 전 사이였나요?",
+   "note": "가로등 등으로 밝아 전조등 없이도 보행자 발견이 쉬운 곳이면 비적용. 신호에 따라 횡단보도를 건넌 경우도 비적용(도표에서 처리)"
+  },
+  {
+   "id": "ped_arterial",
+   "category": "situational",
+   "label": "간선도로",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.arterial_road",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": 5,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "차도폭 20m 이상, 왕복 6차로 이상, 또는 제한속도 80km/h 이상이면서 교통량이 많은 도로인가요?"
+  },
+  {
+   "id": "ped_busy_area",
+   "category": "situational",
+   "label": "주택·상점가·학교",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.ped_busy_area",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": -5,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "주택가, 상점가, 학교 앞처럼 보행자가 많은 곳인가요? (초등학교 앞이 어린이보호구역이면 보호구역만 적용)"
+  },
+  {
+   "id": "ped_no_sidewalk",
+   "category": "situational",
+   "label": "보·차도 구분 없음",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": -5,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)"
+  },
+  {
+   "id": "ped_no_sidewalk_center",
+   "category": "situational",
+   "label": "보·차도 구분 없음 (중앙선 있음)",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     },
+     {
+      "fact": "scene.center_line",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": -5,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)"
+  },
+  {
+   "id": "ped_no_sidewalk_no_center",
+   "category": "situational",
+   "label": "보·차도 구분 없음 (중앙선 없음)",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     },
+     {
+      "fact": "scene.center_line",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": -15,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)"
+  },
+  {
+   "id": "ped_crossing_sign",
+   "category": "situational",
+   "label": "횡단금지 규제 (안전표지만 있음)",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.crossing_prohibition",
+      "op": "==",
+      "value": "sign",
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": 10,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "횡단금지 표지가 있었나요, 가드레일·펜스 같은 횡단금지 시설이 있었나요?",
+   "note": "보·차도 구분이 있고 쉽게 인식할 수 있을 때만. 표지가 낡거나 가려져 알아보기 어려우면 비적용"
+  },
+  {
+   "id": "ped_crossing_barrier",
+   "category": "situational",
+   "label": "횡단금지 규제 (가드레일·펜스 등 시설)",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.crossing_prohibition",
+      "op": "==",
+      "value": "barrier",
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": 20,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "note": "보·차도 구분이 있고 쉽게 인식할 수 있을 때만"
+  },
+  {
+   "id": "ped_vehicle_access_zone",
+   "category": "situational",
+   "label": "차량진출입 허용구간",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.vehicle_access_zone",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": 5,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "p.97 [보24] ①",
+   "question": "주유소·주차장 출입구처럼 보도 중 차량 통행이 허용된 구간이었나요?"
+  },
+  {
+   "id": "ped_bright_place",
+   "category": "situational",
+   "label": "밝은 장소",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.bright_place",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": -10,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.110 [보30]"
+  },
+  {
+   "id": "ped_sidewalk_roadway",
+   "category": "situational",
+   "label": "보·차도 구분이 있는 차도",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.sidewalk_separated",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": 5,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.113 [보32]"
+  },
+  {
+   "id": "ped_child_zone_unsignalized",
+   "category": "situational",
+   "label": "어린이보호구역 (신호기 미설치 횡단보도 또는 정지선)",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.protection_zone",
+      "op": "==",
+      "value": "child",
+      "of": "facts"
+     },
+     {
+      "fact": "scene.crosswalk_signal",
+      "op": "==",
+      "value": false,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": -30,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "p.66 [보13] ④, p.84 [보20] ⑥",
+   "note": "보행자 횡단 여부와 관계없이 일시정지 의무가 있는 곳 (도로교통법 제27조 제7항)"
+  },
+  {
+   "id": "ped_elderly_disabled_zone",
+   "category": "situational",
+   "label": "노인·장애인보호구역",
+   "when": {
+    "all": [
+     {
+      "fact": "in_own_protection_zone",
+      "op": "==",
+      "value": true
+     },
+     {
+      "fact": "vulnerable_type",
+      "op": "in",
+      "value": [
+       "elderly",
+       "disabled"
+      ]
+     }
+    ]
+   },
+   "default_delta": -15,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "p.66 [보13], p.84 [보20]"
+  },
+  {
+   "id": "ped_protection_zone",
+   "category": "situational",
+   "label": "어린이·노인·장애인보호구역",
+   "when": {
+    "all": [
+     {
+      "fact": "in_own_protection_zone",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   "default_delta": -15,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "사고 장소가 어린이·노인·장애인보호구역이고, 보행자가 그 대상(어린이·노인·장애인)이었나요?",
+   "note": "보호구역 안의 해당 대상 사고만. '어린이·노인·장애인'과 겹치면 이것만 적용"
+  },
+  {
+   "id": "ped_vulnerable",
+   "category": "situational",
+   "label": "어린이·노인·장애인",
+   "when": {
+    "all": [
+     {
+      "fact": "vulnerable_type",
+      "op": "in",
+      "value": [
+       "child",
+       "elderly",
+       "disabled"
+      ]
+     }
+    ]
+   },
+   "default_delta": -5,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "보행자가 어린이(만 13세 미만), 노인(만 65세 이상), 등록 장애인이었나요?",
+   "note": "만 6세 미만 영유아는 과실상계 별도 기준 적용 대상"
+  },
+  {
+   "id": "ped_group",
+   "category": "situational",
+   "label": "집단횡단·집단보행",
+   "when": {
+    "all": [
+     {
+      "fact": "ped_factors",
+      "op": "contains",
+      "value": "group"
+     }
+    ]
+   },
+   "default_delta": -5,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "2명 이상이 함께 건너거나 걷고 있었나요? (1명이 다른 1명을 업거나 안은 경우는 제외)"
+  },
+  {
+   "id": "ped_sudden_entry",
+   "category": "situational",
+   "label": "보행자 급진입",
+   "when": {
+    "all": [
+     {
+      "fact": "ped_factors",
+      "op": "contains",
+      "value": "sudden_entry"
+     }
+    ]
+   },
+   "default_delta": 5,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "보행자가 신호가 바뀌자마자, 또는 남은 시간이 부족한데 급하게 횡단보도에 들어섰나요?"
+  },
+  {
+   "id": "ped_stop_back_zigzag",
+   "category": "situational",
+   "label": "정지·후퇴·ㄹ자 보행",
+   "when": {
+    "all": [
+     {
+      "fact": "walk_manner",
+      "op": "in",
+      "value": [
+       "stop",
+       "back",
+       "zigzag"
+      ]
+     }
+    ]
+   },
+   "default_delta": 5,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)",
+   "question": "보행자가 건너다 갑자기 멈추거나, 되돌아가거나, ㄹ자로 걷거나 어슬렁거렸나요?"
+  },
+  {
+   "id": "ped_zigzag",
+   "category": "situational",
+   "label": "ㄹ자 보행",
+   "when": {
+    "all": [
+     {
+      "fact": "walk_manner",
+      "op": "==",
+      "value": "zigzag"
+     }
+    ]
+   },
+   "default_delta": 5,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "제3편 제1장 3. 수정요소의 해설 (p.33~37)"
+  },
+  {
+   "id": "ped_diagonal",
+   "category": "situational",
+   "label": "대각선 횡단",
+   "when": {
+    "all": [
+     {
+      "fact": "diagonal_crossing",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   "default_delta": 10,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.34 (6), p.89 [보22] ②",
+   "note": "횡단보도 없는 교차로를 최단거리가 아니라 대각선·비스듬히 횡단"
+  },
+  {
+   "id": "ped_intentional_block",
+   "category": "situational",
+   "label": "고의로 차량 진행 방해",
+   "when": {
+    "all": [
+     {
+      "fact": "ped_factors",
+      "op": "contains",
+      "value": "intentional_block"
+     }
+    ]
+   },
+   "default_delta": 15,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "p.100 [보27-1] ②, p.108 [보29-2] ②"
+  },
+  {
+   "id": "ped_near_10_30m",
+   "category": "situational",
+   "label": "횡단보도(육교·지하도)에서 10~30m 지점",
+   "when": {
+    "all": [
+     {
+      "fact": "dist_from_crosswalk_m",
+      "op": ">",
+      "value": 10
+     },
+     {
+      "fact": "dist_from_crosswalk_m",
+      "op": "<=",
+      "value": 30
+     }
+    ]
+   },
+   "default_delta": 10,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.34 (2), p.69~ 활용시 참고 사항",
+   "note": "10m 내외는 부근, 10~30m는 +10, 30m를 넘으면 무단횡단(보22·보23) 기준"
+  },
+  {
+   "id": "ped_inside_stop_line",
+   "category": "situational",
+   "label": "정지선 안쪽 지점",
+   "when": {
+    "all": [
+     {
+      "fact": "inside_stop_line",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   "default_delta": -10,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.84 [보20] ⑤",
+   "note": "횡단보도와 매우 가까운 곳에서 횡단"
+  },
+  {
+   "id": "ped_opposite_side",
+   "category": "situational",
+   "label": "마주보는 방향 (이륜차와 반대편에서 횡단)",
+   "when": {
+    "all": [
+     {
+      "fact": "opposite_side_start",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   "default_delta": 5,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.116 [보33] ①"
+  },
+  {
+   "id": "ped_serious_rideable",
+   "category": "situational",
+   "label": "보행자의 중대한 과실 (인라인스케이트·퀵보드 등)",
+   "when": {
+    "all": [
+     {
+      "fact": "ped_factors",
+      "op": "contains",
+      "value": "inline_skate"
+     }
+    ]
+   },
+   "default_delta": 10,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "p.118 [보34] ①",
+   "note": "사고 경위에 따라 10~20%"
+  },
+  {
+   "id": "ped_behind_before_reverse",
+   "category": "situational",
+   "label": "후진 개시 전 후방에 있던 경우",
+   "when": {
+    "all": [
+     {
+      "fact": "behind_before_reverse",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   "default_delta": -10,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.113 [보32] ③"
+  },
+  {
+   "id": "ped_warned_by_horn",
+   "category": "situational",
+   "label": "경음기를 울린 경우 (보행자가 후진을 알았던 경우 포함)",
+   "when": {
+    "all": [
+     {
+      "fact": "reverse_warning",
+      "op": "==",
+      "value": true,
+      "of": "other"
+     }
+    ]
+   },
+   "default_delta": 10,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "p.113 [보32] ②",
+   "question": "차가 후진할 때 경음기 등으로 알렸거나, 보행자가 후진을 미리 알고 있었나요?"
+  },
+  {
+   "id": "ped_car_started_after_stop",
+   "category": "situational",
+   "label": "주·정차 후 출발",
+   "when": {
+    "all": [
+     {
+      "fact": "started_after_stop",
+      "op": "==",
+      "value": true,
+      "of": "other"
+     }
+    ]
+   },
+   "default_delta": -10,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.110 [보30] ②",
+   "note": "주·정차 후 출발할 때는 누워 있는 사람을 발견하기 쉬움"
+  },
+  {
+   "id": "ped_expressway_night",
+   "category": "situational",
+   "label": "야간 (시야확보 곤란)",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.night",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": 20,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.120 [보35, 보36]"
+  },
+  {
+   "id": "ped_expressway_weather",
+   "category": "situational",
+   "label": "악천후 등 시야확보 곤란",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.bad_weather",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": 20,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.120 [보35, 보36]"
+  },
+  {
+   "id": "ped_expressway_jaywalk",
+   "category": "situational",
+   "label": "무단횡단",
+   "when": {
+    "all": [
+     {
+      "fact": "ped_activity",
+      "op": "==",
+      "value": "crossing"
+     }
+    ]
+   },
+   "default_delta": 20,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.120 [보35, 보36]"
+  },
+  {
+   "id": "ped_expressway_easy_area",
+   "category": "situational",
+   "label": "보행이 용이한 지역",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.easy_walk_area",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": -20,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "p.120 [보35, 보36] ①",
+   "note": "횡단 보행인이 자주 나타나고 시야가 좋은 직선도로, 주택·상점 밀집 지역"
+  },
+  {
+   "id": "ped_expressway_shoulder",
+   "category": "situational",
+   "label": "갓길 보행 중 사고",
+   "when": {
+    "all": [
+     {
+      "fact": "on_shoulder",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   "default_delta": -20,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.120 [보35, 보36]"
+  },
+  {
+   "id": "ped_expressway_sign",
+   "category": "situational",
+   "label": "안전표지 설치",
+   "when": {
+    "all": [
+     {
+      "fact": "scene.ped_warning_sign",
+      "op": "==",
+      "value": true,
+      "of": "facts"
+     }
+    ]
+   },
+   "default_delta": -20,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "p.120 [보36]"
+  },
+  {
+   "id": "ped_speeding_10_20",
+   "category": "notable",
+   "label": "제한속도 위반 (시속 10km 이상 20km 미만)",
+   "when": {
+    "all": [
+     {
+      "fact": "speed_over_limit_kmh",
+      "op": ">=",
+      "value": 10
+     },
+     {
+      "fact": "speed_over_limit_kmh",
+      "op": "<",
+      "value": 20
+     }
+    ]
+   },
+   "default_delta": 10,
+   "detect": "calibration",
+   "effect": "accident",
+   "source": "제3편 제1장 p.37 (14)",
+   "causal": {
+    "all": [
+     {
+      "fact": "avoidable_at_limit",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   "note": "차대차 장(0~20km)과 달리 차대보행자 장은 10km 이상부터 현저한 과실"
+  },
+  {
+   "id": "car_pass_stopped_vehicles",
+   "category": "notable",
+   "label": "보행자 앞 정지 차량을 지나쳐 통과·앞지르기",
+   "when": {
+    "all": [
+     {
+      "fact": "passed_stopped_vehicles",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   "default_delta": 10,
+   "detect": "auto",
+   "effect": "accident",
+   "source": "p.73 [보15] ②, p.84 [보20] ⑦, p.89 [보22] ⑥",
+   "question": "다른 차들이 보행자를 보고 멈춰 있는데 서지 않고 지나가거나 앞지르기했나요?"
+  },
+  {
+   "id": "car_ped_sitting_visible",
+   "category": "notable",
+   "label": "도로에 앉아 있는 등 발견이 쉬운 보행자를 충격",
+   "when": {
+    "all": [
+     {
+      "fact": "ped_activity",
+      "op": "==",
+      "value": "lying_or_playing",
+      "of": "other"
+     },
+     {
+      "fact": "ped_posture",
+      "op": "==",
+      "value": "sitting",
+      "of": "other"
+     }
+    ]
+   },
+   "default_delta": 10,
+   "detect": "manual",
+   "effect": "accident",
+   "source": "p.110 [보30] ③"
+  }
+ ]
+}

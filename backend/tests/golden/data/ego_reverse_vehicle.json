@@ -1,0 +1,1327 @@
+{
+ "get": "= post",
+ "post": {
+  "analysis": {
+   "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+   },
+   "message": null,
+   "reason": null,
+   "scenario": {
+    "chosen_by": "request",
+    "description": "영상은 내 차가 직진했다고 봄. 차량 기록(기어 R)과 함께 올리면 후진이 이김",
+    "scenario": "ego_reverse_video_wrong",
+    "video_read": true
+   },
+   "status": "ok",
+   "video": {
+    "duration_s": 30.0,
+    "fps": 5.0,
+    "frames": 150,
+    "height": 48,
+    "width": 64
+   }
+  },
+  "answer_conflicts": [],
+  "answered": [],
+  "answers": {
+   "parties.ego.cls": {
+    "evidence": "내 차는 승용차였어요 (차량 정보)",
+    "source": "vehicle",
+    "value": "car"
+   },
+   "parties.ego.driver_factors": {
+    "basis": "default",
+    "evidence": "내 차 운전자에게 해당하는 것이 있으면 골라 주세요 (모르면 넘어가도 돼요) → 없음 (기본값)",
+    "source": "default",
+    "value": []
+   },
+   "parties.ego.movement": {
+    "evidence": "내 차가 직진했어요 (17초)",
+    "source": "video",
+    "value": "straight"
+   },
+   "parties.other.cls": {
+    "evidence": "상대는 승용차였어요",
+    "source": "video",
+    "value": "car"
+   },
+   "parties.other.entry_from": {
+    "evidence": "상대가 내 차 기준 왼쪽 길에서 왔어요",
+    "source": "video",
+    "value": "left"
+   },
+   "parties.other.movement": {
+    "evidence": "상대가 직진했어요",
+    "source": "video",
+    "value": "straight"
+   },
+   "road.signal_present": {
+    "evidence": "교차로에 신호등이 없었어요",
+    "source": "video",
+    "value": false
+   },
+   "road.stop_sign_side": {
+    "basis": "default",
+    "evidence": "일시정지 표지가 없었어요 (기본값)",
+    "source": "default",
+    "value": "none"
+   },
+   "road.wider_road": {
+    "basis": "default",
+    "evidence": "두 도로의 폭이 비슷했어요 (기본값)",
+    "source": "default",
+    "value": "equal"
+   },
+   "scene.junction_type": {
+    "evidence": "교차로 모양은 사거리였어요",
+    "source": "video",
+    "value": "cross"
+   },
+   "scene.place": {
+    "evidence": "사고 장소는 교차로였어요",
+    "source": "video",
+    "value": "intersection"
+   }
+  },
+  "auto_answers": [
+   {
+    "evidence": {
+     "points": [
+      {
+       "key": "gear",
+       "t": 1794202227700,
+       "value": "R"
+      }
+     ],
+     "text": "사고 직전 3초 중 2.5초 동안 기어가 R(후진)이었어요",
+     "window": {
+      "from": 1794202227200,
+      "to": 1794202230200
+     }
+    },
+    "field": "parties.ego.movement",
+    "rule": "reverse_v0",
+    "source": "vehicle",
+    "value": "reverse"
+   }
+  ],
+  "collision_review": {
+   "can_pick": false,
+   "candidates": [],
+   "message": null,
+   "needed": false,
+   "pick_until": null,
+   "reason": null,
+   "t": 18.2,
+   "t_confidence": null,
+   "threshold": 0.5
+  },
+  "data_quality": {
+   "clock_warnings": [],
+   "fields_missing": [],
+   "gaps": [],
+   "samples": 141,
+   "sync_grade": "coarse",
+   "sync_reason": null,
+   "sync_reason_text": null,
+   "sync_suspect": false,
+   "vehicle_record": true
+  },
+  "event": {
+   "collision_frame": 91,
+   "collision_t": 18.2,
+   "range": {
+    "from": 1794202218200,
+    "to": 1794202232200
+   },
+   "t_event": 1794202230200,
+   "t_event_source": "video"
+  },
+  "other_cls": {
+   "chapter": "car_car",
+   "choices": [
+    "승용차",
+    "화물차",
+    "버스",
+    "이륜차",
+    "자전거",
+    "농기계",
+    "보행자"
+   ],
+   "confidence": 0.9,
+   "field": "parties.other.cls",
+   "label": "승용차",
+   "low_confidence": false,
+   "options": [
+    "car",
+    "truck",
+    "bus",
+    "two_wheeler",
+    "bicycle",
+    "farm_machine",
+    "pedestrian"
+   ],
+   "source": "video",
+   "value": "car"
+  },
+  "parties": {
+   "ego": {
+    "cls": "car",
+    "label": "내 차"
+   },
+   "other": {
+    "cls": "car",
+    "label": "상대"
+   }
+  },
+  "progress": 100,
+  "questions": [
+   {
+    "answer_type": "choice",
+    "choices": [
+     "폭이 비슷함",
+     "내 차가 달린 도로",
+     "상대가 달린 도로"
+    ],
+    "default": true,
+    "depends_on": {
+     "parties.other.entry_from": [
+      "left",
+      "right"
+     ]
+    },
+    "field": "road.wider_road",
+    "group": null,
+    "guess_evidence": null,
+    "guess_source": "default",
+    "model_guess": "equal",
+    "optional": false,
+    "options": [
+     "equal",
+     "mine",
+     "theirs"
+    ],
+    "question": "교차하는 두 도로 중 어느 쪽이 더 넓은가요?",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "있음",
+     "없음 (골목길)"
+    ],
+    "default": false,
+    "depends_on": null,
+    "field": "road.center_line",
+    "group": null,
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": null,
+    "optional": false,
+    "options": [
+     true,
+     false
+    ],
+    "question": "사고 난 길에 중앙선(가운데 노란 선)이 있나요?",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "내 차",
+     "상대",
+     "거의 동시에"
+    ],
+    "default": false,
+    "depends_on": null,
+    "field": "intersection_entry_order",
+    "group": null,
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": null,
+    "optional": false,
+    "options": [
+     "ego",
+     "other",
+     "same_time"
+    ],
+    "question": "두 차 중 어느 쪽이 먼저 교차로에 들어갔나요?",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "없음",
+     "내 차가 온 길",
+     "상대 차가 온 길",
+     "양쪽 다"
+    ],
+    "default": true,
+    "depends_on": {
+     "road.signal_present": false
+    },
+    "field": "road.stop_sign_side",
+    "group": null,
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": "none",
+    "optional": false,
+    "options": [
+     "none",
+     "ego",
+     "other",
+     "both"
+    ],
+    "question": "일시정지 표지(또는 바닥의 '정지' 글자)가 있던 길은 어느 쪽인가요?",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "줄였음 (또는 멈췄음)",
+     "안 줄였음"
+    ],
+    "default": false,
+    "depends_on": {
+     "road.signal_present": false
+    },
+    "field": "parties.ego.slowed_before_entry",
+    "group": null,
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": null,
+    "optional": false,
+    "options": [
+     true,
+     false
+    ],
+    "question": "내 차는 교차로에 들어가기 전에 속도를 줄였나요?",
+    "vehicle_hint": {
+     "applied": false,
+     "determined": true,
+     "reason": "sync_coarse",
+     "reason_text": "영상과 차량 기록의 시각을 대략만 맞춰서 이 기록은 결과에 넣지 않았어요",
+     "rule": "slowed_v0",
+     "text": "진입 전 2.5초 동안 멈췄어요",
+     "value": true,
+     "value_label": "속도를 줄임"
+    }
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "줄였음 (또는 멈췄음)",
+     "안 줄였음"
+    ],
+    "default": false,
+    "depends_on": {
+     "road.signal_present": false
+    },
+    "field": "parties.other.slowed_before_entry",
+    "group": null,
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": null,
+    "optional": false,
+    "options": [
+     true,
+     false
+    ],
+    "question": "상대 차는 교차로에 들어가기 전에 속도를 줄였나요?",
+    "vehicle_hint": null
+   },
+   {
+    "all_options": [
+     "emergency:ego",
+     "emergency:other",
+     "one_way:ego",
+     "one_way:other",
+     "door:ego",
+     "door:other",
+     "cargo:ego",
+     "cargo:other",
+     "bus_stop:ego",
+     "bus_stop:other",
+     "off_road:ego",
+     "off_road:other",
+     "reverse:ego",
+     "reverse:other",
+     "lane_change:ego",
+     "lane_change:other",
+     "cut_in:ego",
+     "cut_in:other",
+     "congested:ego",
+     "congested:other",
+     "merging:ego",
+     "merging:other",
+     "lc_first:ego",
+     "lc_first:other",
+     "overtake:ego",
+     "overtake:other",
+     "to_shoulder:ego",
+     "to_shoulder:other",
+     "safety_zone:ego",
+     "safety_zone:other",
+     "center:ego",
+     "center:other",
+     "wrong_way:ego",
+     "wrong_way:other",
+     "lc_in_int:ego",
+     "lc_in_int:other",
+     "to_off_road:ego",
+     "to_off_road:other",
+     "large:ego",
+     "large:other",
+     "blocking:ego",
+     "blocking:other",
+     "turn_done:ego",
+     "turn_done:other",
+     "wide_turn:ego",
+     "wide_turn:other",
+     "narrow_turn:ego",
+     "narrow_turn:other",
+     "no_lights:ego",
+     "no_lights:other",
+     "queue:ego",
+     "queue:other",
+     "sidewalk:ego",
+     "sidewalk:other",
+     "pass_right:ego",
+     "pass_right:other",
+     "parking_arrow:ego",
+     "parking_arrow:other",
+     "sidewalk_cross:ego",
+     "sidewalk_cross:other",
+     "sudden_turn:ego",
+     "sudden_turn:other",
+     "left_banned:ego",
+     "left_banned:other",
+     "left_method:ego",
+     "left_method:other",
+     "right_method:ego",
+     "right_method:other",
+     "u_outside:ego",
+     "u_outside:other",
+     "sudden_lc:ego",
+     "sudden_lc:other",
+     "banned_lc:ego",
+     "banned_lc:other",
+     "forced_cut:ego",
+     "forced_cut:other",
+     "signaled_first:ego",
+     "signaled_first:other",
+     "bus_lane:ego",
+     "bus_lane:other",
+     "sudden_stop:ego",
+     "sudden_stop:other",
+     "tailgating:ego",
+     "tailgating:other",
+     "brake_light:ego",
+     "brake_light:other",
+     "no_fault_stop:ego",
+     "no_fault_stop:other",
+     "hazard:ego",
+     "hazard:other",
+     "warning_sign:ego",
+     "warning_sign:other",
+     "no_evacuate:ego",
+     "no_evacuate:other",
+     "bad_parking:ego",
+     "bad_parking:other",
+     "banned_parking:ego",
+     "banned_parking:other",
+     "door_traffic:ego",
+     "door_traffic:other",
+     "door_sudden:ego",
+     "door_sudden:other",
+     "door_stop:ego",
+     "door_stop:other",
+     "door_foresee:ego",
+     "door_foresee:other",
+     "view_blocked:ego",
+     "view_blocked:other",
+     "evasive:ego",
+     "evasive:other",
+     "school_bus:ego",
+     "school_bus:other",
+     "late_red:ego",
+     "late_red:other",
+     "highway",
+     "night",
+     "low_vis",
+     "side_street",
+     "none"
+    ],
+    "answer_type": "multi",
+    "choices": [
+     "내 차가 긴급 출동 중인 긴급자동차 (경광등·사이렌)",
+     "상대가 긴급 출동 중인 긴급자동차 (경광등·사이렌)",
+     "내 차가 일방통행 길을 거꾸로 들어감",
+     "상대가 일방통행 길을 거꾸로 들어감",
+     "내 차가 서 있다가 문을 열었음",
+     "상대가 서 있다가 문을 열었음",
+     "내 차에서 짐이 떨어짐",
+     "상대 차에서 짐이 떨어짐",
+     "내 차가 버스정류장에서 출발한 버스",
+     "상대가 버스정류장에서 출발한 버스",
+     "내 차가 도로가 아닌 곳(주차장·건물 입구 등)에서 도로로 나옴",
+     "상대가 도로가 아닌 곳(주차장·건물 입구 등)에서 도로로 나옴",
+     "내 차가 후진하던 중",
+     "상대가 후진하던 중",
+     "내 차가 차로를 바꾸던 중",
+     "상대가 차로를 바꾸던 중",
+     "내 차가 뒤에서 오른쪽 좁은 틈으로 끼어듦",
+     "상대가 뒤에서 오른쪽 좁은 틈으로 끼어듦",
+     "내 차가 막힌 차로에서 기다리다 갑자기 차로를 바꿈",
+     "상대가 막힌 차로에서 기다리다 갑자기 차로를 바꿈",
+     "내 차로가 줄어드는 곳(합류)이었음",
+     "상대 차로가 줄어드는 곳(합류)이었음",
+     "내 차가 같은 차로 뒤에 있다가 먼저 차로를 바꿈",
+     "상대가 같은 차로 뒤에 있다가 먼저 차로를 바꿈",
+     "내 차가 앞지르기를 하던 중",
+     "상대가 앞지르기를 하던 중",
+     "내 차가 갓길로 차로를 바꿈",
+     "상대가 갓길로 차로를 바꿈",
+     "내 차가 안전지대(바닥에 빗금 친 곳)를 지나 달림",
+     "상대가 안전지대(바닥에 빗금 친 곳)를 지나 달림",
+     "내 차가 중앙선을 넘음",
+     "상대가 중앙선을 넘음",
+     "내 차가 중앙선을 넘어 거꾸로 달림 (역주행)",
+     "상대가 중앙선을 넘어 거꾸로 달림 (역주행)",
+     "내 차가 교차로 안에서 차로를 바꿈",
+     "상대가 교차로 안에서 차로를 바꿈",
+     "내 차가 도로가 아닌 곳(주차장·건물 입구 등)으로 우회전해 들어감",
+     "상대가 도로가 아닌 곳(주차장·건물 입구 등)으로 우회전해 들어감",
+     "내 차가 버스·덤프트럭·5톤 이상 화물차 같은 대형차",
+     "상대가 버스·덤프트럭·5톤 이상 화물차 같은 대형차",
+     "내 차가 막혀 있는 교차로에 들어감 (꼬리물기)",
+     "상대가 막혀 있는 교차로에 들어감 (꼬리물기)",
+     "내 차가 밤·비·안개인데 전조등을 안 켰거나 속도를 안 줄임",
+     "상대가 밤·비·안개인데 전조등을 안 켰거나 속도를 안 줄임",
+     "내 차가 갓길 경계선이나 인도를 넘어 달림",
+     "상대가 갓길 경계선이나 인도를 넘어 달림",
+     "내 차가 상대보다 먼저 방향지시등으로 차로 변경을 알림",
+     "상대가 내 차보다 먼저 방향지시등으로 차로 변경을 알림",
+     "내 차가 버스전용차로로 달림",
+     "상대가 버스전용차로로 달림",
+     "내 차가 이유 없이 갑자기 섰음",
+     "상대가 이유 없이 갑자기 섰음",
+     "내 차가 앞차와 너무 가까이 붙어 달림",
+     "상대가 앞차와 너무 가까이 붙어 달림",
+     "내 차 브레이크등이 고장 나 있었음",
+     "상대 브레이크등이 고장 나 있었음",
+     "내 차 쪽에서 건물·큰 차 때문에 상대가 안 보였음",
+     "상대 쪽에서 건물·큰 차 때문에 상대가 안 보였음",
+     "내 차가 부딪히기 전에 피하려고 속도를 줄이거나 방향을 틀었음",
+     "상대가 부딪히기 전에 피하려고 속도를 줄이거나 방향을 틀었음",
+     "내 차가 어린이통학버스",
+     "상대가 어린이통학버스",
+     "고속도로·자동차전용도로였음",
+     "밤이었음",
+     "비·눈·안개 등으로 앞이 잘 안 보였음",
+     "골목길(중앙선 없는 좁은 길)이었음",
+     "해당 없음 (모두 아니요)"
+    ],
+    "default": true,
+    "depends_on": null,
+    "field": "situation.special",
+    "group": "특수 상황",
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": [],
+    "more_options": [
+     "door:ego",
+     "door:other",
+     "bus_stop:ego",
+     "bus_stop:other",
+     "off_road:ego",
+     "off_road:other",
+     "to_off_road:ego",
+     "to_off_road:other",
+     "large:ego",
+     "large:other",
+     "school_bus:ego",
+     "school_bus:other",
+     "highway"
+    ],
+    "option_groups": [
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "마주 오다가",
+     "마주 오다가",
+     "마주 오다가",
+     "마주 오다가",
+     "교차로",
+     "교차로",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "교차로",
+     "교차로",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "같은 방향으로 가다가",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "일반",
+     "장소·날씨",
+     "장소·날씨",
+     "장소·날씨",
+     "장소·날씨",
+     "일반"
+    ],
+    "optional": true,
+    "options": [
+     "emergency:ego",
+     "emergency:other",
+     "one_way:ego",
+     "one_way:other",
+     "door:ego",
+     "door:other",
+     "cargo:ego",
+     "cargo:other",
+     "bus_stop:ego",
+     "bus_stop:other",
+     "off_road:ego",
+     "off_road:other",
+     "reverse:ego",
+     "reverse:other",
+     "lane_change:ego",
+     "lane_change:other",
+     "cut_in:ego",
+     "cut_in:other",
+     "congested:ego",
+     "congested:other",
+     "merging:ego",
+     "merging:other",
+     "lc_first:ego",
+     "lc_first:other",
+     "overtake:ego",
+     "overtake:other",
+     "to_shoulder:ego",
+     "to_shoulder:other",
+     "safety_zone:ego",
+     "safety_zone:other",
+     "center:ego",
+     "center:other",
+     "wrong_way:ego",
+     "wrong_way:other",
+     "lc_in_int:ego",
+     "lc_in_int:other",
+     "to_off_road:ego",
+     "to_off_road:other",
+     "large:ego",
+     "large:other",
+     "blocking:ego",
+     "blocking:other",
+     "no_lights:ego",
+     "no_lights:other",
+     "sidewalk_cross:ego",
+     "sidewalk_cross:other",
+     "signaled_first:ego",
+     "signaled_first:other",
+     "bus_lane:ego",
+     "bus_lane:other",
+     "sudden_stop:ego",
+     "sudden_stop:other",
+     "tailgating:ego",
+     "tailgating:other",
+     "brake_light:ego",
+     "brake_light:other",
+     "view_blocked:ego",
+     "view_blocked:other",
+     "evasive:ego",
+     "evasive:other",
+     "school_bus:ego",
+     "school_bus:other",
+     "highway",
+     "night",
+     "low_vis",
+     "side_street",
+     "none"
+    ],
+    "question": "이 중에 해당하는 게 있으면 골라 주세요 (없으면 넘어가도 돼요)",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "multi",
+    "choices": [
+     "음주 (혈중알코올 0.03% 이상)",
+     "음주 (0.03% 미만)",
+     "약물 복용",
+     "무면허",
+     "제한속도보다 시속 20km 이상 빨랐음",
+     "제한속도보다 조금(시속 20km 미만) 빨랐음",
+     "운전 중 휴대전화 사용·영상 시청",
+     "졸음·한눈팔기 등으로 앞을 제대로 안 봄",
+     "밤·비 오는 날 짙은 썬팅 차량",
+     "난폭운전 (위반을 연달아·반복)",
+     "여러 대가 줄지어 위험하게 운전 (공동위험)",
+     "해당 없음 (모두 아니요)"
+    ],
+    "default": true,
+    "depends_on": null,
+    "field": "parties.ego.driver_factors",
+    "group": "운전자 요인",
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": [],
+    "optional": true,
+    "options": [
+     "drunk_0.03_plus",
+     "drunk_under_0.03",
+     "drugs",
+     "no_license",
+     "speed_20plus",
+     "speed_under20",
+     "phone",
+     "inattention",
+     "dark_tint",
+     "reckless",
+     "group_danger",
+     "none"
+    ],
+    "question": "내 차 운전자에게 해당하는 것이 있으면 골라 주세요 (모르면 넘어가도 돼요)",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "multi",
+    "choices": [
+     "음주 (혈중알코올 0.03% 이상)",
+     "음주 (0.03% 미만)",
+     "약물 복용",
+     "무면허",
+     "제한속도보다 시속 20km 이상 빨랐음",
+     "제한속도보다 조금(시속 20km 미만) 빨랐음",
+     "운전 중 휴대전화 사용·영상 시청",
+     "졸음·한눈팔기 등으로 앞을 제대로 안 봄",
+     "밤·비 오는 날 짙은 썬팅 차량",
+     "난폭운전 (위반을 연달아·반복)",
+     "여러 대가 줄지어 위험하게 운전 (공동위험)",
+     "해당 없음 (모두 아니요)"
+    ],
+    "default": true,
+    "depends_on": null,
+    "field": "parties.other.driver_factors",
+    "group": "운전자 요인",
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": [],
+    "optional": true,
+    "options": [
+     "drunk_0.03_plus",
+     "drunk_under_0.03",
+     "drugs",
+     "no_license",
+     "speed_20plus",
+     "speed_under20",
+     "phone",
+     "inattention",
+     "dark_tint",
+     "reckless",
+     "group_danger",
+     "none"
+    ],
+    "question": "상대 운전자에게 해당하는 것이 있으면 골라 주세요 (모르면 넘어가도 돼요)",
+    "vehicle_hint": null
+   }
+  ],
+  "remaining": [
+   {
+    "answer_type": "choice",
+    "choices": [
+     "폭이 비슷함",
+     "내 차가 달린 도로",
+     "상대가 달린 도로"
+    ],
+    "default": true,
+    "depends_on": {
+     "parties.other.entry_from": [
+      "left",
+      "right"
+     ]
+    },
+    "field": "road.wider_road",
+    "group": null,
+    "guess_choice": "폭이 비슷함",
+    "guess_evidence": null,
+    "guess_source": "default",
+    "model_guess": "equal",
+    "options": [
+     "equal",
+     "mine",
+     "theirs"
+    ],
+    "question": "교차하는 두 도로 중 어느 쪽이 더 넓은가요?",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "있음",
+     "없음 (골목길)"
+    ],
+    "default": false,
+    "depends_on": null,
+    "field": "road.center_line",
+    "group": null,
+    "guess_choice": null,
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": null,
+    "options": [
+     true,
+     false
+    ],
+    "question": "사고 난 길에 중앙선(가운데 노란 선)이 있나요?",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "내 차",
+     "상대",
+     "거의 동시에"
+    ],
+    "default": false,
+    "depends_on": null,
+    "field": "intersection_entry_order",
+    "group": null,
+    "guess_choice": null,
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": null,
+    "options": [
+     "ego",
+     "other",
+     "same_time"
+    ],
+    "question": "두 차 중 어느 쪽이 먼저 교차로에 들어갔나요?",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "없음",
+     "내 차가 온 길",
+     "상대 차가 온 길",
+     "양쪽 다"
+    ],
+    "default": true,
+    "depends_on": {
+     "road.signal_present": false
+    },
+    "field": "road.stop_sign_side",
+    "group": null,
+    "guess_choice": "없음",
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": "none",
+    "options": [
+     "none",
+     "ego",
+     "other",
+     "both"
+    ],
+    "question": "일시정지 표지(또는 바닥의 '정지' 글자)가 있던 길은 어느 쪽인가요?",
+    "vehicle_hint": null
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "줄였음 (또는 멈췄음)",
+     "안 줄였음"
+    ],
+    "default": false,
+    "depends_on": {
+     "road.signal_present": false
+    },
+    "field": "parties.ego.slowed_before_entry",
+    "group": null,
+    "guess_choice": null,
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": null,
+    "options": [
+     true,
+     false
+    ],
+    "question": "내 차는 교차로에 들어가기 전에 속도를 줄였나요?",
+    "vehicle_hint": {
+     "applied": false,
+     "determined": true,
+     "reason": "sync_coarse",
+     "reason_text": "영상과 차량 기록의 시각을 대략만 맞춰서 이 기록은 결과에 넣지 않았어요",
+     "rule": "slowed_v0",
+     "text": "진입 전 2.5초 동안 멈췄어요",
+     "value": true,
+     "value_label": "속도를 줄임"
+    }
+   },
+   {
+    "answer_type": "choice",
+    "choices": [
+     "줄였음 (또는 멈췄음)",
+     "안 줄였음"
+    ],
+    "default": false,
+    "depends_on": {
+     "road.signal_present": false
+    },
+    "field": "parties.other.slowed_before_entry",
+    "group": null,
+    "guess_choice": null,
+    "guess_evidence": null,
+    "guess_source": null,
+    "model_guess": null,
+    "options": [
+     true,
+     false
+    ],
+    "question": "상대 차는 교차로에 들어가기 전에 속도를 줄였나요?",
+    "vehicle_hint": null
+   }
+  ],
+  "remaining_count": 6,
+  "result": {
+   "auto_filled": [
+    "road.wider_road",
+    "road.stop_sign_side",
+    "parties.ego.driver_factors"
+   ],
+   "base_fault_by_party": null,
+   "chapter": "car_car",
+   "fault_by_party": null,
+   "fault_display": null,
+   "modifiers": [],
+   "notice": null,
+   "provisional": true,
+   "rule_id": null,
+   "status": "no_rule",
+   "title": null,
+   "unverifiable_factors": []
+  },
+  "result_with_vehicle": {
+   "auto_filled": [
+    "road.wider_road",
+    "road.stop_sign_side",
+    "parties.ego.slowed_before_entry",
+    "parties.ego.driver_factors"
+   ],
+   "base_fault_by_party": null,
+   "chapter": "car_car",
+   "fault_by_party": null,
+   "fault_display": null,
+   "modifiers": [],
+   "notice": null,
+   "provisional": true,
+   "rule_id": null,
+   "status": "no_rule",
+   "title": null,
+   "unverifiable_factors": []
+  },
+  "source_conflicts": [
+   {
+    "evidence": "사고 직전 3초 중 2.5초 동안 기어가 R(후진)이었어요",
+    "field": "parties.ego.movement",
+    "kind": "vehicle_vs_video",
+    "others": [
+     {
+      "evidence": "내 차가 직진했어요 (17초)",
+      "source": "video",
+      "value": "straight"
+     }
+    ],
+    "used": {
+     "source": "vehicle",
+     "value": "reverse"
+    }
+   }
+  ],
+  "status": "needs_answers",
+  "sync": {
+   "candidates": [
+    {
+     "source": "filename",
+     "start_ms": 1794202212000
+    }
+   ],
+   "clock_warnings": [],
+   "fine": {
+    "impact": null,
+    "offset_candidates": [],
+    "offset_ms": null,
+    "reason": "no_ego_motion",
+    "score": null
+   },
+   "grade": "coarse",
+   "method": "coarse_start_v0",
+   "offset_ms": 0,
+   "reason": null,
+   "reason_text": null,
+   "score": null,
+   "start_ms": 1794202212000,
+   "start_source": "filename",
+   "t_collision_ms": 1794202230200,
+   "vehicle_gap": null
+  },
+  "vehicle_effects": [],
+  "vehicle_timeline": {
+   "aligned": false,
+   "brake": [],
+   "collision_s": 0.0,
+   "from_s": -12.0,
+   "gaps": [],
+   "gear": [
+    {
+     "from": -12.0,
+     "to": -2.5,
+     "value": "D"
+    },
+    {
+     "from": -2.5,
+     "to": 2.0,
+     "value": "R"
+    }
+   ],
+   "speed": [
+    [
+     -12.0,
+     3.0
+    ],
+    [
+     -11.8,
+     3.0
+    ],
+    [
+     -11.6,
+     3.0
+    ],
+    [
+     -11.4,
+     3.0
+    ],
+    [
+     -11.2,
+     3.0
+    ],
+    [
+     -11.0,
+     3.0
+    ],
+    [
+     -10.8,
+     3.0
+    ],
+    [
+     -10.6,
+     3.0
+    ],
+    [
+     -10.4,
+     3.0
+    ],
+    [
+     -10.2,
+     3.0
+    ],
+    [
+     -10.0,
+     3.0
+    ],
+    [
+     -9.8,
+     3.0
+    ],
+    [
+     -9.6,
+     3.0
+    ],
+    [
+     -9.4,
+     3.0
+    ],
+    [
+     -9.2,
+     3.0
+    ],
+    [
+     -9.0,
+     3.0
+    ],
+    [
+     -8.8,
+     3.0
+    ],
+    [
+     -8.6,
+     3.0
+    ],
+    [
+     -8.4,
+     3.0
+    ],
+    [
+     -8.2,
+     3.0
+    ],
+    [
+     -8.0,
+     3.0
+    ],
+    [
+     -7.8,
+     3.0
+    ],
+    [
+     -7.6,
+     3.0
+    ],
+    [
+     -7.4,
+     3.0
+    ],
+    [
+     -7.2,
+     3.0
+    ],
+    [
+     -7.0,
+     3.0
+    ],
+    [
+     -6.8,
+     3.0
+    ],
+    [
+     -6.6,
+     3.0
+    ],
+    [
+     -6.4,
+     3.0
+    ],
+    [
+     -6.2,
+     3.0
+    ],
+    [
+     -6.0,
+     3.0
+    ],
+    [
+     -5.8,
+     3.0
+    ],
+    [
+     -5.6,
+     3.0
+    ],
+    [
+     -5.4,
+     3.0
+    ],
+    [
+     -5.2,
+     3.0
+    ],
+    [
+     -5.0,
+     3.0
+    ],
+    [
+     -4.8,
+     3.0
+    ],
+    [
+     -4.6,
+     3.0
+    ],
+    [
+     -4.4,
+     3.0
+    ],
+    [
+     -4.2,
+     3.0
+    ],
+    [
+     -4.0,
+     3.0
+    ],
+    [
+     -3.8,
+     3.0
+    ],
+    [
+     -3.6,
+     3.0
+    ],
+    [
+     -3.4,
+     3.0
+    ],
+    [
+     -3.2,
+     3.0
+    ],
+    [
+     -3.0,
+     3.0
+    ],
+    [
+     -2.8,
+     3.0
+    ],
+    [
+     -2.6,
+     3.0
+    ],
+    [
+     -2.4,
+     3.0
+    ],
+    [
+     -2.2,
+     3.0
+    ],
+    [
+     -2.0,
+     3.0
+    ],
+    [
+     -1.8,
+     3.0
+    ],
+    [
+     -1.6,
+     3.0
+    ],
+    [
+     -1.4,
+     3.0
+    ],
+    [
+     -1.2,
+     3.0
+    ],
+    [
+     -1.0,
+     3.0
+    ],
+    [
+     -0.8,
+     3.0
+    ],
+    [
+     -0.6,
+     3.0
+    ],
+    [
+     -0.4,
+     3.0
+    ],
+    [
+     -0.2,
+     3.0
+    ],
+    [
+     0.0,
+     3.0
+    ],
+    [
+     0.2,
+     3.0
+    ],
+    [
+     0.4,
+     3.0
+    ],
+    [
+     0.6,
+     3.0
+    ],
+    [
+     0.8,
+     3.0
+    ],
+    [
+     1.0,
+     3.0
+    ],
+    [
+     1.2,
+     3.0
+    ],
+    [
+     1.4,
+     3.0
+    ],
+    [
+     1.6,
+     3.0
+    ],
+    [
+     1.8,
+     3.0
+    ],
+    [
+     2.0,
+     3.0
+    ]
+   ],
+   "speed_max": 3.0,
+   "step_s": 0.2,
+   "sync_grade": "coarse",
+   "t0_ms": 1794202230200,
+   "to_s": 2.0,
+   "turn_signal": [],
+   "video_collision_t": 18.2
+  }
+ }
+}

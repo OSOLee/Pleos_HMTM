@@ -1,0 +1,8 @@
+# 기본 bytetrack.yaml에서 문턱만 낮춤 (CCTV에서 신뢰도 0.1~0.25로 잡히는 당사자를 놓치지 않도록)
+tracker_type: bytetrack
+track_high_thresh: 0.15
+track_low_thresh: 0.05
+new_track_thresh: 0.15
+track_buffer: 30
+match_thresh: 0.8
+fuse_score: True

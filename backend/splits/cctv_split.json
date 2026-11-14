@@ -1,0 +1,4066 @@
+{
+ "rule": "1. 신호 있는 장소(장소 이름에 \"신호등있음\")의 사고는 전부 평가\n2. 사고가 SMALL_CAT개 이하인 카테고리(대상 × 장소)는 전부 평가\n3. 지금 평가에 쓰는 사고(outputs/gt_cc)와 영상을 받지 않아 중복을 못 본 사고(UNCHECKED)는 평가\n4. 나머지 카테고리는 TRAIN_PER_CAT개를 학습, 이륜차·자전거 카테고리는 RESERVE_PER_CAT개를 예비로 두고\n   나머지는 평가. 학습·예비는 프레임이 많은 영상(라벨 프레임이 많음)이 든 사고부터 고른다\n예비는 처음에는 학습에도 평가에도 쓰지 않는다. 학습 뒤 CCTV 이륜차 탐지가 부족하면 학습으로 옮긴다.\n\n평가 기준 라벨\n같은 사고의 복사본끼리 과실비율 라벨이 다른 경우가 있다. 그래서 사고마다 기준 영상 하나를 정한다.\n- 기준 영상: 지금 평가에 쓰는 영상이 있으면 그 영상. 없으면 다수 라벨을 가진 복사본 중 이름순 첫 번째\n- 정답(answer): 기준 영상의 라벨. A·B는 기준 영상의 프레임 라벨(isObjectA/B) 기준\n- 복사본의 A·B가 기준 영상과 반대로 붙은 경우가 있다(cc_3_170203 묶음). 프레임 라벨의 A·B 종류가 다르면\n  종류로, 같으면 박스 평균 위치로 맞춘다. 차이가 AB_MARGIN보다 작으면 \"unknown\"\n- 허용 비율(allowed): 복사본 라벨을 기준 영상의 A·B로 맞춘 비율 전부. 라벨이 다른 사고는 결과표에서\n  \"기준 라벨 일치\"(주 지표)와 \"허용 비율 중 하나와 일치\"를 나눠서 센다\n- 비율이 하나만 적힌 라벨(A만 있음)은 B = 100 - A",
+ "accidents": [
+  {
+   "id": "cc_3_090122_vehicle_124_130",
+   "videos": [
+    "cc_3_090122_vehicle_124_130",
+    "cc_3_091122_vehicle_246_22464"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_090122_vehicle_124_130",
+   "answer": [
+    25,
+    75
+   ],
+   "type": 127,
+   "allowed": [
+    [
+     25,
+     75
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_090122_vehicle_124_130",
+     "rate": [
+      25,
+      75
+     ],
+     "type": 127,
+     "ab": "same",
+     "rate_ref": [
+      25,
+      75
+     ]
+    },
+    {
+     "video": "cc_3_091122_vehicle_246_22464",
+     "rate": [
+      25,
+      75
+     ],
+     "type": 127,
+     "ab": "same",
+     "rate_ref": [
+      25,
+      75
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_110319_vehicle_231_21621",
+   "videos": [
+    "cc_3_110319_vehicle_231_21621",
+    "cc_3_111124_vehicle_110_134",
+    "cc_3_130301_vehicle_143_113",
+    "cc_3_130327_vehicle_256_21840"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_110319_vehicle_231_21621",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 126,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_110319_vehicle_231_21621",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 126,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_111124_vehicle_110_134",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 126,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_130301_vehicle_143_113",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 126,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_130327_vehicle_256_21840",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 126,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_110710_vehicle_191_139",
+   "videos": [
+    "cc_3_110710_vehicle_191_139",
+    "cc_3_130710_vehicle_230_47740"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_110710_vehicle_191_139",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 107,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_110710_vehicle_191_139",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 107,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_130710_vehicle_230_47740",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 107,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_120213_vehicle_217_22360",
+   "videos": [
+    "cc_3_120213_vehicle_217_22360",
+    "cc_3_120915_vehicle_127_146"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_120213_vehicle_217_22360",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 126,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_120213_vehicle_217_22360",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 126,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_120915_vehicle_127_146",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 126,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_120222_pedestrian_206_21684",
+   "videos": [
+    "cc_3_120222_pedestrian_206_21684",
+    "cc_3_130111_pedestrian_242_22348",
+    "cc_3_190911_pedestrian_45_008",
+    "cc_3_210206_pedestrian_114_040"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_120222_pedestrian_206_21684",
+   "answer": [
+    0,
+    100
+   ],
+   "type": 164,
+   "allowed": [
+    [
+     0,
+     100
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_120222_pedestrian_206_21684",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 164,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    },
+    {
+     "video": "cc_3_130111_pedestrian_242_22348",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 169,
+     "ab": "unknown",
+     "rate_ref": [
+      0,
+      100
+     ]
+    },
+    {
+     "video": "cc_3_190911_pedestrian_45_008",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 164,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    },
+    {
+     "video": "cc_3_210206_pedestrian_114_040",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 169,
+     "ab": "unknown",
+     "rate_ref": [
+      0,
+      100
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_120407_vehicle_251_43871",
+   "videos": [
+    "cc_3_120407_vehicle_251_43871",
+    "cc_3_120714_vehicle_21_049"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_120407_vehicle_251_43871",
+   "answer": [
+    25,
+    75
+   ],
+   "type": 127,
+   "allowed": [
+    [
+     25,
+     75
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_120407_vehicle_251_43871",
+     "rate": [
+      25,
+      75
+     ],
+     "type": 127,
+     "ab": "same",
+     "rate_ref": [
+      25,
+      75
+     ]
+    },
+    {
+     "video": "cc_3_120714_vehicle_21_049",
+     "rate": [
+      25,
+      75
+     ],
+     "type": 127,
+     "ab": "same",
+     "rate_ref": [
+      25,
+      75
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_130626_vehicle_148_009",
+   "videos": [
+    "cc_3_130626_vehicle_148_009",
+    "cc_3_140408_vehicle_211_23284"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_130626_vehicle_148_009",
+   "answer": [
+    40,
+    60
+   ],
+   "type": 109,
+   "allowed": [
+    [
+     40,
+     60
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_130626_vehicle_148_009",
+     "rate": [
+      40,
+      60
+     ],
+     "type": 109,
+     "ab": "same",
+     "rate_ref": [
+      40,
+      60
+     ]
+    },
+    {
+     "video": "cc_3_140408_vehicle_211_23284",
+     "rate": [
+      40,
+      60
+     ],
+     "type": 109,
+     "ab": "same",
+     "rate_ref": [
+      40,
+      60
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_130730_pedestrian_227_21760",
+   "videos": [
+    "cc_3_130730_pedestrian_227_21760",
+    "cc_3_140331_pedestrian_249_22071",
+    "cc_3_140427_pedestrian_252_21201",
+    "cc_3_171108_pedestrian_111_050",
+    "cc_3_191009_pedestrian_200_140",
+    "cc_3_210504_pedestrian_143_123"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_130730_pedestrian_227_21760",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 170,
+   "allowed": [
+    [
+     20,
+     80
+    ],
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_130730_pedestrian_227_21760",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 170,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_140331_pedestrian_249_22071",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 170,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_140427_pedestrian_252_21201",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 162,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_171108_pedestrian_111_050",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 167,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_191009_pedestrian_200_140",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 170,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_210504_pedestrian_143_123",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 170,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": true,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_140726_vehicle_108_080",
+   "videos": [
+    "cc_3_140726_vehicle_108_080",
+    "cc_3_141015_vehicle_221_22312"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_140726_vehicle_108_080",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 126,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_140726_vehicle_108_080",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 126,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_141015_vehicle_221_22312",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 126,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_141011_vehicle_47_131",
+   "videos": [
+    "cc_3_141011_vehicle_47_131",
+    "cc_3_160827_vehicle_205_23308"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_141011_vehicle_47_131",
+   "answer": [
+    40,
+    60
+   ],
+   "type": 21,
+   "allowed": [
+    [
+     40,
+     60
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_141011_vehicle_47_131",
+     "rate": [
+      40,
+      60
+     ],
+     "type": 21,
+     "ab": "same",
+     "rate_ref": [
+      40,
+      60
+     ]
+    },
+    {
+     "video": "cc_3_160827_vehicle_205_23308",
+     "rate": [
+      40,
+      60
+     ],
+     "type": 21,
+     "ab": "same",
+     "rate_ref": [
+      40,
+      60
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_141123_vehicle_236_22437",
+   "videos": [
+    "cc_3_141123_vehicle_236_22437",
+    "cc_3_150527_vehicle_44_127"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_141123_vehicle_236_22437",
+   "answer": [
+    25,
+    75
+   ],
+   "type": 127,
+   "allowed": [
+    [
+     25,
+     75
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_141123_vehicle_236_22437",
+     "rate": [
+      25,
+      75
+     ],
+     "type": 127,
+     "ab": "same",
+     "rate_ref": [
+      25,
+      75
+     ]
+    },
+    {
+     "video": "cc_3_150527_vehicle_44_127",
+     "rate": [
+      25,
+      75
+     ],
+     "type": 127,
+     "ab": "same",
+     "rate_ref": [
+      25,
+      75
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_150101_vehicle_46_290",
+   "videos": [
+    "cc_3_150101_vehicle_46_290",
+    "cc_3_161103_vehicle_209_21996"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_150101_vehicle_46_290",
+   "answer": [
+    40,
+    60
+   ],
+   "type": 21,
+   "allowed": [
+    [
+     40,
+     60
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_150101_vehicle_46_290",
+     "rate": [
+      40,
+      60
+     ],
+     "type": 21,
+     "ab": "same",
+     "rate_ref": [
+      40,
+      60
+     ]
+    },
+    {
+     "video": "cc_3_161103_vehicle_209_21996",
+     "rate": [
+      40,
+      60
+     ],
+     "type": 21,
+     "ab": "same",
+     "rate_ref": [
+      40,
+      60
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_150226_pedestrian_233_22248",
+   "videos": [
+    "cc_3_150226_pedestrian_233_22248",
+    "cc_3_210502_pedestrian_118_007"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_150226_pedestrian_233_22248",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 167,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_150226_pedestrian_233_22248",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 167,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_210502_pedestrian_118_007",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 167,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_151128_pedestrian_243_22469",
+   "videos": [
+    "cc_3_151128_pedestrian_243_22469",
+    "cc_3_170822_pedestrian_193_020"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_151128_pedestrian_243_22469",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 162,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_151128_pedestrian_243_22469",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 162,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_170822_pedestrian_193_020",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 162,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_160316_vehicle_210_47971",
+   "videos": [
+    "cc_3_160316_vehicle_210_47971",
+    "cc_3_160510_vehicle_146_050"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_160316_vehicle_210_47971",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 107,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_160316_vehicle_210_47971",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 107,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_160510_vehicle_146_050",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 107,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_160726_pedestrian_236_22672",
+   "videos": [
+    "cc_3_160726_pedestrian_236_22672",
+    "cc_3_190817_pedestrian_16_001"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도(신호등있음)부근",
+   "category_conflict": false,
+   "signal": true,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_160726_pedestrian_236_22672",
+   "answer": [
+    0,
+    100
+   ],
+   "type": 172,
+   "allowed": [
+    [
+     0,
+     100
+    ],
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_160726_pedestrian_236_22672",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 172,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    },
+    {
+     "video": "cc_3_190817_pedestrian_16_001",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 172,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": true,
+   "set": "eval",
+   "why": "신호 있는 장소"
+  },
+  {
+   "id": "cc_3_160823_pedestrian_125_009",
+   "videos": [
+    "cc_3_160823_pedestrian_125_009",
+    "cc_3_180607_pedestrian_206_23880"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_160823_pedestrian_125_009",
+   "answer": [
+    0,
+    100
+   ],
+   "type": 133,
+   "allowed": [
+    [
+     0,
+     100
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_160823_pedestrian_125_009",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 133,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    },
+    {
+     "video": "cc_3_180607_pedestrian_206_23880",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 133,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "사고 3개 이하 카테고리"
+  },
+  {
+   "id": "cc_3_170203_vehicle_31_112",
+   "videos": [
+    "cc_3_170203_vehicle_31_112",
+    "cc_3_180518_vehicle_255_22386",
+    "cc_3_211208_vehicle_120_011",
+    "cc_3_220504_vehicle_219_25422"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_211208_vehicle_120_011",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 23,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_170203_vehicle_31_112",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 22,
+     "ab": "swapped",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_180518_vehicle_255_22386",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 22,
+     "ab": "swapped",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_211208_vehicle_120_011",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 23,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_220504_vehicle_219_25422",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 23,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_171218_pedestrian_40_004",
+   "videos": [
+    "cc_3_171218_pedestrian_40_004",
+    "cc_3_220103_pedestrian_214_21997"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도(신호등있음)",
+   "category_conflict": false,
+   "signal": true,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_171218_pedestrian_40_004",
+   "answer": [
+    70,
+    30
+   ],
+   "type": 154,
+   "allowed": [
+    [
+     70,
+     30
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_171218_pedestrian_40_004",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 154,
+     "ab": "same",
+     "rate_ref": [
+      70,
+      30
+     ]
+    },
+    {
+     "video": "cc_3_220103_pedestrian_214_21997",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 154,
+     "ab": "same",
+     "rate_ref": [
+      70,
+      30
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "신호 있는 장소"
+  },
+  {
+   "id": "cc_3_180401_vehicle_204_23693",
+   "videos": [
+    "cc_3_180401_vehicle_204_23693",
+    "cc_3_181212_vehicle_04_016"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_180401_vehicle_204_23693",
+   "answer": [
+    70,
+    30
+   ],
+   "type": 22,
+   "allowed": [
+    [
+     70,
+     30
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_180401_vehicle_204_23693",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 22,
+     "ab": "same",
+     "rate_ref": [
+      70,
+      30
+     ]
+    },
+    {
+     "video": "cc_3_181212_vehicle_04_016",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 22,
+     "ab": "same",
+     "rate_ref": [
+      70,
+      30
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_180629_two-wheeled-vehicle_120_173",
+   "videos": [
+    "cc_3_180629_two-wheeled-vehicle_120_173",
+    "cc_3_190701_two-wheeled-vehicle_201_21747"
+   ],
+   "object": "차대이륜차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_180629_two-wheeled-vehicle_120_173",
+   "answer": [
+    60,
+    40
+   ],
+   "type": 231,
+   "allowed": [
+    [
+     60,
+     40
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_180629_two-wheeled-vehicle_120_173",
+     "rate": [
+      60,
+      40
+     ],
+     "type": 231,
+     "ab": "same",
+     "rate_ref": [
+      60,
+      40
+     ]
+    },
+    {
+     "video": "cc_3_190701_two-wheeled-vehicle_201_21747",
+     "rate": [
+      60,
+      40
+     ],
+     "type": 231,
+     "ab": "same",
+     "rate_ref": [
+      60,
+      40
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_190106_vehicle_259_47055",
+   "videos": [
+    "cc_3_190106_vehicle_259_47055",
+    "cc_3_190118_vehicle_131_066"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_190106_vehicle_259_47055",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 110,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_190106_vehicle_259_47055",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 110,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_190118_vehicle_131_066",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 110,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_190212_bike_120_089",
+   "videos": [
+    "cc_3_190212_bike_120_089",
+    "cc_3_190318_bike_224_21598"
+   ],
+   "object": "차대자전거",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_190212_bike_120_089",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 388,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_190212_bike_120_089",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 388,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_190318_bike_224_21598",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 388,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_190506_bike_20_015",
+   "videos": [
+    "cc_3_190506_bike_20_015",
+    "cc_3_190902_bike_218_21838",
+    "cc_3_191004_bike_41_005",
+    "cc_3_200613_bike_246_23066"
+   ],
+   "object": "차대자전거",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_190506_bike_20_015",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 398,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_190506_bike_20_015",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 398,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_190902_bike_218_21838",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 398,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_191004_bike_41_005",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 398,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_200613_bike_246_23066",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 398,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_190914_two-wheeled-vehicle_141_099",
+   "videos": [
+    "cc_3_190914_two-wheeled-vehicle_141_099",
+    "cc_3_200323_two-wheeled-vehicle_231_33028"
+   ],
+   "object": "차대이륜차",
+   "place": "차도와차도가아닌장소",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_190914_two-wheeled-vehicle_141_099",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 364,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_190914_two-wheeled-vehicle_141_099",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 364,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_200323_two-wheeled-vehicle_231_33028",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 364,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "reserve",
+   "why": "이륜차·자전거 예비"
+  },
+  {
+   "id": "cc_3_200212_vehicle_145_034",
+   "videos": [
+    "cc_3_200212_vehicle_145_034",
+    "cc_3_210616_vehicle_226_47658"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_200212_vehicle_145_034",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 107,
+   "allowed": [
+    [
+     10,
+     90
+    ],
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200212_vehicle_145_034",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 107,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_210616_vehicle_226_47658",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 110,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": true,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_200215_pedestrian_111_049",
+   "videos": [
+    "cc_3_200215_pedestrian_111_049",
+    "cc_3_200412_pedestrian_208_21966"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_200215_pedestrian_111_049",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 172,
+   "allowed": [
+    [
+     10,
+     90
+    ],
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200215_pedestrian_111_049",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 172,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_200412_pedestrian_208_21966",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 163,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": true,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_200222_vehicle_01_040",
+   "videos": [
+    "cc_3_200222_vehicle_01_040",
+    "cc_3_200511_vehicle_260_23411"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_200511_vehicle_260_23411",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 34,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200222_vehicle_01_040",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 34,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_200511_vehicle_260_23411",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 34,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_200227_vehicle_235_47114",
+   "videos": [
+    "cc_3_200227_vehicle_235_47114",
+    "cc_3_200512_vehicle_30_256"
+   ],
+   "object": "차대차",
+   "place": "차도와차도가아닌장소",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_200227_vehicle_235_47114",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 106,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200227_vehicle_235_47114",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 106,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_200512_vehicle_30_256",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 106,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "사고 3개 이하 카테고리"
+  },
+  {
+   "id": "cc_3_200520_vehicle_108_183",
+   "videos": [
+    "cc_3_200520_vehicle_108_183",
+    "cc_3_220723_vehicle_233_21348"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_200520_vehicle_108_183",
+   "answer": [
+    40,
+    60
+   ],
+   "type": 21,
+   "allowed": [
+    [
+     40,
+     60
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200520_vehicle_108_183",
+     "rate": [
+      40,
+      60
+     ],
+     "type": 21,
+     "ab": "same",
+     "rate_ref": [
+      40,
+      60
+     ]
+    },
+    {
+     "video": "cc_3_220723_vehicle_233_21348",
+     "rate": [
+      40,
+      60
+     ],
+     "type": 21,
+     "ab": "same",
+     "rate_ref": [
+      40,
+      60
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_200702_two-wheeled-vehicle_240_22954",
+   "videos": [
+    "cc_3_200702_two-wheeled-vehicle_240_22954",
+    "cc_3_200827_two-wheeled-vehicle_39_015"
+   ],
+   "object": "차대이륜차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_200702_two-wheeled-vehicle_240_22954",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 337,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200702_two-wheeled-vehicle_240_22954",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 337,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_200827_two-wheeled-vehicle_39_015",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 337,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_200711_pedestrian_207_24988",
+   "videos": [
+    "cc_3_200711_pedestrian_207_24988",
+    "cc_3_211125_pedestrian_16_004"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_200711_pedestrian_207_24988",
+   "answer": [
+    0,
+    100
+   ],
+   "type": 133,
+   "allowed": [
+    [
+     0,
+     100
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200711_pedestrian_207_24988",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 133,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    },
+    {
+     "video": "cc_3_211125_pedestrian_16_004",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 133,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "사고 3개 이하 카테고리"
+  },
+  {
+   "id": "cc_3_200822_two-wheeled-vehicle_089_390",
+   "videos": [
+    "cc_3_200822_two-wheeled-vehicle_089_390",
+    "cc_3_211029_two-wheeled-vehicle_230_22487"
+   ],
+   "object": "차대이륜차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_200822_two-wheeled-vehicle_089_390",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 225,
+   "allowed": [
+    [
+     30,
+     70
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200822_two-wheeled-vehicle_089_390",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 225,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_211029_two-wheeled-vehicle_230_22487",
+     "rate": [
+      50,
+      50
+     ],
+     "type": 224,
+     "ab": "same",
+     "rate_ref": [
+      50,
+      50
+     ]
+    }
+   ],
+   "label_conflict": true,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_200914_two-wheeled-vehicle_116_204",
+   "videos": [
+    "cc_3_200914_two-wheeled-vehicle_116_204",
+    "cc_3_220117_two-wheeled-vehicle_253_20357"
+   ],
+   "object": "차대이륜차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_200914_two-wheeled-vehicle_116_204",
+   "answer": [
+    70,
+    30
+   ],
+   "type": 292,
+   "allowed": [
+    [
+     70,
+     30
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200914_two-wheeled-vehicle_116_204",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 292,
+     "ab": "same",
+     "rate_ref": [
+      70,
+      30
+     ]
+    },
+    {
+     "video": "cc_3_220117_two-wheeled-vehicle_253_20357",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 292,
+     "ab": "same",
+     "rate_ref": [
+      70,
+      30
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_201029_two-wheeled-vehicle_225_20315",
+   "videos": [
+    "cc_3_201029_two-wheeled-vehicle_225_20315",
+    "cc_3_210828_two-wheeled-vehicle_112_336"
+   ],
+   "object": "차대이륜차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_201029_two-wheeled-vehicle_225_20315",
+   "answer": [
+    60,
+    40
+   ],
+   "type": 245,
+   "allowed": [
+    [
+     60,
+     40
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_201029_two-wheeled-vehicle_225_20315",
+     "rate": [
+      60,
+      40
+     ],
+     "type": 245,
+     "ab": "same",
+     "rate_ref": [
+      60,
+      40
+     ]
+    },
+    {
+     "video": "cc_3_210828_two-wheeled-vehicle_112_336",
+     "rate": [
+      60,
+      40
+     ],
+     "type": 245,
+     "ab": "same",
+     "rate_ref": [
+      60,
+      40
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_210122_two-wheeled-vehicle_244_21567",
+   "videos": [
+    "cc_3_210122_two-wheeled-vehicle_244_21567",
+    "cc_3_210910_two-wheeled-vehicle_195_163"
+   ],
+   "object": "차대이륜차",
+   "place": "직선도로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_210122_two-wheeled-vehicle_244_21567",
+   "answer": [
+    0,
+    100
+   ],
+   "type": 199,
+   "allowed": [
+    [
+     0,
+     100
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210122_two-wheeled-vehicle_244_21567",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 199,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    },
+    {
+     "video": "cc_3_210910_two-wheeled-vehicle_195_163",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 199,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "reserve",
+   "why": "이륜차·자전거 예비"
+  },
+  {
+   "id": "cc_3_210130_pedestrian_16_003",
+   "videos": [
+    "cc_3_210130_pedestrian_16_003",
+    "cc_3_210521_pedestrian_239_25045"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_210130_pedestrian_16_003",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 157,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210130_pedestrian_16_003",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 157,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_210521_pedestrian_239_25045",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 157,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_210313_bike_252_20809",
+   "videos": [
+    "cc_3_210313_bike_252_20809",
+    "cc_3_211209_bike_30_009"
+   ],
+   "object": "차대자전거",
+   "place": "사거리교차로(신호등있음)",
+   "category_conflict": false,
+   "signal": true,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_210313_bike_252_20809",
+   "answer": [
+    90,
+    10
+   ],
+   "type": 426,
+   "allowed": [
+    [
+     90,
+     10
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210313_bike_252_20809",
+     "rate": [
+      90,
+      10
+     ],
+     "type": 426,
+     "ab": "same",
+     "rate_ref": [
+      90,
+      10
+     ]
+    },
+    {
+     "video": "cc_3_211209_bike_30_009",
+     "rate": [
+      90,
+      10
+     ],
+     "type": 426,
+     "ab": "same",
+     "rate_ref": [
+      90,
+      10
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "신호 있는 장소"
+  },
+  {
+   "id": "cc_3_210405_pedestrian_114_137",
+   "videos": [
+    "cc_3_210405_pedestrian_114_137",
+    "cc_3_220615_pedestrian_234_20815"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_210405_pedestrian_114_137",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 172,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210405_pedestrian_114_137",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 172,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_220615_pedestrian_234_20815",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 172,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_210412_two-wheeled-vehicle_148_229",
+   "videos": [
+    "cc_3_210412_two-wheeled-vehicle_148_229",
+    "cc_3_220104_two-wheeled-vehicle_255_21989"
+   ],
+   "object": "차대이륜차",
+   "place": "차도와차도가아닌장소",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_210412_two-wheeled-vehicle_148_229",
+   "answer": [
+    70,
+    30
+   ],
+   "type": 365,
+   "allowed": [
+    [
+     70,
+     30
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210412_two-wheeled-vehicle_148_229",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 365,
+     "ab": "same",
+     "rate_ref": [
+      70,
+      30
+     ]
+    },
+    {
+     "video": "cc_3_220104_two-wheeled-vehicle_255_21989",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 365,
+     "ab": "same",
+     "rate_ref": [
+      70,
+      30
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_211125_pedestrian_45_010",
+   "videos": [
+    "cc_3_211125_pedestrian_45_010",
+    "cc_3_220526_pedestrian_206_21732"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_211125_pedestrian_45_010",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 167,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_211125_pedestrian_45_010",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 167,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    },
+    {
+     "video": "cc_3_220526_pedestrian_206_21732",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 167,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_211217_vehicle_117_024",
+   "videos": [
+    "cc_3_211217_vehicle_117_024",
+    "cc_3_220305_vehicle_252_47329"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_211217_vehicle_117_024",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 110,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_211217_vehicle_117_024",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 110,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_220305_vehicle_252_47329",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 110,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_220114_bike_114_132",
+   "videos": [
+    "cc_3_220114_bike_114_132",
+    "cc_3_220211_bike_217_22494"
+   ],
+   "object": "차대자전거",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_220114_bike_114_132",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 398,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_220114_bike_114_132",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 398,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    },
+    {
+     "video": "cc_3_220211_bike_217_22494",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 398,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_220119_pedestrian_131_209",
+   "videos": [
+    "cc_3_220119_pedestrian_131_209",
+    "cc_3_220508_pedestrian_206_20543"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_220119_pedestrian_131_209",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 173,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_220119_pedestrian_131_209",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 173,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_220508_pedestrian_206_20543",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 173,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_180420_vehicle_21_264",
+   "videos": [
+    "cc_3_180420_vehicle_21_264",
+    "cc_3_190201_vehicle_232_24368"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": true,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_180420_vehicle_21_264",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 54,
+   "allowed": [
+    [
+     20,
+     80
+    ],
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_180420_vehicle_21_264",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 54,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    },
+    {
+     "video": "cc_3_190201_vehicle_232_24368",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 106,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": true,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_1_190909_two-wheeled-vehicle_187_013",
+   "videos": [
+    "cc_1_190909_two-wheeled-vehicle_187_013"
+   ],
+   "object": "차대이륜차",
+   "place": "직선도로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_1_190909_two-wheeled-vehicle_187_013",
+   "answer": [
+    100,
+    0
+   ],
+   "type": 216,
+   "allowed": [
+    [
+     100,
+     0
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_1_190909_two-wheeled-vehicle_187_013",
+     "rate": [
+      100,
+      0
+     ],
+     "type": 216,
+     "ab": "same",
+     "rate_ref": [
+      100,
+      0
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_1_201126_pedestrian_195_214",
+   "videos": [
+    "cc_1_201126_pedestrian_195_214"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_1_201126_pedestrian_195_214",
+   "answer": [
+    0,
+    100
+   ],
+   "type": 133,
+   "allowed": [
+    [
+     0,
+     100
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_1_201126_pedestrian_195_214",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 133,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "사고 3개 이하 카테고리"
+  },
+  {
+   "id": "cc_3_141030_two-wheeled-vehicle_260_33447",
+   "videos": [
+    "cc_3_141030_two-wheeled-vehicle_260_33447"
+   ],
+   "object": "차대이륜차",
+   "place": "차도와차도가아닌장소",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_141030_two-wheeled-vehicle_260_33447",
+   "answer": [
+    80,
+    20
+   ],
+   "type": 367,
+   "allowed": [
+    [
+     80,
+     20
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_141030_two-wheeled-vehicle_260_33447",
+     "rate": [
+      80,
+      20
+     ],
+     "type": 367,
+     "ab": "same",
+     "rate_ref": [
+      80,
+      20
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_160203_two-wheeled-vehicle_194_026",
+   "videos": [
+    "cc_3_160203_two-wheeled-vehicle_194_026"
+   ],
+   "object": "차대이륜차",
+   "place": "차도와차도가아닌장소",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_160203_two-wheeled-vehicle_194_026",
+   "answer": [
+    80,
+    20
+   ],
+   "type": 367,
+   "allowed": [
+    [
+     80,
+     20
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_160203_two-wheeled-vehicle_194_026",
+     "rate": [
+      80,
+      20
+     ],
+     "type": 367,
+     "ab": "same",
+     "rate_ref": [
+      80,
+      20
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_160413_vehicle_246_22469",
+   "videos": [
+    "cc_3_160413_vehicle_246_22469"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_160413_vehicle_246_22469",
+   "answer": [
+    25,
+    75
+   ],
+   "type": 127,
+   "allowed": [
+    [
+     25,
+     75
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_160413_vehicle_246_22469",
+     "rate": [
+      25,
+      75
+     ],
+     "type": 127,
+     "ab": "same",
+     "rate_ref": [
+      25,
+      75
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_160916_pedestrian_125_142",
+   "videos": [
+    "cc_3_160916_pedestrian_125_142"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_160916_pedestrian_125_142",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 167,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_160916_pedestrian_125_142",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 167,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_170114_vehicle_45_178",
+   "videos": [
+    "cc_3_170114_vehicle_45_178"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_170114_vehicle_45_178",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 126,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_170114_vehicle_45_178",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 126,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_180304_two-wheeled-vehicle_126_284",
+   "videos": [
+    "cc_3_180304_two-wheeled-vehicle_126_284"
+   ],
+   "object": "차대이륜차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_180304_two-wheeled-vehicle_126_284",
+   "answer": [
+    60,
+    40
+   ],
+   "type": 281,
+   "allowed": [
+    [
+     60,
+     40
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_180304_two-wheeled-vehicle_126_284",
+     "rate": [
+      60,
+      40
+     ],
+     "type": 281,
+     "ab": "same",
+     "rate_ref": [
+      60,
+      40
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_181103_vehicle_113_015",
+   "videos": [
+    "cc_3_181103_vehicle_113_015"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_181103_vehicle_113_015",
+   "answer": [
+    25,
+    75
+   ],
+   "type": 127,
+   "allowed": [
+    [
+     25,
+     75
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_181103_vehicle_113_015",
+     "rate": [
+      25,
+      75
+     ],
+     "type": 127,
+     "ab": "same",
+     "rate_ref": [
+      25,
+      75
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_190314_two-wheeled-vehicle_312_035",
+   "videos": [
+    "cc_3_190314_two-wheeled-vehicle_312_035"
+   ],
+   "object": "차대이륜차",
+   "place": "직선도로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_190314_two-wheeled-vehicle_312_035",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 205,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_190314_two-wheeled-vehicle_312_035",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 205,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "train",
+   "why": "카테고리당 2개"
+  },
+  {
+   "id": "cc_3_190427_pedestrian_116_218",
+   "videos": [
+    "cc_3_190427_pedestrian_116_218"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_190427_pedestrian_116_218",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 163,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_190427_pedestrian_116_218",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 163,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_190510_two-wheeled-vehicle_311_109",
+   "videos": [
+    "cc_3_190510_two-wheeled-vehicle_311_109"
+   ],
+   "object": "차대이륜차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 299,
+   "reference": "cc_3_190510_two-wheeled-vehicle_311_109",
+   "answer": [
+    35,
+    65
+   ],
+   "type": 226,
+   "allowed": [
+    [
+     35,
+     65
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_190510_two-wheeled-vehicle_311_109",
+     "rate": [
+      35,
+      65
+     ],
+     "type": 226,
+     "ab": "same",
+     "rate_ref": [
+      35,
+      65
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_190730_vehicle_316_021",
+   "videos": [
+    "cc_3_190730_vehicle_316_021"
+   ],
+   "object": "차대차",
+   "place": "주차장(또는차도가아닌장소)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_190730_vehicle_316_021",
+   "answer": [
+    25,
+    75
+   ],
+   "type": 127,
+   "allowed": [
+    [
+     25,
+     75
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_190730_vehicle_316_021",
+     "rate": [
+      25,
+      75
+     ],
+     "type": 127,
+     "ab": "same",
+     "rate_ref": [
+      25,
+      75
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_191104_pedestrian_223_22223",
+   "videos": [
+    "cc_3_191104_pedestrian_223_22223"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_191104_pedestrian_223_22223",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 172,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_191104_pedestrian_223_22223",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 172,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_191207_vehicle_197_067",
+   "videos": [
+    "cc_3_191207_vehicle_197_067"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_191207_vehicle_197_067",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 107,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_191207_vehicle_197_067",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 107,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_200203_vehicle_311_029",
+   "videos": [
+    "cc_3_200203_vehicle_311_029"
+   ],
+   "object": "차대차",
+   "place": "회전교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_200203_vehicle_311_029",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 132,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200203_vehicle_311_029",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 132,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "사고 3개 이하 카테고리"
+  },
+  {
+   "id": "cc_3_200303_bike_116_279",
+   "videos": [
+    "cc_3_200303_bike_116_279"
+   ],
+   "object": "차대자전거",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_200303_bike_116_279",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 391,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200303_bike_116_279",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 391,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_200507_vehicle_108_185",
+   "videos": [
+    "cc_3_200507_vehicle_108_185"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_200507_vehicle_108_185",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 57,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200507_vehicle_108_185",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 57,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_200711_vehicle_200_22143",
+   "videos": [
+    "cc_3_200711_vehicle_200_22143"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_200711_vehicle_200_22143",
+   "answer": [
+    40,
+    60
+   ],
+   "type": 21,
+   "allowed": [
+    [
+     40,
+     60
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_200711_vehicle_200_22143",
+     "rate": [
+      40,
+      60
+     ],
+     "type": 21,
+     "ab": "same",
+     "rate_ref": [
+      40,
+      60
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_210116_vehicle_315_019",
+   "videos": [
+    "cc_3_210116_vehicle_315_019"
+   ],
+   "object": "차대차",
+   "place": "직선도로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": true,
+   "eval_now": false,
+   "frames": 0,
+   "reference": "cc_3_210116_vehicle_315_019",
+   "answer": [
+    0,
+    100
+   ],
+   "type": 2,
+   "allowed": [
+    [
+     0,
+     100
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210116_vehicle_315_019",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 2,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "영상 미확인"
+  },
+  {
+   "id": "cc_3_210224_vehicle_311_089",
+   "videos": [
+    "cc_3_210224_vehicle_311_089"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_210224_vehicle_311_089",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 110,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210224_vehicle_311_089",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 110,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_210303_two-wheeled-vehicle_312_106",
+   "videos": [
+    "cc_3_210303_two-wheeled-vehicle_312_106"
+   ],
+   "object": "차대이륜차",
+   "place": "직선도로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_210303_two-wheeled-vehicle_312_106",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 217,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210303_two-wheeled-vehicle_312_106",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 217,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_210814_vehicle_199_113",
+   "videos": [
+    "cc_3_210814_vehicle_199_113"
+   ],
+   "object": "차대차",
+   "place": "T자형교차로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_210814_vehicle_199_113",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 107,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210814_vehicle_199_113",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 107,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_210819_vehicle_313_066",
+   "videos": [
+    "cc_3_210819_vehicle_313_066"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등있음)",
+   "category_conflict": false,
+   "signal": true,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_210819_vehicle_313_066",
+   "answer": [
+    100,
+    0
+   ],
+   "type": 90,
+   "allowed": [
+    [
+     100,
+     0
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210819_vehicle_313_066",
+     "rate": [
+      100,
+      0
+     ],
+     "type": 90,
+     "ab": "same",
+     "rate_ref": [
+      100,
+      0
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "신호 있는 장소"
+  },
+  {
+   "id": "cc_3_210823_vehicle_316_068",
+   "videos": [
+    "cc_3_210823_vehicle_316_068"
+   ],
+   "object": "차대차",
+   "place": "직선도로",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": true,
+   "eval_now": false,
+   "frames": 0,
+   "reference": "cc_3_210823_vehicle_316_068",
+   "answer": [
+    30,
+    70
+   ],
+   "type": 11,
+   "allowed": [
+    [
+     30,
+     70
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210823_vehicle_316_068",
+     "rate": [
+      30,
+      70
+     ],
+     "type": 11,
+     "ab": "same",
+     "rate_ref": [
+      30,
+      70
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "영상 미확인"
+  },
+  {
+   "id": "cc_3_210901_pedestrian_198_158",
+   "videos": [
+    "cc_3_210901_pedestrian_198_158"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_210901_pedestrian_198_158",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 174,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_210901_pedestrian_198_158",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 174,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_211119_vehicle_198_106",
+   "videos": [
+    "cc_3_211119_vehicle_198_106"
+   ],
+   "object": "차대차",
+   "place": "사거리교차로(신호등없음)",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": true,
+   "frames": 150,
+   "reference": "cc_3_211119_vehicle_198_106",
+   "answer": [
+    70,
+    30
+   ],
+   "type": 22,
+   "allowed": [
+    [
+     70,
+     30
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_211119_vehicle_198_106",
+     "rate": [
+      70,
+      30
+     ],
+     "type": 22,
+     "ab": "same",
+     "rate_ref": [
+      70,
+      30
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "지금 평가 영상"
+  },
+  {
+   "id": "cc_3_211219_bike_118_016",
+   "videos": [
+    "cc_3_211219_bike_118_016"
+   ],
+   "object": "차대자전거",
+   "place": "사거리교차로(신호등있음)",
+   "category_conflict": false,
+   "signal": true,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_211219_bike_118_016",
+   "answer": [
+    0,
+    100
+   ],
+   "type": 424,
+   "allowed": [
+    [
+     0,
+     100
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_211219_bike_118_016",
+     "rate": [
+      0,
+      100
+     ],
+     "type": 424,
+     "ab": "same",
+     "rate_ref": [
+      0,
+      100
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "신호 있는 장소"
+  },
+  {
+   "id": "cc_3_220117_pedestrian_130_179",
+   "videos": [
+    "cc_3_220117_pedestrian_130_179"
+   ],
+   "object": "차대보행자",
+   "place": "횡단보도없음",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_220117_pedestrian_130_179",
+   "answer": [
+    20,
+    80
+   ],
+   "type": 173,
+   "allowed": [
+    [
+     20,
+     80
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_220117_pedestrian_130_179",
+     "rate": [
+      20,
+      80
+     ],
+     "type": 173,
+     "ab": "same",
+     "rate_ref": [
+      20,
+      80
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  },
+  {
+   "id": "cc_3_220118_two-wheeled-vehicle_38_014",
+   "videos": [
+    "cc_3_220118_two-wheeled-vehicle_38_014"
+   ],
+   "object": "차대이륜차",
+   "place": "차도와차도가아닌장소",
+   "category_conflict": false,
+   "signal": false,
+   "unchecked": false,
+   "eval_now": false,
+   "frames": 150,
+   "reference": "cc_3_220118_two-wheeled-vehicle_38_014",
+   "answer": [
+    10,
+    90
+   ],
+   "type": 364,
+   "allowed": [
+    [
+     10,
+     90
+    ]
+   ],
+   "labels": [
+    {
+     "video": "cc_3_220118_two-wheeled-vehicle_38_014",
+     "rate": [
+      10,
+      90
+     ],
+     "type": 364,
+     "ab": "same",
+     "rate_ref": [
+      10,
+      90
+     ]
+    }
+   ],
+   "label_conflict": false,
+   "set": "eval",
+   "why": "나머지"
+  }
+ ],
+ "counts": {
+  "train": {
+   "accidents": 14,
+   "videos": 32
+  },
+  "reserve": {
+   "accidents": 2,
+   "videos": 4
+  },
+  "eval": {
+   "accidents": 59,
+   "videos": 96
+  }
+ }
+}

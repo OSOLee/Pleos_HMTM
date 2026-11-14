@@ -1,0 +1,31 @@
+{
+  "schema_version": "bb-0.2",
+  "fake": {
+    "description": "블랙박스 영상이 아님 (고정 카메라·실내 등)",
+    "delay_sec": 0,
+    "expect": {
+      "status": "unsupported",
+      "reason": "not_blackbox"
+    }
+  },
+  "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+  },
+  "status": "unsupported",
+  "reason": "not_blackbox",
+  "message": "블랙박스 앞 카메라 영상이 아니에요",
+  "video": {
+    "duration_s": 30.0,
+    "fps": 30.0,
+    "frames": 900,
+    "width": 1920,
+    "height": 1080
+  },
+  "clock": {
+    "osd_start_ms": null
+  },
+  "facts": null,
+  "ego_motion": null,
+  "hints": {}
+}

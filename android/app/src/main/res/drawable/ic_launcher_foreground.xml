@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 적응형 아이콘 앞 108dp: 블랙박스(카메라) + 렌즈 안 과실비율 원(판정) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- 블랙박스 몸체 (안전 영역 66dp = 21~87 안) -->
+    <path android:fillColor="@color/ic_body"
+        android:pathData="M30,36h48a6,6 0 0,1 6,6v24a6,6 0 0,1 -6,6h-48a6,6 0 0,1 -6,-6v-24a6,6 0 0,1 6,-6z" />
+    <!-- 렌즈 -->
+    <path android:fillColor="@color/ic_lens" android:pathData="M54,54m-14,0a14,14 0 1,0 28,0a14,14 0 1,0 -28,0" />
+    <!-- 렌즈 안 과실비율 원 (내 차 60 : 상대 40) -->
+    <path android:fillColor="@color/ic_other" android:pathData="M54,54m-10,0a10,10 0 1,0 20,0a10,10 0 1,0 -20,0" />
+    <path android:fillColor="@color/ic_ego" android:pathData="M54,54L54,44A10,10 0 1,1 48.12,62.09Z" />
+    <!-- 녹화 점 -->
+    <path android:fillColor="@color/ic_rec" android:pathData="M76,43m-3,0a3,3 0 1,0 6,0a3,3 0 1,0 -6,0" />
+</vector>

@@ -1,0 +1,65 @@
+# Gradle / 빌드 산출물
+.gradle/
+build/
+*/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Kotlin 컴파일 캐시
+.kotlin/
+
+# 로컬 환경
+local.properties
+
+# IDE
+.idea/
+*.iml
+
+# 서명 키 / 비밀값
+*.jks
+*.keystore
+keystore.properties
+secrets.properties
+
+# OS
+.DS_Store
+
+# ===== backend (Python) — MTM .gitignore에서 병합 =====
+# 폴더 패턴은 backend/ 기준으로 고정 (android/.../data, backend/tools/data가 무시되지 않도록)
+
+# 파이썬
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+
+# 데이터/결과물 (용량, AI Hub 재배포 금지)
+backend/data/
+backend/outputs/
+backend/datasets/
+backend/runs/
+*.mp4
+*.avi
+*.zip
+*.part*
+
+# 모델 가중치 (실행 시 자동 다운로드 / 학습 결과)
+*.pt
+*.onnx
+
+# 비밀 정보 (예시 파일만 올림)
+.env
+.env.*
+!.env.example
+*apikey*
+
+# 외부 도구
+aihubshell
+
+# 판정·학습 결과
+backend/result*.json
+backend/list*.txt
+
+.claude/

@@ -1,0 +1,53 @@
+{
+  "schema_version": "bb-0.2",
+  "fake": {
+    "description": "충돌 순간을 찾지 못함 (사용자가 고르게 됨)",
+    "delay_sec": 0,
+    "expect": {
+      "status": "no_collision",
+      "reason": "no_impact"
+    }
+  },
+  "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+  },
+  "status": "no_collision",
+  "reason": "no_impact",
+  "message": "부딪힌 순간을 찾지 못했어요",
+  "video": {
+    "duration_s": 30.0,
+    "fps": 30.0,
+    "frames": 900,
+    "width": 1920,
+    "height": 1080
+  },
+  "clock": {
+    "osd_start_ms": null
+  },
+  "facts": {
+    "schema_version": "0.3",
+    "collision": {
+      "a": "ego",
+      "b": "other",
+      "t": null,
+      "frame": null,
+      "zone": "intersection"
+    },
+    "parties": {
+      "ego": {},
+      "other": {}
+    },
+    "road": {}
+  },
+  "ego_motion": {
+    "fps": 30.0,
+    "step": 3,
+    "t": [],
+    "speed_proxy": [],
+    "moving": [],
+    "yaw_proxy": [],
+    "jolt_t": []
+  },
+  "hints": {}
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": "bb-0.2",
+  "fake": {
+    "description": "충돌 순간을 찾지 못함, 후보 2개. 사용자가 사고 순간을 고르면 right_turn_left_straight로 다시 분석됨",
+    "delay_sec": 0,
+    "on_pick": "right_turn_left_straight",
+    "expect": {
+      "status": "no_collision",
+      "reason": "no_impact"
+    }
+  },
+  "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+  },
+  "status": "no_collision",
+  "reason": "no_impact",
+  "message": "영상에서 사고 순간을 찾지 못했어요. 충돌 시점을 골라 주세요",
+  "video": {
+    "duration_s": 30.0,
+    "fps": 30.0,
+    "frames": 900,
+    "width": 1920,
+    "height": 1080
+  },
+  "clock": {
+    "osd_start_ms": null
+  },
+  "facts": {
+    "schema_version": "0.3",
+    "collision": {
+      "a": "ego",
+      "b": "other",
+      "t": null,
+      "frame": null,
+      "zone": "intersection"
+    },
+    "parties": {
+      "ego": {},
+      "other": {
+        "cls": {
+          "value": "car",
+          "source": "model",
+          "confidence": 0.9
+        },
+        "movement": {
+          "value": null,
+          "source": "model",
+          "guess": "straight",
+          "confidence": 0.5
+        }
+      }
+    },
+    "road": {}
+  },
+  "ego_motion": {
+    "fps": 30.0,
+    "step": 3,
+    "t": [],
+    "speed_proxy": [],
+    "moving": [],
+    "yaw_proxy": [],
+    "jolt_t": []
+  },
+  "hints": {
+    "collision_candidates": [
+      {"t": 18.2, "frame": 546, "source": "video_end", "reason": "no_stop_found"},
+      {"t": 12.0, "frame": 360, "source": "jolt", "reason": "jolt_only"}
+    ]
+  }
+}

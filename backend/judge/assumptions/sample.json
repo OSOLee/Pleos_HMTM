@@ -1,0 +1,17 @@
+{
+  "_note": "scene.json과 영상 확인 전 임시 가정. 측면 진입로가 도로(골목)이고 두 도로 폭이 같다고 가정. 확인되면 수정할 것.",
+  "scene": {
+    "location": "intersection",
+    "junction_type": "t",
+    "road_width": "equal"
+  },
+  "signal": {"state": "none"},
+  "intersection": {
+    "_note": "zones: 교차로 영역 이름. side_entry_is_road: 측면 진입로에서 도로로 들어온 시점을 교차로 진입으로 봄",
+    "zones": ["intersection", "junction"],
+    "side_entry_is_road": true
+  },
+  "parties": {
+    "_note": "사용자 확인 값. 예: \"28\": {\"intersection_entry_t\": 6.0, \"damage_severity\": \"moderate\"}"
+  }
+}

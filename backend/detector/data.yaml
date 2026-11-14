@@ -1,0 +1,11 @@
+# convert_aihub.py가 데이터 폴더 안에 같은 내용의 data.yaml을 만들어 준다. 이 파일은 참고용 템플릿.
+path: /content/dataset
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: vehicle
+  1: two_wheeler
+  2: bicycle
+  3: person

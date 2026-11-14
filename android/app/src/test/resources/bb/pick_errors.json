@@ -1,0 +1,23 @@
+{
+ "not_needed": {
+  "status": 409,
+  "body": {
+   "error": "collision_not_needed",
+   "message": "이 사건은 사고 순간을 고를 필요가 없어요"
+  }
+ },
+ "invalid": {
+  "status": 422,
+  "body": {
+   "error": "collision_invalid",
+   "message": "t는 영상 안의 시각(0 이상, 영상 길이 이하 초)이어야 해요 (영상 30초)"
+  }
+ },
+ "shape": {
+  "status": 422,
+  "body": {
+   "error": "request_invalid",
+   "message": "요청은 {\"t\": 초} 모양이어야 해요"
+  }
+ }
+}

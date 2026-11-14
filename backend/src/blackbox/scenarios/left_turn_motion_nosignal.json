@@ -1,0 +1,10 @@
+{
+  "extends": "left_turn_motion",
+  "fake": {
+    "description": "left_turn_motion과 같은 영상 분석 결과. 데모 차량 기록만 다름: 지시등을 켜지 않음 (sd_data.py)",
+    "vehicle_demo": {
+      "turn_signal": null,
+      "signal_lead_s": null
+    }
+  }
+}

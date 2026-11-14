@@ -1,0 +1,183 @@
+{
+ "schema_version": "0.3",
+ "video": "data/videos/cc/cc_3_211029_two-wheeled-vehicle_230_22487.mp4",
+ "frame_ref": 0,
+ "road_type": "intersection",
+ "junction_type": "cross",
+ "closed_side": null,
+ "source": "corners",
+ "corners": [
+  [
+   0.3971,
+   0.2857
+  ],
+  [
+   0.6543,
+   0.26
+  ],
+  [
+   0.7143,
+   0.4572
+  ],
+  [
+   0.4143,
+   0.4828
+  ]
+ ],
+ "roi": [
+  [
+   0.0,
+   0.0
+  ],
+  [
+   1.0,
+   0.0
+  ],
+  [
+   1.0,
+   1.0
+  ],
+  [
+   0.0,
+   1.0
+  ]
+ ],
+ "zones": [
+  {
+   "id": "intersection",
+   "type": "intersection",
+   "polygon": [
+    [
+     0.3971,
+     0.2857
+    ],
+    [
+     0.6543,
+     0.26
+    ],
+    [
+     0.7143,
+     0.4572
+    ],
+    [
+     0.4143,
+     0.4828
+    ]
+   ]
+  },
+  {
+   "id": "appr_n",
+   "type": "approach",
+   "direction": "north",
+   "polygon": [
+    [
+     0.3971,
+     0.2857
+    ],
+    [
+     0.6543,
+     0.26
+    ],
+    [
+     0.9094,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0554
+    ]
+   ]
+  },
+  {
+   "id": "appr_e",
+   "type": "approach",
+   "direction": "east",
+   "polygon": [
+    [
+     0.6543,
+     0.26
+    ],
+    [
+     0.7143,
+     0.4572
+    ],
+    [
+     1.0,
+     0.6019
+    ],
+    [
+     1.0,
+     0.0
+    ],
+    [
+     0.9094,
+     0.0
+    ]
+   ]
+  },
+  {
+   "id": "appr_s",
+   "type": "approach",
+   "direction": "south",
+   "polygon": [
+    [
+     0.7143,
+     0.4572
+    ],
+    [
+     0.4143,
+     0.4828
+    ],
+    [
+     0.0,
+     0.8359
+    ],
+    [
+     0.0,
+     1.0
+    ],
+    [
+     1.0,
+     1.0
+    ],
+    [
+     1.0,
+     0.6019
+    ]
+   ]
+  },
+  {
+   "id": "appr_w",
+   "type": "approach",
+   "direction": "west",
+   "polygon": [
+    [
+     0.4143,
+     0.4828
+    ],
+    [
+     0.3971,
+     0.2857
+    ],
+    [
+     0.0,
+     0.0554
+    ],
+    [
+     0.0,
+     0.8359
+    ]
+   ]
+  }
+ ],
+ "lines": [],
+ "signals": [],
+ "mapped_from": {
+  "video": "cc_3_200822_two-wheeled-vehicle_089_390",
+  "inliers": 1945
+ }
+}

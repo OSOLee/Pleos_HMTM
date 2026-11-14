@@ -1,0 +1,12 @@
+{
+  "_note": "교차로 신호 체계 데이터(CVAT XML)의 label -> 우리 클래스. bike는 오토바이·자전거가 섞여 있어 two_wheeler로 묶는다. face, car_plate는 개인정보 가림용 박스라 제외. 보행자 라벨이 없으므로 pseudo_label.py로 채운다.",
+  "map": {
+    "car": "vehicle", "small_bus": "vehicle", "bus": "vehicle", "small_truck": "vehicle",
+    "truck": "vehicle", "large_truck": "vehicle", "unknown": "vehicle",
+    "bike": "two_wheeler"
+  },
+  "ignore": ["face", "car_plate"],
+  "subtype": {
+    "car": "car", "small_bus": "bus", "bus": "bus", "small_truck": "truck", "truck": "truck", "large_truck": "truck"
+  }
+}

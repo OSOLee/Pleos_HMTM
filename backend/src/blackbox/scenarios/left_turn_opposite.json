@@ -1,0 +1,105 @@
+{
+  "schema_version": "bb-0.2",
+  "fake": {
+    "description": "내 차 녹색 비보호 좌회전, 상대 맞은편 녹색 직진, 신호 교차로. 내 차 신호 초록(영상), 상대 신호는 추정, 비보호좌회전 표지는 영상으로 못 봐서 사용자 답",
+    "delay_sec": 0,
+    "expect": {
+      "answers": {
+        "parties.ego.unprotected_left_sign": true
+      },
+      "status": "needs_answers",
+      "judge_status": "ok",
+      "rule_id": "차2-6",
+      "fault_by_party": {
+        "ego": 90,
+        "other": 10
+      }
+    }
+  },
+  "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "reason": null,
+  "message": null,
+  "video": {
+    "duration_s": 30.0,
+    "fps": 30.0,
+    "frames": 900,
+    "width": 1920,
+    "height": 1080
+  },
+  "clock": {
+    "osd_start_ms": null
+  },
+  "facts": {
+    "schema_version": "0.3",
+    "collision": {
+      "a": "ego",
+      "b": "other",
+      "t": 18.2,
+      "frame": 546,
+      "zone": "intersection"
+    },
+    "parties": {
+      "ego": {
+        "movement": {
+          "value": "left_turn",
+          "source": "model"
+        },
+        "signal_at_entry": {
+          "value": "green",
+          "source": "model",
+          "confidence": 0.8
+        }
+      },
+      "other": {
+        "cls": {
+          "value": "car",
+          "source": "model",
+          "confidence": 0.9
+        },
+        "movement": {
+          "value": "straight",
+          "source": "model"
+        },
+        "entry_from": {
+          "value": "north",
+          "source": "model"
+        },
+        "signal_at_entry": {
+          "value": null,
+          "source": "model",
+          "guess": "green"
+        }
+      }
+    },
+    "road": {
+      "location": {
+        "value": "intersection",
+        "source": "model"
+      },
+      "junction_type": {
+        "value": "cross",
+        "source": "model"
+      },
+      "signal_present": {
+        "value": true,
+        "source": "model"
+      }
+    }
+  },
+  "ego_motion": {
+    "fps": 30.0,
+    "step": 3,
+    "t": [],
+    "speed_proxy": [],
+    "moving": [],
+    "yaw_proxy": [],
+    "jolt_t": [
+      18.2
+    ]
+  },
+  "hints": {}
+}

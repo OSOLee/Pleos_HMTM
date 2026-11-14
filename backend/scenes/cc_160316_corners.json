@@ -1,0 +1,148 @@
+{
+ "schema_version": "0.3",
+ "video": "data/videos/cc/cc_3_160316_vehicle_210_47971.mp4",
+ "frame_ref": 0,
+ "road_type": "intersection",
+ "junction_type": "t",
+ "closed_side": "south",
+ "source": "corners",
+ "corners": [
+  [
+   0.45,
+   0.24
+  ],
+  [
+   0.85,
+   0.27
+  ],
+  [
+   0.85,
+   0.45
+  ],
+  [
+   0.45,
+   0.4
+  ]
+ ],
+ "roi": [
+  [
+   0.0,
+   0.0
+  ],
+  [
+   1.0,
+   0.0
+  ],
+  [
+   1.0,
+   1.0
+  ],
+  [
+   0.0,
+   1.0
+  ]
+ ],
+ "zones": [
+  {
+   "id": "intersection",
+   "type": "intersection",
+   "polygon": [
+    [
+     0.45,
+     0.24
+    ],
+    [
+     0.85,
+     0.27
+    ],
+    [
+     0.85,
+     0.45
+    ],
+    [
+     0.45,
+     0.4
+    ]
+   ]
+  },
+  {
+   "id": "appr_n",
+   "type": "approach",
+   "direction": "north",
+   "polygon": [
+    [
+     0.45,
+     0.24
+    ],
+    [
+     0.85,
+     0.27
+    ],
+    [
+     1.0,
+     0.2175
+    ],
+    [
+     1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.015
+    ]
+   ]
+  },
+  {
+   "id": "appr_e",
+   "type": "approach",
+   "direction": "east",
+   "polygon": [
+    [
+     0.85,
+     0.27
+    ],
+    [
+     0.85,
+     0.45
+    ],
+    [
+     1.0,
+     0.5325
+    ],
+    [
+     1.0,
+     0.2175
+    ]
+   ]
+  },
+  {
+   "id": "appr_w",
+   "type": "approach",
+   "direction": "west",
+   "polygon": [
+    [
+     0.45,
+     0.4
+    ],
+    [
+     0.45,
+     0.24
+    ],
+    [
+     0.0,
+     0.015
+    ],
+    [
+     0.0,
+     0.535
+    ]
+   ]
+  }
+ ],
+ "lines": [],
+ "signals": []
+}

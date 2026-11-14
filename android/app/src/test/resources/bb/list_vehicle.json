@@ -1,0 +1,157 @@
+[
+ {
+  "id": "f0e01c1487f143fe8ed0134b5b9073b6",
+  "status": "needs_answers",
+  "progress": 100,
+  "created_at": 1794202272000,
+  "updated_at": 1794202272000,
+  "filename": "20261109_143012_F.mp4",
+  "recorded_at_ms": 1794202212000,
+  "collision_t": 18.2,
+  "other_cls": {
+   "value": "car",
+   "label": "승용차",
+   "source": "video"
+  },
+  "chapter": "car_car",
+  "rule_id": "차16-1",
+  "title": "왼쪽 직진 대 오른쪽 좌회전 (동일폭)",
+  "fault_by_party": {
+   "other": 40,
+   "ego": 60
+  },
+  "fault_display": {
+   "kind": "ratio",
+   "party": null,
+   "value": null,
+   "text": "내 차 60 : 상대 40",
+   "note": null
+  },
+  "provisional": true,
+  "remaining_count": 5,
+  "reason": null,
+  "vehicle_record": true,
+  "sync_grade": "fine",
+  "fault_display_with_vehicle": {
+   "kind": "ratio",
+   "party": null,
+   "value": null,
+   "text": "내 차 70 : 상대 30",
+   "note": null
+  },
+  "vehicle_changes": true,
+  "collision_review_needed": false,
+  "collision_pick_until": null
+ },
+ {
+  "id": "e16fff79d23540f0852d6ae1b41e05d5",
+  "status": "needs_answers",
+  "progress": 100,
+  "created_at": 1794202272000,
+  "updated_at": 1794202272000,
+  "filename": "20261109_143012_F.mp4",
+  "recorded_at_ms": 1794202212000,
+  "collision_t": 18.2,
+  "other_cls": {
+   "value": "car",
+   "label": "승용차",
+   "source": "video"
+  },
+  "chapter": "car_car",
+  "rule_id": "차16-1",
+  "title": "왼쪽 직진 대 오른쪽 좌회전 (동일폭)",
+  "fault_by_party": {
+   "other": 40,
+   "ego": 60
+  },
+  "fault_display": {
+   "kind": "ratio",
+   "party": null,
+   "value": null,
+   "text": "내 차 60 : 상대 40",
+   "note": null
+  },
+  "provisional": true,
+  "remaining_count": 5,
+  "reason": null,
+  "vehicle_record": true,
+  "sync_grade": "fine",
+  "fault_display_with_vehicle": {
+   "kind": "ratio",
+   "party": null,
+   "value": null,
+   "text": "내 차 60 : 상대 40",
+   "note": null
+  },
+  "vehicle_changes": false,
+  "collision_review_needed": false,
+  "collision_pick_until": null
+ },
+ {
+  "id": "d2253eca8eb54465949e193ccb02b7eb",
+  "status": "needs_answers",
+  "progress": 100,
+  "created_at": 1794202272000,
+  "updated_at": 1794202272000,
+  "filename": "20261109_143012_F.mp4",
+  "recorded_at_ms": 1794202212000,
+  "collision_t": 18.2,
+  "other_cls": {
+   "value": "car",
+   "label": "승용차",
+   "source": "guess"
+  },
+  "chapter": "car_car",
+  "rule_id": null,
+  "title": null,
+  "fault_by_party": null,
+  "fault_display": null,
+  "provisional": true,
+  "remaining_count": 9,
+  "reason": null,
+  "vehicle_record": false,
+  "sync_grade": "none",
+  "fault_display_with_vehicle": null,
+  "vehicle_changes": false,
+  "collision_review_needed": false,
+  "collision_pick_until": null
+ },
+ {
+  "id": "14a9b8ec31054bbab81d3fcd0c17d6d3",
+  "status": "needs_answers",
+  "progress": 100,
+  "created_at": 1794202272000,
+  "updated_at": 1794202272000,
+  "filename": "20261109_143012_F.mp4",
+  "recorded_at_ms": 1794202212000,
+  "collision_t": 18.2,
+  "other_cls": {
+   "value": "pedestrian",
+   "label": "보행자",
+   "source": "video"
+  },
+  "chapter": "car_pedestrian",
+  "rule_id": "보13",
+  "title": "신호등 없는 횡단보도 횡단 사고",
+  "fault_by_party": {
+   "ego": 100,
+   "other": 0
+  },
+  "fault_display": {
+   "kind": "pedestrian_only",
+   "party": "other",
+   "value": 0,
+   "text": "보행자 과실 0%",
+   "note": "차대보행자 기준은 보행자 과실만 정해요. 내 차 몫은 나머지 100%예요"
+  },
+  "provisional": true,
+  "remaining_count": 3,
+  "reason": null,
+  "vehicle_record": false,
+  "sync_grade": "none",
+  "fault_display_with_vehicle": null,
+  "vehicle_changes": false,
+  "collision_review_needed": false,
+  "collision_pick_until": null
+ }
+]

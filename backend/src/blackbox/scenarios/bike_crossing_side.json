@@ -1,0 +1,96 @@
+{
+  "schema_version": "bb-0.2",
+  "fake": {
+    "description": "상대 자전거가 왼쪽에서 자전거횡단도로 건넘, 내 차 직진 (교차로 아닌 길). 상대 종류 확실(0.85)",
+    "delay_sec": 0,
+    "expect": {
+      "answers": {},
+      "status": "needs_answers",
+      "judge_status": "ok",
+      "rule_id": "거42-1",
+      "fault_by_party": {
+        "ego": 100,
+        "other": 0
+      },
+      "chapter": "car_bicycle"
+    }
+  },
+  "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "reason": null,
+  "message": null,
+  "video": {
+    "duration_s": 30.0,
+    "fps": 30.0,
+    "frames": 900,
+    "width": 1920,
+    "height": 1080
+  },
+  "clock": {
+    "osd_start_ms": null
+  },
+  "facts": {
+    "schema_version": "0.3",
+    "collision": {
+      "a": "ego",
+      "b": "other",
+      "t": 18.2,
+      "frame": 546,
+      "zone": "road",
+      "contact": "left"
+    },
+    "parties": {
+      "ego": {
+        "movement": {
+          "value": "straight",
+          "source": "model",
+          "confidence": 0.9,
+          "t": 17.0
+        }
+      },
+      "other": {
+        "cls": {
+          "value": "bicycle",
+          "source": "model",
+          "confidence": 0.85,
+          "evidence_frame": 534
+        },
+        "on_bike_crossing": {
+          "value": true,
+          "source": "model",
+          "confidence": 0.8,
+          "t": 17.8
+        },
+        "entry_from": {
+          "value": "west",
+          "source": "model"
+        },
+        "movement": {
+          "value": "straight",
+          "source": "model"
+        }
+      }
+    },
+    "road": {
+      "location": {
+        "value": "straight",
+        "source": "model"
+      }
+    }
+  },
+  "ego_motion": {
+    "fps": 30.0,
+    "step": 3,
+    "t": [],
+    "speed_proxy": [],
+    "moving": [],
+    "yaw_proxy": [],
+    "jolt_t": [
+      18.2
+    ]
+  },
+  "hints": {}
+}

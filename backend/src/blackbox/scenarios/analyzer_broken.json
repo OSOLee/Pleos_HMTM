@@ -1,0 +1,54 @@
+{
+  "schema_version": "bb-0.2",
+  "fake": {
+    "description": "분석기 고장 흉내: 당사자 id가 약속과 다름 (validate_output이 failed로 바꿈)",
+    "delay_sec": 0,
+    "expect": {
+      "status": "failed",
+      "reason": "analyzer_output_invalid"
+    }
+  },
+  "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "reason": null,
+  "message": null,
+  "video": {
+    "duration_s": 30.0,
+    "fps": 30.0,
+    "frames": 900,
+    "width": 1920,
+    "height": 1080
+  },
+  "clock": {
+    "osd_start_ms": null
+  },
+  "facts": {
+    "schema_version": "0.3",
+    "collision": {
+      "a": "1",
+      "b": "2",
+      "t": 18.2,
+      "frame": 546
+    },
+    "parties": {
+      "ego": {},
+      "other": {}
+    },
+    "road": {}
+  },
+  "ego_motion": {
+    "fps": 30.0,
+    "step": 3,
+    "t": [],
+    "speed_proxy": [],
+    "moving": [],
+    "yaw_proxy": [],
+    "jolt_t": [
+      18.2
+    ]
+  },
+  "hints": {}
+}

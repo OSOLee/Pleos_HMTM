@@ -1,0 +1,160 @@
+{
+ "schema_version": "0.3",
+ "video": "data/videos/cc/cc_3_200827_two-wheeled-vehicle_39_015.mp4",
+ "frame_ref": 0,
+ "road_type": "intersection",
+ "junction_type": "t",
+ "closed_side": "east",
+ "source": "corners",
+ "corners": [
+  [
+   0.775,
+   0.3588
+  ],
+  [
+   0.939,
+   0.428
+  ],
+  [
+   0.9969,
+   0.6144
+  ],
+  [
+   0.7385,
+   0.572
+  ]
+ ],
+ "roi": [
+  [
+   0.0,
+   0.0
+  ],
+  [
+   1.0,
+   0.0
+  ],
+  [
+   1.0,
+   1.0
+  ],
+  [
+   0.0,
+   1.0
+  ]
+ ],
+ "zones": [
+  {
+   "id": "intersection",
+   "type": "intersection",
+   "polygon": [
+    [
+     0.775,
+     0.3588
+    ],
+    [
+     0.939,
+     0.428
+    ],
+    [
+     0.9969,
+     0.6144
+    ],
+    [
+     0.7385,
+     0.572
+    ]
+   ]
+  },
+  {
+   "id": "appr_n",
+   "type": "approach",
+   "direction": "north",
+   "polygon": [
+    [
+     0.775,
+     0.3588
+    ],
+    [
+     0.939,
+     0.428
+    ],
+    [
+     1.0,
+     0.3761
+    ],
+    [
+     1.0,
+     0.0
+    ],
+    [
+     0.542,
+     0.0
+    ]
+   ]
+  },
+  {
+   "id": "appr_s",
+   "type": "approach",
+   "direction": "south",
+   "polygon": [
+    [
+     0.9969,
+     0.6144
+    ],
+    [
+     0.7385,
+     0.572
+    ],
+    [
+     0.0647,
+     1.0
+    ],
+    [
+     1.0,
+     1.0
+    ],
+    [
+     1.0,
+     0.6172
+    ]
+   ]
+  },
+  {
+   "id": "appr_w",
+   "type": "approach",
+   "direction": "west",
+   "polygon": [
+    [
+     0.7385,
+     0.572
+    ],
+    [
+     0.775,
+     0.3588
+    ],
+    [
+     0.542,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     1.0
+    ],
+    [
+     0.0647,
+     1.0
+    ]
+   ]
+  }
+ ],
+ "lines": [],
+ "signals": [],
+ "mapped_from": {
+  "video": "cc_3_200702_two-wheeled-vehicle_240_22954",
+  "inliers": 2072
+ }
+}

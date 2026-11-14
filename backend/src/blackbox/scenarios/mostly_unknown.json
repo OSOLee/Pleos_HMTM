@@ -1,0 +1,83 @@
+{
+  "schema_version": "bb-0.2",
+  "fake": {
+    "description": "충돌 시각만 확실하고 나머지는 추정이거나 모름",
+    "delay_sec": 0,
+    "expect": {
+      "answers": {},
+      "status": "needs_answers",
+      "judge_status": "no_rule",
+      "rule_id": null,
+      "fault_by_party": null
+    }
+  },
+  "analyzer": {
+    "name": "fake",
+    "version": "0.1.0"
+  },
+  "status": "ok",
+  "reason": null,
+  "message": null,
+  "video": {
+    "duration_s": 30.0,
+    "fps": 30.0,
+    "frames": 900,
+    "width": 1920,
+    "height": 1080
+  },
+  "clock": {
+    "osd_start_ms": null
+  },
+  "facts": {
+    "schema_version": "0.3",
+    "collision": {
+      "a": "ego",
+      "b": "other",
+      "t": 18.2,
+      "frame": 546,
+      "zone": null
+    },
+    "parties": {
+      "ego": {
+        "movement": {
+          "value": null,
+          "source": "model",
+          "guess": "straight",
+          "confidence": 0.4
+        }
+      },
+      "other": {
+        "cls": {
+          "value": null,
+          "source": "model",
+          "guess": "car",
+          "confidence": 0.55
+        },
+        "movement": {
+          "value": null,
+          "source": "model",
+          "guess": null
+        }
+      }
+    },
+    "road": {
+      "location": {
+        "value": null,
+        "source": "model",
+        "guess": "intersection"
+      }
+    }
+  },
+  "ego_motion": {
+    "fps": 30.0,
+    "step": 3,
+    "t": [],
+    "speed_proxy": [],
+    "moving": [],
+    "yaw_proxy": [],
+    "jolt_t": [
+      18.2
+    ]
+  },
+  "hints": {}
+}

@@ -1,0 +1,31 @@
+{
+  "_note": "탐지 모델(M1)은 움직이는 4종만 학습한다. 신호등은 색 판별 모델(M3), 표지판은 표지판 모델(M4), 횡단보도는 도로 분할(SegFormer, M5) 담당이라 ignore. 목록에 없는 category는 학습에서 제외되고 변환 결과에 표시된다.",
+  "classes": [
+    "vehicle",
+    "two_wheeler",
+    "bicycle",
+    "person"
+  ],
+  "map": {
+    "vehicle": "vehicle",
+    "two-wheeled-vehicle": "two_wheeler",
+    "bike": "bicycle",
+    "pedestrian": "person",
+    "차량": "vehicle",
+    "이륜차": "two_wheeler",
+    "자전거": "bicycle",
+    "보행자": "person"
+  },
+  "ignore": [
+    "crosswalk",
+    "횡단보도",
+    "traffic-light-red",
+    "traffic-light-green",
+    "traffic-light-etc",
+    "traffic-sign",
+    "신호등(적색)",
+    "신호등(녹색)",
+    "신호등(기타)",
+    "표지판"
+  ]
+}
